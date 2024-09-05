@@ -62,7 +62,6 @@
             <div class="menu-title">Makmal Komputer</div>
         </a>
     </li>
-    @endrole
 
     <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">
