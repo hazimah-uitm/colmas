@@ -44,7 +44,6 @@
 
 
     <li class="menu-label">Tetapan</li>
-
     <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">
             <div class="parent-icon"><i class='bx bx-location-plus'></i></div>
@@ -56,6 +55,14 @@
             </li>
         </ul>
     </li>
+    <li class="{{ Request::is('computer-lab*') ? 'mm-active' : '' }}">
+        <a href="{{ route('computer-lab') }}">
+            <div class="parent-icon"><i class='bx bx-desktop'></i>
+            </div>
+            <div class="menu-title">Makmal Komputer</div>
+        </a>
+    </li>
+    @endrole
 
     <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">

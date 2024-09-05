@@ -40,6 +40,11 @@ Route::middleware('auth')->group(function () {
     Route::get('position/view/{id}', 'PositionController@show')->name('position.show');
     Route::get('/position/search', 'PositionController@search')->name('position.search');
 
+    //Computer Lab
+    Route::get('computer-lab', 'ComputerLabController@index')->name('computer-lab');
+    Route::get('computer-lab/view/{id}', 'ComputerLabController@show')->name('computer-lab.show');
+    Route::get('/computer-lab/search', 'ComputerLabController@search')->name('computer-lab.search');
+    Route::get('computer-lab/{id}/history', 'ComputerLabController@history')->name('computer-lab.history');
 
     Route::get('/home', 'HomeController@index')->name('home');
 
