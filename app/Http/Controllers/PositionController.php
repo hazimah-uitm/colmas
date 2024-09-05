@@ -30,12 +30,11 @@ class PositionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:positions',
+            'title' => 'required',
             'grade' => 'required',
             'publish_status' => 'required|in:1,0',
         ],[
             'title.required'     => 'Sila isi nama jawatan',
-            'title.unique' => 'Nama jawatan telah wujud',
             'grade.required'     => 'Sila isi gred jawatan',
             'publish_status.required' => 'Sila isi status jawatan',
         ]);
@@ -69,12 +68,11 @@ class PositionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|unique:positions,title,' . $id,
+            'title' => 'required,' . $id,
             'grade' => 'required',
             'publish_status' => 'required|in:1,0',
         ],[
             'title.required'     => 'Sila isi nama jawatan',
-            'title.unique' => 'Nama jawatan telah wujud',
             'grade.required'     => 'Sila isi gred jawatan',
             'publish_status.required' => 'Sila isi status jawatan',
         ]);
