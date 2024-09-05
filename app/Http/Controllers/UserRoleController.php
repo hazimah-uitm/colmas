@@ -141,4 +141,21 @@ class UserRoleController extends Controller
         $role->forceDelete();
         return redirect()->route('user-role')->with('success', 'Peranan pengguna telah berjaya dipadam secara kekal');
     }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        if ($search) {
+            $userRoleList = Role::where('name', 'LIKE', "%$search%")
+                ->latest()
+                ->paginate(10);
+        } else {
+            $userRoleList = Role::latest()->paginate(10);
+        }
+
+        return view('pages.user-role.index', [
+            'userRoleList' => $userRoleList,
+        ]);
+    }
 }

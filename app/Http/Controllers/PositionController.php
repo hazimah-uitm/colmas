@@ -90,8 +90,8 @@ class PositionController extends Controller
         $search = $request->input('search');
 
         if ($search) {
-            $positionList = Position::where('name', 'LIKE', "%$search%")
-                ->orWhere('position', 'LIKE', "%$search%")
+            $positionList = Position::where('title', 'LIKE', "%$search%")
+                ->orWhere('grade', 'LIKE', "%$search%")
                 ->latest()
                 ->paginate(10);
         } else {

@@ -89,7 +89,6 @@ class CampusController extends Controller
 
         if ($search) {
             $campusList = Campus::where('name', 'LIKE', "%$search%")
-                ->orWhere('city', 'LIKE', "%$search%")
                 ->latest()
                 ->paginate(10);
         } else {
