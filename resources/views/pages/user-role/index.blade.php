@@ -117,7 +117,7 @@
                 </form>
             </div>
 
-            <div class="d-flex justify-content-end align-items-center">
+            <div class="mt-3 d-flex justify-content-end">
                 <span class="mx-2 mt-2 small text-muted">
                     Menunjukkan {{ $userRoleList->firstItem() }} hingga {{ $userRoleList->lastItem() }} daripada
                     {{ $userRoleList->total() }} rekod
