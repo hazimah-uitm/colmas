@@ -35,7 +35,7 @@ class CampusController extends Controller
         ],[
             'name.required'     => 'Sila isi nama kampus',
             'name.unique' => 'Nama kampus telah wujud',
-            'publish_status.required' => 'Sila isi status pengguna',
+            'publish_status.required' => 'Sila isi status kampus',
         ]);
 
         $campus = new Campus();
@@ -72,7 +72,7 @@ class CampusController extends Controller
         ],[
             'name.required'     => 'Sila isi nama kampus',
             'name.unique' => 'Nama kampus telah wujud',
-            'publish_status.required' => 'Sila isi status pengguna',
+            'publish_status.required' => 'Sila isi status kampus',
         ]);
 
         $campus = Campus::findOrFail($id);

@@ -74,14 +74,26 @@
 
             <div class="mb-3">
                 <label for="publish_status" class="form-label">Status</label>
+
                 <div class="form-check">
-                    <input type="radio" id="aktif" name="publish_status" value="1" {{ isset($userRole) && $userRole->publish_status ? 'checked' : '' }}>
+                    <input type="radio" id="aktif" name="publish_status" value="1"
+                        class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                        {{ (old('publish_status', $userRole->publish_status ?? '') == 1) ? 'checked' : '' }}>
                     <label class="form-check-label" for="aktif">Aktif</label>
                 </div>
+
                 <div class="form-check">
-                    <input type="radio" id="tidak_aktif" name="publish_status" value="0" {{ isset($userRole) && !$userRole->publish_status ? 'checked' : '' }}>
+                    <input type="radio" id="tidak_aktif" name="publish_status" value="0"
+                        class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                        {{ (old('publish_status', $userRole->publish_status ?? '') == 0) ? 'checked' : '' }}>
                     <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                 </div>
+
+                @if ($errors->has('publish_status'))
+                <div class="invalid-feedback d-block">
+                    {{ $errors->first('publish_status') }}
+                </div>
+                @endif
             </div>
 
             <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>

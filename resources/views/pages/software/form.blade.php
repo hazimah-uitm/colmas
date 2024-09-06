@@ -22,7 +22,7 @@
 <div class="card">
     <div class="card-body">
         <form method="POST" action="{{ $save_route }}">
-        {{ csrf_field() }}
+            {{ csrf_field() }}
 
             <div class="mb-3">
                 <label for="title" class="form-label">Perisian</label>
@@ -41,18 +41,20 @@
                 <label for="publish_status" class="form-label">Status</label>
                 <div class="form-check">
                     <input type="radio" id="aktif" name="publish_status" value="1"
-                        {{ old('publish_status', $labChecklist->publish_status ?? '') == '1' ? 'checked' : '' }}>
+                        class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                        {{ ($software->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
                     <label class="form-check-label" for="aktif">Aktif</label>
                 </div>
                 <div class="form-check">
                     <input type="radio" id="tidak_aktif" name="publish_status" value="0"
-                        {{ old('publish_status', $labChecklist->publish_status ?? '') == '0' ? 'checked' : '' }}>
+                        class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                        {{ ($software->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
                     <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                 </div>
                 @if ($errors->has('publish_status'))
                 <div class="invalid-feedback d-block">
                     @foreach ($errors->get('publish_status') as $error)
-                    {{ $error }}
+                    {{ $errors->first('publish_status') }}
                     @endforeach
                 </div>
                 @endif
