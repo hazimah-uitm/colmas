@@ -2,34 +2,32 @@
 @section('content')
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Pengurusan Makmal Komputer</div>
+    <div class="breadcrumb-title pe-3">Pengurusan Proses Kerja</div>
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Senarai Makmal Komputer</li>
+                <li class="breadcrumb-item active" aria-current="page">Senarai Proses Kerja</li>
             </ol>
         </nav>
     </div>
     @hasanyrole('Superadmin|Admin')
     <div class="ms-auto">
-        <a href="{{ route('computer-lab.trash') }}">
+        <a href="{{ route('work-checklist.trash') }}">
             <button type="button" class="btn btn-primary mt-2 mt-lg-0">Senarai Rekod Dipadam</button>
         </a>
     </div>
     @endhasanyrole
 </div>
 <!--end breadcrumb-->
-<h6 class="mb-0 text-uppercase">Senarai Makmal Komputer</h6>
+<h6 class="mb-0 text-uppercase">Senarai Proses Kerja</h6>
 <hr />
-
 <div class="card">
     <div class="card-body">
-
         <div class="d-lg-flex align-items-center mb-4 gap-3">
             <div class="position-relative">
-                <form action="{{ route('computer-lab.search') }}" method="GET" id="searchForm"
+                <form action="{{ route('work-checklist.search') }}" method="GET" id="searchForm"
                     class="d-lg-flex align-items-center gap-3">
                     <div class="input-group">
                         <input type="text" class="form-control rounded" placeholder="Carian..." name="search"
@@ -47,8 +45,8 @@
             </div>
             @hasanyrole('Superadmin|Admin')
             <div class="ms-auto">
-                <a href="{{ route('computer-lab.create') }}" class="btn btn-primary radius-30 mt-2 mt-lg-0">
-                    <i class="bx bxs-plus-square"></i> Tambah Makmal Komputer
+                <a href="{{ route('work-checklist.create') }}" class="btn btn-primary radius-30 mt-2 mt-lg-0">
+                    <i class="bx bxs-plus-square"></i> Tambah Proses Kerja
                 </a>
             </div>
             @endhasanyrole
@@ -62,60 +60,36 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Kod</th>
-                        <th>Makmal Komputer</th>
-                        <th>Kampus</th>
-                        <th>Pemilik</th>
-                        <th>Bil. Komputer</th>
-                        <th>Username</th>
-                        <th>Kata Laluan</th>
-                        @hasanyrole('Superadmin|Admin')
+                        <th>Proses Kerja</th>
                         <th>Status</th>
+                        @hasanyrole('Superadmin|Admin')
                         <th>Tindakan</th>
                         @endhasanyrole
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($computerLabList) > 0)
-                    @foreach ($computerLabList as $computerLab)
+                    @if (count($workChecklists) > 0)
+                    @foreach ($workChecklists as $workChecklist)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $computerLab->code }}</td>
-                        <td>{{ $computerLab->name }}</td>
-                        <td>{{ $computerLab->campus->name }}</td>
-                        <td>{{ $computerLab->pemilik->name }}</td>
-                        <td>{{ $computerLab->no_of_computer }}</td>
-                        <td>{{ $computerLab->username }}</td>
+                        <td>{{ $workChecklist->title }}</td>
                         <td>
-                            <div class="password-container d-flex align-items-center">
-                                <span class="password me-3" data-password="{{ $computerLab->password }}">****</span>
-                                <button class="btn btn-sm btn-outline-info toggle-password" type="button">
-                                    <i class="bx bx-show"></i>
-                                </button>
-                            </div>
-                        </td>
-                        @hasanyrole('Superadmin|Admin')
-                        <td>
-                            @if ($computerLab->publish_status == 'Aktif')
+                            @if ($workChecklist->publish_status == 'Aktif')
                             <span class="badge bg-success">Aktif</span>
                             @else
                             <span class="badge bg-danger">Tidak Aktif</span>
                             @endif
                         </td>
+                        @hasanyrole('Superadmin|Admin')
                         <td>
-                            <a href="{{ route('computer-lab.edit', $computerLab->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
+                            <a href="{{ route('work-checklist.edit', $workChecklist->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>
                             </a>
-                            <a href="{{ route('computer-lab.show', $computerLab->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
+                            <a href="{{ route('work-checklist.show', $workChecklist->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                 <i class="bx bx-show"></i>
                             </a>
-                            <a href="{{ route('computer-lab.history', $computerLab->id) }}"
-                                class="btn btn-warning btn-sm" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" title="Sejarah">
-                                <i class="bx bx-history"></i>
-                            </a>
                             <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Padam">
-                                <span class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $computerLab->id }}"><i class="bx bx-trash"></i></span>
+                                <span class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $workChecklist->id }}"><i class="bx bx-trash"></i></span>
                             </a>
                         </td>
                         @endhasanyrole
@@ -130,7 +104,7 @@
         <div class="mt-3 d-flex justify-content-between">
             <div class="d-flex align-items-center">
                 <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
-                <form action="{{ route('computer-lab.search') }}" method="GET" id="perPageForm"
+                <form action="{{ route('work-checklist.search') }}" method="GET" id="perPageForm"
                     class="d-flex align-items-center">
                     <input type="hidden" name="search" value="{{ request('search') }}">
                     <select name="perPage" id="perPage" class="form-select form-select-sm"
@@ -144,11 +118,11 @@
 
             <div class="mt-3 d-flex justify-content-end">
                 <span class="mx-2 mt-2 small text-muted">
-                    Menunjukkan {{ $computerLabList->firstItem() }} hingga {{ $computerLabList->lastItem() }} daripada
-                    {{ $computerLabList->total() }} rekod
+                    Menunjukkan {{ $workChecklists->firstItem() }} hingga {{ $workChecklists->lastItem() }} daripada
+                    {{ $workChecklists->total() }} rekod
                 </span>
                 <div class="pagination-wrapper">
-                    {{ $computerLabList->appends([
+                    {{ $workChecklists->appends([
                                 'search' => request('search'),
                             ])->links('pagination::bootstrap-4') }}
                 </div>
@@ -158,8 +132,8 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-@foreach ($computerLabList as $computerLab)
-<div class="modal fade" id="deleteModal{{ $computerLab->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+@foreach ($workChecklists as $workChecklist)
+<div class="modal fade" id="deleteModal{{ $workChecklist->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -167,17 +141,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @isset($computerLab)
-                Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">Makmal Komputer
-                    {{ $computerLab->name }}</span>?
+                @isset($workChecklist)
+                Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">Proses Kerja
+                    {{ $workChecklist->title }}</span>?
                 @else
                 Error: Campus data not available.
                 @endisset
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                @isset($computerLab)
-                <form class="d-inline" method="POST" action="{{ route('computer-lab.destroy', $computerLab->id) }}">
+                @isset($workChecklist)
+                <form class="d-inline" method="POST" action="{{ route('work-checklist.destroy', $workChecklist->id) }}">
                     {{ method_field('delete') }}
                     {{ csrf_field() }}
                     <button type="submit" class="btn btn-danger">Padam</button>
@@ -191,21 +165,6 @@
 <!--end page wrapper -->
 
 <script>
-    document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function() {
-            const passwordSpan = this.previousElementSibling;
-            const icon = this.querySelector('i');
-            if (passwordSpan.textContent === '****') {
-                passwordSpan.textContent = passwordSpan.getAttribute('data-password');
-                icon.classList.replace('bx-show', 'bx-hide');
-            } else {
-                passwordSpan.textContent = '****';
-                icon.classList.replace('bx-hide', 'bx-show');
-            }
-        });
-    });
-</script>
-<script>
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-submit the form on input change
         document.getElementById('searchInput').addEventListener('input', function() {
@@ -215,7 +174,7 @@
         // Reset form
         document.getElementById('resetButton').addEventListener('click', function() {
             // Redirect to the base route to clear query parameters
-            window.location.href = "{{ route('campus') }}";
+            window.location.href = "{{ route('work-checklist') }}";
         });
     });
 </script>

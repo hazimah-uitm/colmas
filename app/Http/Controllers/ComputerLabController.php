@@ -65,7 +65,7 @@ class ComputerLabController extends Controller
             'username.required' => 'Sila isi nama pengguna',
             'password.required' => 'Sila isi kata laluan',
             'no_of_computer.required' => 'Sila isi bilangan komputer',
-            'publish_status.required' => 'Sila isi status pengguna',
+            'publish_status.required'     => 'Sila pilih status',
         ]);
 
         $computerLab = new ComputerLab();
@@ -128,7 +128,7 @@ class ComputerLabController extends Controller
             'username.required' => 'Sila isi nama pengguna',
             'password.required' => 'Sila isi kata laluan',
             'no_of_computer.required' => 'Sila isi bilangan komputer',
-            'publish_status.required' => 'Sila isi status pengguna',
+            'publish_status.required'     => 'Sila pilih status',
         ]);
 
         $computerLab = ComputerLab::findOrFail($id);

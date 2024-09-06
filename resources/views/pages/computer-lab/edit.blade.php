@@ -138,14 +138,21 @@
                 <label for="publish_status" class="form-label">Status</label>
                 <div class="form-check">
                     <input type="radio" id="aktif" name="publish_status" value="1"
-                        {{ ($computerLab->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
+                        {{ ($user->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
                     <label class="form-check-label" for="aktif">Aktif</label>
                 </div>
                 <div class="form-check">
                     <input type="radio" id="tidak_aktif" name="publish_status" value="0"
-                        {{ ($computerLab->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
+                        {{ ($user->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
                     <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                 </div>
+                @if ($errors->has('publish_status'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('publish_status') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
             </div>
 
             <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>

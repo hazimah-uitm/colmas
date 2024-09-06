@@ -63,6 +63,25 @@
         </a>
     </li>
 
+    <li class="{{ request()->routeIs('software*', 'work-checklist*', 'lab-checklist*') ? 'mm-active' : ''  }}">
+        <a class="has-arrow">
+            <div class="parent-icon"><i class='bx bx-briefcase-alt'></i></div>
+            <div class="menu-title">Proses Selenggara</div>
+        </a>
+        <ul>
+            <li class="{{ request()->routeIs('software*') ? 'mm-active' : ''  }}">
+                <a href="{{ route('software') }}"><i class="bx bx-right-arrow-alt"></i>Perisian</a>
+            </li>
+            <li class="{{ request()->routeIs('work-checklist*') ? 'mm-active' : ''  }}">
+                <a href="{{ route('work-checklist') }}"><i class="bx bx-right-arrow-alt"></i>Proses Kerja</a>
+            </li>
+            <li class="{{ request()->routeIs('lab-checklist*') ? 'mm-active' : ''  }}">
+                <a href="{{ route('lab-checklist') }}"><i class="bx bx-right-arrow-alt"></i>Senarai Semak Makmal</a>
+            </li>
+        </ul>
+    </li>
+
+
     <li class="{{ Request::is('position*') ? 'mm-active' : '' }}">
         <a class="has-arrow" href="#">
             <div class="parent-icon"><i class="bx bx-cog"></i></div>

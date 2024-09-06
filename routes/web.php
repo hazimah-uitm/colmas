@@ -31,6 +31,8 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/home', 'HomeController@index')->name('home');
+
     //Campus
     Route::get('campus', 'CampusController@index')->name('campus');
     Route::get('campus/view/{id}', 'CampusController@show')->name('campus.show');
@@ -47,8 +49,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/computer-lab/search', 'ComputerLabController@search')->name('computer-lab.search');
     Route::get('computer-lab/{id}/history', 'ComputerLabController@history')->name('computer-lab.history');
 
-    Route::get('/home', 'HomeController@index')->name('home');
+    //Software
+    Route::get('software', 'SoftwareController@index')->name('software');
+    Route::get('software/view/{id}', 'SoftwareController@show')->name('software.show');
+    Route::get('/software/search', 'SoftwareController@search')->name('software.search');
 
+    //Work Checklist
+    Route::get('work-checklist', 'WorkChecklistController@index')->name('work-checklist');
+    Route::get('work-checklist/view/{id}', 'WorkChecklistController@show')->name('work-checklist.show');
+    Route::get('/work-checklist/search', 'WorkChecklistController@search')->name('work-checklist.search');
+
+    //Lab Checklist
+    Route::get('lab-checklist', 'LabChecklistController@index')->name('lab-checklist');
+    Route::get('lab-checklist/view/{id}', 'LabChecklistController@show')->name('lab-checklist.show');
+    Route::get('/lab-checklist/search', 'LabChecklistController@search')->name('lab-checklist.search');
 
     // User Profile
     Route::get('profile/{id}', 'UserProfileController@show')->name('profile.show');
@@ -120,5 +134,35 @@ Route::middleware('auth')->group(function () {
         Route::get('/computer-lab/trash', 'ComputerLabController@trashList')->name('computer-lab.trash');
         Route::get('/computer-lab/{id}/restore', 'ComputerLabController@restore')->name('computer-lab.restore');
         Route::delete('/computer-lab/{id}/force-delete', 'ComputerLabController@forceDelete')->name('computer-lab.forceDelete');
+
+        // Software
+        Route::get('software/create', 'SoftwareController@create')->name('software.create');
+        Route::post('software/store', 'SoftwareController@store')->name('software.store');
+        Route::get('software/{id}/edit', 'SoftwareController@edit')->name('software.edit');
+        Route::post('software/{id}', 'SoftwareController@update')->name('software.update');
+        Route::delete('software/{id}', 'SoftwareController@destroy')->name('software.destroy');
+        Route::get('/software/trash', 'SoftwareController@trashList')->name('software.trash');
+        Route::get('/software/{id}/restore', 'SoftwareController@restore')->name('software.restore');
+        Route::delete('/software/{id}/force-delete', 'SoftwareController@forceDelete')->name('software.forceDelete');
+
+        // Work checklist
+        Route::get('work-checklist/create', 'WorkChecklistController@create')->name('work-checklist.create');
+        Route::post('work-checklist/store', 'WorkChecklistController@store')->name('work-checklist.store');
+        Route::get('work-checklist/{id}/edit', 'WorkChecklistController@edit')->name('work-checklist.edit');
+        Route::post('work-checklist/{id}', 'WorkChecklistController@update')->name('work-checklist.update');
+        Route::delete('work-checklist/{id}', 'WorkChecklistController@destroy')->name('work-checklist.destroy');
+        Route::get('/work-checklist/trash', 'WorkChecklistController@trashList')->name('work-checklist.trash');
+        Route::get('/work-checklist/{id}/restore', 'WorkChecklistController@restore')->name('work-checklist.restore');
+        Route::delete('/work-checklist/{id}/force-delete', 'WorkChecklistController@forceDelete')->name('work-checklist.forceDelete');
+
+        // Lab Checklist
+        Route::get('lab-checklist/create', 'LabChecklistController@create')->name('lab-checklist.create');
+        Route::post('lab-checklist/store', 'LabChecklistController@store')->name('lab-checklist.store');
+        Route::get('lab-checklist/{id}/edit', 'LabChecklistController@edit')->name('lab-checklist.edit');
+        Route::post('lab-checklist/{id}', 'LabChecklistController@update')->name('lab-checklist.update');
+        Route::delete('lab-checklist/{id}', 'LabChecklistController@destroy')->name('lab-checklist.destroy');
+        Route::get('/lab-checklist/trash', 'LabChecklistController@trashList')->name('lab-checklist.trash');
+        Route::get('/lab-checklist/{id}/restore', 'LabChecklistController@restore')->name('lab-checklist.restore');
+        Route::delete('/lab-checklist/{id}/force-delete', 'LabChecklistController@forceDelete')->name('lab-checklist.forceDelete');
     });
 });

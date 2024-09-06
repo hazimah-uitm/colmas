@@ -140,16 +140,21 @@
                 <label for="publish_status" class="form-label">Status</label>
                 <div class="form-check">
                     <input type="radio" id="aktif" name="publish_status" value="1"
-                        {{ old('publish_status') == '1' || ($computerLab->publish_status ?? false) ? 'checked' : '' }}
-                        required>
+                        {{ old('publish_status', $labChecklist->publish_status ?? '') == '1' ? 'checked' : '' }}>
                     <label class="form-check-label" for="aktif">Aktif</label>
                 </div>
                 <div class="form-check">
                     <input type="radio" id="tidak_aktif" name="publish_status" value="0"
-                        {{ old('publish_status') == '0' || !($computerLab->publish_status ?? true) ? 'checked' : '' }}
-                        required>
+                        {{ old('publish_status', $labChecklist->publish_status ?? '') == '0' ? 'checked' : '' }}>
                     <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                 </div>
+                @if ($errors->has('publish_status'))
+                <div class="invalid-feedback d-block">
+                    @foreach ($errors->get('publish_status') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
             </div>
 
             <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>

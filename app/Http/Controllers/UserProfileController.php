@@ -43,6 +43,14 @@ class UserProfileController extends Controller
             'position_id' => 'required|exists:positions,id',
             'campus_id'  => 'required|exists:campuses,id',
             'office_phone_no' => 'nullable|string',
+        ],[
+            'name.required'     => 'Sila isi nama pengguna',
+            'staff_id.required' => 'Sila isi no. pekerja pengguna',
+            'staff_id.unique' => 'No. pekerja telah wujud',
+            'email.required'    => 'Sila isi emel pengguna',
+            'email.unique'    => 'Emel telah wujud',
+            'position_id.required' => 'Sila isi jawatan pengguna',
+            'campus_id.required' => 'Sila isi kampus pengguna',
         ]);
 
         $user = User::findOrFail($id);
