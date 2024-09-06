@@ -56,6 +56,16 @@ class ComputerLabController extends Controller
             'password' => 'required',
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
+        ], [
+            'name.required' => 'Sila isi nama kampus',
+            'name.unique' => 'Nama kampus telah wujud',
+            'campus_id.required' => 'Sila pilih kampus',
+            'campus_id.exists' => 'Kampus yang dipilih tidak sah',
+            'pemilik_id.required' => 'Sila pilih pemilik',
+            'username.required' => 'Sila isi nama pengguna',
+            'password.required' => 'Sila isi kata laluan',
+            'no_of_computer.required' => 'Sila isi bilangan komputer',
+            'publish_status.required' => 'Sila isi status pengguna',
         ]);
 
         $computerLab = new ComputerLab();
@@ -109,6 +119,16 @@ class ComputerLabController extends Controller
             'password' => 'required',
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
+        ],[
+            'name.required' => 'Sila isi nama kampus',
+            'name.unique' => 'Nama kampus telah wujud',
+            'campus_id.required' => 'Sila pilih kampus',
+            'campus_id.exists' => 'Kampus yang dipilih tidak sah',
+            'pemilik_id.required' => 'Sila pilih pemilik',
+            'username.required' => 'Sila isi nama pengguna',
+            'password.required' => 'Sila isi kata laluan',
+            'no_of_computer.required' => 'Sila isi bilangan komputer',
+            'publish_status.required' => 'Sila isi status pengguna',
         ]);
 
         $computerLab = ComputerLab::findOrFail($id);
@@ -126,6 +146,7 @@ class ComputerLabController extends Controller
 
         if ($search) {
             $computerLabList = ComputerLab::where('name', 'LIKE', "%$search%")
+                ->orWhere('code', 'LIKE', "%$search%")
                 ->latest()
                 ->paginate(10);
         } else {
@@ -180,11 +201,11 @@ class ComputerLabController extends Controller
             'Aktif' => 1,
             'Tidak Aktif' => 0,
         ];
-    
+
         $publishStatus = isset($publishStatusMapping[$computerLab->publish_status])
             ? $publishStatusMapping[$computerLab->publish_status]
             : $computerLab->publish_status;
-    
+
         ComputerLabHistory::create([
             'computer_lab_id' => $computerLab->id,
             'code' => $computerLab->code,
@@ -195,13 +216,13 @@ class ComputerLabController extends Controller
             'action' => $action,
             'publish_status' => $publishStatus,
         ]);
-    }    
+    }
 
     public function history($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
         $historyList = $computerLab->histories()->latest()->paginate(10);
-    
+
         return view('pages.computer-lab.history', [
             'computerLab' => $computerLab,
             'historyList' => $historyList,

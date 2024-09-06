@@ -29,14 +29,19 @@
 
         <div class="d-lg-flex align-items-center mb-4 gap-3">
             <div class="position-relative">
-                <form action="{{ route('computer-lab.search') }}" method="GET">
+                <form action="{{ route('computer-lab.search') }}" method="GET" id="searchForm"
+                    class="d-lg-flex align-items-center gap-3">
                     <div class="input-group">
-                        <input type="text" class="form-control search-input" placeholder="Carian..." name="search">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-primary search-button">
-                                <i class="bx bx-search"></i>
-                            </button>
-                        </span>
+                        <input type="text" class="form-control rounded" placeholder="Carian..." name="search"
+                            value="{{ request('search') }}" id="searchInput">
+
+                        <input type="hidden" name="perPage" value="{{ request('perPage', 10) }}">
+                        <button type="submit" class="btn btn-primary ms-1 rounded" id="searchButton">
+                            <i class="bx bx-search"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary ms-1 rounded" id="resetButton">
+                            Reset
+                        </button>
                     </div>
                 </form>
             </div>
@@ -104,11 +109,11 @@
                             <a href="{{ route('computer-lab.show', $computerLab->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                 <i class="bx bx-show"></i>
                             </a>
-                                            <a href="{{ route('computer-lab.history', $computerLab->id) }}"
-                                                class="btn btn-warning btn-sm" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title="Sejarah">
-                                                <i class="bx bx-history"></i>
-                                            </a>
+                            <a href="{{ route('computer-lab.history', $computerLab->id) }}"
+                                class="btn btn-warning btn-sm" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" title="Sejarah">
+                                <i class="bx bx-history"></i>
+                            </a>
                             <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Padam">
                                 <span class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $computerLab->id }}"><i class="bx bx-trash"></i></span>
                             </a>
@@ -125,8 +130,11 @@
         <div class="mt-3 d-flex justify-content-between">
             <div class="d-flex align-items-center">
                 <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
-                <form action="{{ route('computer-lab') }}" method="GET" id="perPageForm">
-                    <select name="perPage" id="perPage" class="form-select" onchange="document.getElementById('perPageForm').submit()">
+                <form action="{{ route('computer-lab.search') }}" method="GET" id="perPageForm"
+                    class="d-flex align-items-center">
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                    <select name="perPage" id="perPage" class="form-select form-select-sm"
+                        onchange="document.getElementById('perPageForm').submit()">
                         <option value="10" {{ Request::get('perPage') == '10' ? 'selected' : '' }}>10</option>
                         <option value="20" {{ Request::get('perPage') == '20' ? 'selected' : '' }}>20</option>
                         <option value="30" {{ Request::get('perPage') == '30' ? 'selected' : '' }}>30</option>
@@ -135,10 +143,15 @@
             </div>
 
             <div class="mt-3 d-flex justify-content-end">
-                <div class="mx-1 mt-2">{{ $computerLabList->firstItem() }} – {{ $computerLabList->lastItem() }} dari
+                <span class="mx-2 mt-2 small text-muted">
+                    Menunjukkan {{ $computerLabList->firstItem() }} hingga {{ $computerLabList->lastItem() }} daripada
                     {{ $computerLabList->total() }} rekod
+                </span>
+                <div class="pagination-wrapper">
+                    {{ $computerLabList->appends([
+                                'search' => request('search'),
+                            ])->links('pagination::bootstrap-4') }}
                 </div>
-                <div>{{ $computerLabList->links() }}</div>
             </div>
         </div>
     </div>
@@ -179,7 +192,7 @@
 
 <script>
     document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function() {
             const passwordSpan = this.previousElementSibling;
             const icon = this.querySelector('i');
             if (passwordSpan.textContent === '****') {
@@ -189,6 +202,20 @@
                 passwordSpan.textContent = '****';
                 icon.classList.replace('bx-hide', 'bx-show');
             }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-submit the form on input change
+        document.getElementById('searchInput').addEventListener('input', function() {
+            document.getElementById('searchForm').submit();
+        });
+
+        // Reset form
+        document.getElementById('resetButton').addEventListener('click', function() {
+            // Redirect to the base route to clear query parameters
+            window.location.href = "{{ route('campus') }}";
         });
     });
 </script>
