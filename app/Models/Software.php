@@ -25,8 +25,8 @@ class Software extends Model
         return $this->attributes['publish_status'] ? 'Aktif' : 'Tidak Aktif';
     }
 
-    // public function labManagement()
-    // {
-    //     return $this->hasMany(LabManagement::class);
-    // }
+    public function labManagement()
+    {
+        return $this->hasMany(LabManagement::class);
+    }
 }

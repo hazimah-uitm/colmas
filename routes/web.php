@@ -71,6 +71,42 @@ Route::middleware('auth')->group(function () {
     Route::get('profile/{id}/change-password', 'UserProfileController@changePasswordForm')->name('profile.change-password');
     Route::post('profile/{id}/change-password', 'UserProfileController@changePassword')->name('profile.update-password');
 
+    // Lab Management Record
+    Route::get('lab-management', 'LabManagementController@index')->name('lab-management');
+    Route::get('lab-management/create', 'LabManagementController@create')->name('lab-management.create');
+    Route::post('lab-management/store', 'LabManagementController@store')->name('lab-management.store');
+    Route::get('lab-management/{id}/edit', 'LabManagementController@edit')->name('lab-management.edit');
+    Route::post('lab-management/{id}', 'LabManagementController@update')->name('lab-management.update');
+    Route::get('lab-management/view/{id}', 'LabManagementController@show')->name('lab-management.show');
+    Route::get('/lab-management/search', 'LabManagementController@search')->name('lab-management.search');
+    Route::post('lab-management/submit/{id}', 'LabManagementController@submit')->name('lab-management.submit');
+    Route::get('lab-management/{id}/report-detail', 'LabManagementController@reportDetail')->name('lab-management.report-detail');
+    Route::get('lab-management/{id}/check-detail', 'LabManagementController@checkDetail')->name('lab-management.check-detail');
+    Route::post('lab-management/check/{id}', 'LabManagementController@check')->name('lab-management.check');
+    Route::delete('lab-management/{id}', 'LabManagementController@destroy')->name('lab-management.destroy');
+    Route::get('/lab-management/trash', 'LabManagementController@trashList')->name('lab-management.trash');
+    Route::get('/lab-management/{id}/restore', 'LabManagementController@restore')->name('lab-management.restore');
+    Route::delete('/lab-management/{id}/force-delete', 'LabManagementController@forceDelete')->name('lab-management.forceDelete');
+
+    // Lab Management - Maintenance Record
+    Route::get('lab-management/{labManagement}/maintenance-records', 'MaintenanceRecordController@index')->name('lab-management.maintenance-records');
+    Route::get('lab-management/{labManagement}/maintenance-records/create', 'MaintenanceRecordController@create')->name('lab-management.maintenance-records.create');
+    Route::post('lab-management/{labManagement}/maintenance-records/store', 'MaintenanceRecordController@store')->name('lab-management.maintenance-records.store');
+    Route::get('lab-management/{labManagement}/maintenance-records/{id}/edit', 'MaintenanceRecordController@edit')->name('lab-management.maintenance-records.edit');
+    Route::post('lab-management/{labManagement}/maintenance-records/{id}', 'MaintenanceRecordController@update')->name('lab-management.maintenance-records.update');
+    Route::get('lab-management/{labManagement}/maintenance-records/show/{id}', 'MaintenanceRecordController@show')->name('lab-management.maintenance-records.show');
+    Route::get('lab-management/{labManagement}/maintenance-records/search', 'MaintenanceRecordController@search')->name('lab-management.maintenance-records.search');
+    Route::delete('lab-management/{labManagement}/maintenance-records/{id}', 'MaintenanceRecordController@destroy')->name('lab-management.maintenance-records.destroy');
+    Route::get('lab-management/{labManagement}/maintenance-records/trash', 'MaintenanceRecordController@trashList')->name('lab-management.maintenance-records.trash');
+    Route::get('lab-management/{labManagement}/maintenance-records/{id}/restore', 'MaintenanceRecordController@restore')->name('lab-management.maintenance-records.restore');
+    Route::delete('lab-management/{labManagement}/maintenance-records/{id}/force-delete', 'MaintenanceRecordController@forceDelete')->name('lab-management.maintenance-records.forceDelete');
+
+    // Report
+    Route::get('report', 'ReportController@index')->name('report');
+    Route::get('report/view/{id}', 'ReportController@show')->name('report.show');
+    Route::get('/report/{id}/pdf', 'ReportController@downloadPdf')->name('report.pdf');
+
+
     Route::middleware([RoleMiddleware::class . ':Superadmin'])->group(function () {
         // Superadmin - Activity Log
         Route::get('activity-log', 'ActivityLogController@index')->name('activity-log');

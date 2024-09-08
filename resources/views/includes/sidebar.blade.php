@@ -41,7 +41,21 @@
         </a>
     </li>
 
-
+    <li class="menu-label">Pengurusan Maklumat</li>
+    <li class="{{ Request::is('lab-management*') ? 'mm-active' : '' }}">
+        <a href="{{ route('lab-management') }}">
+            <div class="parent-icon"><i class='bx bx-wrench'></i>
+            </div>
+            <div class="menu-title">Rekod Selenggara</div>
+        </a>
+    </li>
+    <li class="{{ Request::is('report*') ? 'mm-active' : '' }}">
+        <a href="{{ route('report') }}">
+            <div class="parent-icon"><i class='bx bxs-report'></i>
+            </div>
+            <div class="menu-title">Laporan Selenggara</div>
+        </a>
+    </li>
 
     <li class="menu-label">Tetapan</li>
     <li class="{{ Request::is('campus*') ? 'mm-active' : '' }}">

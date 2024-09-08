@@ -25,8 +25,8 @@ class WorkChecklist extends Model
         return $this->attributes['publish_status'] ? 'Aktif' : 'Tidak Aktif';
     }
 
-    // public function maintenanceRecord()
-    // {
-    //     return $this->hasMany(MaintenanceRecord::class);
-    // }
+    public function maintenanceRecord()
+    {
+        return $this->hasMany(MaintenanceRecord::class);
+    }
 }

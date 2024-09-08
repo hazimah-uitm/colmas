@@ -41,15 +41,15 @@ class ComputerLab extends Model
         return $this->belongsTo(Campus::class);
     }
 
-    // public function maintenanceRecord()
-    // {
-    //     return $this->hasMany(MaintenanceRecord::class);
-    // }
+    public function maintenanceRecord()
+    {
+        return $this->hasMany(MaintenanceRecord::class);
+    }
 
-    // public function labManagement()
-    // {
-    //     return $this->hasMany(LabManagement::class);
-    // }
+    public function labManagement()
+    {
+        return $this->hasMany(LabManagement::class);
+    }
 
     public function histories()
     {
