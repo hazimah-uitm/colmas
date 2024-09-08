@@ -175,11 +175,15 @@
                                     <th>Catatan/Ulasan</th>
                                     <td>
                                         <div class="mb-3">
-                                            <textarea class="form-control @error('remarks_submitter') is-invalid @enderror" id="remarks_submitter"
+                                            <textarea class="form-control {{ $errors->has('remarks_submitter') ? 'is-invalid' : '' }}" id="remarks_submitter"
                                                 name="remarks_submitter" rows="3">{{ old('remarks_submitter') ?? ($labManagement->remarks_submitter ?? '') }}</textarea>
-                                            @error('remarks_submitter')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            @if ($errors->has('remarks_submitter'))
+                                                <div class="invalid-feedback">
+                                                    @foreach ($errors->get('remarks_submitter') as $error)
+                                                        {{ $error }}
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -202,8 +206,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-
-                            @csrf
+                            {{ csrf_field() }}
                             <input type="hidden" name="submitted_by" value="{{ auth()->id() }}">
                             <input type="hidden" name="submitted_at" value="{{ now() }}">
 

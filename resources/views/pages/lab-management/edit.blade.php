@@ -25,7 +25,7 @@
 <div class="card">
     <div class="card-body">
         <form method="POST" action="{{ $save_route }}">
-            @csrf
+            {{ csrf_field() }}
 
             @foreach ($errors->all() as $error)
             <div class="alert alert-danger">{{ $error }}</div>

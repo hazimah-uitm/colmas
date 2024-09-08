@@ -154,8 +154,8 @@
                         @isset($trash)
                             <form class="d-inline" method="POST"
                                 action="{{ route('lab-management.forceDelete', $trash->id) }}">
-                                @method('DELETE')
-                                @csrf
+                                {{ method_field('delete') }}
+                                {{ csrf_field() }}
                                 <button type="submit" class="btn btn-danger">Padam</button>
                             </form>
                         @endisset

@@ -1,11 +1,11 @@
 <!-- Optional button section -->
 <!-- <div class="d-flex justify-content-end mb-2">
     @if (!in_array($labManagement->status, ['dihantar', 'telah_disemak']))
-        <a href="{{ route('lab-management.maintenance-records.create', ['labManagement' => $labManagement->id]) }}"
+<a href="{{ route('lab-management.maintenance-records.create', ['labManagement' => $labManagement->id]) }}"
             class="btn btn-primary radius-30 mt-2 mt-lg-0 ms-2">
             <i class="bx bxs-plus-square"></i> Tambah Rekod PC
         </a>
-    @endif
+@endif
 </div> -->
 
 <!-- Lab Management Info -->
@@ -50,11 +50,18 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $pcMaintenanceNo = $labManagement->pc_maintenance_no;
+            $computerNo = $labManagement->computer_no;
+            $pcDamageNo = $labManagement->pc_damage_no ?? 0;
+            $totalPCMaintenance = $pcMaintenanceNo + $pcDamageNo;
+            $pcUnmaintenanceNo = $computerNo - $totalPCMaintenance;
+        @endphp
         <tr>
-            <td>{{ $labManagement->computer_no ?? '-' }}</td>
-            <td>{{ $labManagement->pc_maintenance_no ?? '-' }}</td>
-            <td>{{ $labManagement->pc_damage_no ?? '-' }}</td>
-            <td>{{ $labManagement->pc_unmaintenance_no ?? '-' }}</td>
+            <td>{{ $computerNo }}</td>
+            <td>{{ $totalPCMaintenance }}</td>
+            <td>{{ $pcDamageNo }}</td>
+            <td>{{ $pcUnmaintenanceNo }}</td>
         </tr>
     </tbody>
 </table>

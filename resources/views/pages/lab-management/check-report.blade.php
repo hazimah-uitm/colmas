@@ -1,7 +1,7 @@
     @foreach ($labManagementList as $labManagement)
         <form id="checkForm{{ $labManagement->id }}" action="{{ route('lab-management.check', $labManagement->id) }}"
             method="POST" class="d-inline">
-            @csrf
+            {{ csrf_field() }}
             <div class="modal fade" id="checkModal{{ $labManagement->id }}" tabindex="-1" aria-labelledby="checkModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -187,11 +187,15 @@
                                     <th>Catatan/Ulasan Pegawai Penyemak</th>
                                     <td>
                                         <div class="mb-3">
-                                            <textarea class="form-control @error('remarks_checker') is-invalid @enderror" id="remarks_checker"
+                                            <textarea class="form-control {{ $errors->has('remarks_checker') ? 'is-invalid' : '' }}" id="remarks_checker"
                                                 name="remarks_checker" rows="3">{{ old('remarks_checker') ?? ($labManagement->remarks_checker ?? '') }}</textarea>
-                                            @error('remarks_checker')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                        @if ($errors->has('remarks_checker'))
+                                            <div class="invalid-feedback">
+                                                @foreach ($errors->get('remarks_checker') as $error)
+                                                    {{ $error }}
+                                                @endforeach
+                                            </div>
+                                        @endif
                                         </div>
                                     </td>
                                 </tr>

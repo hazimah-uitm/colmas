@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <form id="submitForm{{ $labManagement->id }}"
                         action="{{ route('lab-management.submit', $labManagement->id) }}" method="POST" class="d-inline">
-                        @csrf
+                        {{ csrf_field() }}
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
