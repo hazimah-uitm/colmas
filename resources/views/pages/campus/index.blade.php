@@ -63,7 +63,8 @@
                     @if (count($campusList) > 0)
                     @foreach ($campusList as $campus)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                    <td>{{ ($campusList->currentPage() - 1) * $campusList->perPage() + $loop->iteration }}
+                    </td>
                         <td>{{ $campus->name }}</td>
                         <td>
                             @if ($campus->publish_status == 'Aktif')

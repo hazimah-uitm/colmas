@@ -18,66 +18,76 @@
 <hr />
 <div class="card">
     <div class="card-body">
-        <div class="d-lg-flex justify-content-end align-items-center mb-4 gap-2">
-            <div class="ms-auto">
-                <form id="report" action="{{ route('report') }}" method="GET">
-                    <div class="d-flex flex-wrap justify-content-end">
+        <div class="row mb-4">
+            <div class="col-lg">
+                <form action="{{ route('report') }}" method="GET" id="searchForm"
+                    class="d-lg-flex align-items-center gap-3">
+
+                    <div class="input-group">
+                        <input type="text" class="form-control rounded" placeholder="Carian..." name="search"
+                            value="{{ request('search') }}" id="searchInput">
+
                         @hasanyrole('Admin|Superadmin')
-                        <div class="mb-2 ms-2 col-12 col-md-auto">
-                            <select name="campus_id" id="campus_id" class="form-select">
-                                <option value="">Semua Kampus</option>
-                                @foreach ($campusList as $campus)
-                                <option value="{{ $campus->id }}" {{ Request::get('campus_id') == $campus->id ? 'selected' : '' }}>
-                                    {{ $campus->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <select name="campus_id" class="form-select form-select-sm ms-2 rounded" id="campusFilter">
+                            <option value="">Semua Kampus</option>
+                            @foreach ($campusList as $campus)
+                            <option value="{{ $campus->id }}"
+                                {{ Request::get('campus_id') == $campus->id ? 'selected' : '' }}>
+                                {{ $campus->name }}
+                            </option>
+                            @endforeach
+                        </select>
                         @endhasanyrole
+
                         @hasanyrole('Pegawai Penyemak|Superadmin')
-                        <div class="mb-2 ms-2 col-12 col-md-auto">
-                            <select name="pemilik_id" id="pemilik_id" class="form-select">
-                                <option value="">Semua Pemilik</option>
-                                @foreach ($pemilikList as $pemilik)
-                                <option value="{{ $pemilik->id }}" {{ Request::get('pemilik_id') == $pemilik->id ? 'selected' : '' }}>
-                                    {{ $pemilik->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <select name="pemilik_id" class="form-select form-select-sm ms-2 rounded" id="pemilikFilter">
+                            <option value="">Semua Pemilik</option>
+                            @foreach ($pemilikList as $pemilik)
+                            <option value="{{ $pemilik->id }}"
+                                {{ Request::get('pemilik_id') == $pemilik->id ? 'selected' : '' }}>
+                                {{ $pemilik->name }}
+                            </option>
+                            @endforeach
+                        </select>
                         @endhasanyrole
-                        <div class="mb-2 ms-2 col-12 col-md-auto">
-                            <select name="computer_lab_id" id="computer_lab_id" class="form-select">
-                                <option value="">Semua Makmal Komputer</option>
-                                @foreach ($computerLabList as $computerLab)
-                                <option value="{{ $computerLab->id }}" {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
-                                    {{ $computerLab->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-2 ms-2 col-12 col-md-auto">
-                            <select name="month" id="month" class="form-select">
-                                <option value="">Semua Bulan</option>
-                                @for ($i = 1; $i <= 12; $i++) <option value="{{ $i }}" {{ Request::get('month') == $i ? 'selected' : '' }}>
-                                    {{ date('F', mktime(0, 0, 0, $i, 1)) }}
-                                    </option>
-                                    @endfor
-                            </select>
-                        </div>
-                        <div class="mb-2 ms-2 col-12 col-md-auto">
-                            <select name="year" id="year" class="form-select">
-                                <option value="">Semua Tahun</option>
-                                @for ($i = date('Y'); $i >= date('Y') - 10; $i--)
-                                <option value="{{ $i }}" {{ Request::get('year') == $i ? 'selected' : '' }}>
-                                    {{ $i }}
+
+                        <select name="computer_lab_id" class="form-select form-select-sm ms-2 rounded" id="computerLabFilter">
+                            <option value="">Semua Makmal Komputer</option>
+                            @foreach ($computerLabList as $computerLab)
+                            <option value="{{ $computerLab->id }}"
+                                {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
+                                {{ $computerLab->name }}
+                            </option>
+                            @endforeach
+                        </select>
+
+                        <select name="month" class="form-select form-select-sm ms-2 rounded" id="monthFilter">
+                            <option value="">Semua Bulan</option>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <option value="{{ $i }}"
+                                {{ Request::get('month') == $i ? 'selected' : '' }}>
+                                {{ date('F', mktime(0, 0, 0, $i, 1)) }}
                                 </option>
                                 @endfor
-                            </select>
-                        </div>
-                        <div class="mb-2 ms-2 col-12 col-md-auto">
-                            <button id="resetButton" class="btn btn-primary">Reset</button>
-                        </div>
+                        </select>
+
+                        <select name="year" class="form-select form-select-sm ms-2 rounded" id="yearFilter">
+                            <option value="">Semua Tahun</option>
+                            @for ($i = date('Y'); $i >= date('Y') - 10; $i--)
+                            <option value="{{ $i }}"
+                                {{ Request::get('year') == $i ? 'selected' : '' }}>
+                                {{ $i }}
+                            </option>
+                            @endfor
+                        </select>
+
+                        <input type="hidden" name="perPage" value="{{ request('perPage', 10) }}">
+                        <button type="submit" class="btn btn-primary ms-1 rounded" id="searchButton">
+                            <i class="bx bx-search"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary ms-1 rounded" id="resetButton">
+                            Reset
+                        </button>
                     </div>
                 </form>
             </div>
@@ -120,7 +130,7 @@
                     </tr>
                     @endforeach
                     @else
-                    <td colspan="7">Tiada rekod</td>
+                    <td colspan="9">Tiada rekod</td>
                     @endif
                 </tbody>
             </table>
@@ -128,8 +138,16 @@
         <div class="mt-3 d-flex justify-content-between">
             <div class="d-flex align-items-center">
                 <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
-                <form action="{{ route('report') }}" method="GET" id="perPageForm">
-                    <select name="perPage" id="perPage" class="form-select" onchange="document.getElementById('perPageForm').submit()">
+                <form action="{{ route('report') }}" method="GET" id="perPageForm"
+                    class="d-flex align-items-center">
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                    <input type="hidden" name="campus_id" value="{{ request('campus_id') }}">
+                    <input type="hidden" name="pemilik_id" value="{{ request('pemilik_id') }}">
+                    <input type="hidden" name="computer_lab_id" value="{{ request('computer_lab_id') }}">
+                    <input type="hidden" name="month" value="{{ request('month') }}">
+                    <input type="hidden" name="year" value="{{ request('year') }}">
+                    <select name="perPage" id="perPage" class="form-select form-select-sm"
+                        onchange="document.getElementById('perPageForm').submit()">
                         <option value="10" {{ Request::get('perPage') == '10' ? 'selected' : '' }}>10</option>
                         <option value="20" {{ Request::get('perPage') == '20' ? 'selected' : '' }}>20</option>
                         <option value="30" {{ Request::get('perPage') == '30' ? 'selected' : '' }}>30</option>
@@ -137,34 +155,59 @@
                 </form>
             </div>
 
-            <div class="mt-3 d-flex justify-content-end">
-                <div class="mx-1 mt-2">{{ $labManagementList->firstItem() }} –
-                    {{ $labManagementList->lastItem() }} dari
+            <div class="d-flex justify-content-end align-items-center">
+                <span class="mx-2 mt-2 small text-muted">
+                    Menunjukkan {{ $labManagementList->firstItem() }} hingga {{ $labManagementList->lastItem() }} daripada
                     {{ $labManagementList->total() }} rekod
+                </span>
+                <div class="pagination-wrapper">
+                    {{ $labManagementList->appends([
+                                'search' => request('search'),
+                                'perPage' => request('perPage'),
+                                'campus_id' => request('campus_id'),
+                                'pemilik_id' => request('pemilik_id'),
+                                'computer_lab_id' => request('computer_lab_id'),
+                                'month' => request('month'),
+                                'year' => request('year'),
+                            ])->links('pagination::bootstrap-4') }}
                 </div>
-                <div>{{ $labManagementList->links() }}</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#campus_id, #pemilik_id, #computer_lab_id, #month, #year').on('change', function() {
-            // Submit the form when either dropdown changes
-            $('#report').submit();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-submit the form on input change
+        document.getElementById('searchInput').addEventListener('input', function() {
+            document.getElementById('searchForm').submit();
         });
-    });
 
-    document.getElementById('resetButton').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default reset behavior
-        const url = new URL(window.location.href);
-        url.searchParams.delete('campus_id');
-        url.searchParams.delete('pemilik_id');
-        url.searchParams.delete('computer_lab_id');
-        url.searchParams.delete('month');
-        url.searchParams.delete('year');
-        window.location.href = url.toString(); // Redirect to the URL with reset filters
+        document.getElementById('campusFilter').addEventListener('change', function() {
+            document.getElementById('searchForm').submit();
+        });
+
+        document.getElementById('computerLabFilter').addEventListener('change', function() {
+            document.getElementById('searchForm').submit();
+        });
+
+        document.getElementById('pemilikFilter').addEventListener('change', function() {
+            document.getElementById('searchForm').submit();
+        });
+
+        document.getElementById('monthFilter').addEventListener('change', function() {
+            document.getElementById('searchForm').submit();
+        });
+
+        document.getElementById('yearFilter').addEventListener('change', function() {
+            document.getElementById('searchForm').submit();
+        });
+
+        document.getElementById('resetButton').addEventListener('click', function() {
+            // Redirect to the base route to clear query parameters
+            window.location.href = "{{ route('report') }}";
+        });
+
     });
 </script>
 @endsection

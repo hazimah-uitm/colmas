@@ -66,20 +66,21 @@
             <div class="d-flex align-items-center">
                 <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
                 <form action="{{ route('work-checklist') }}" method="GET" id="perPageForm">
-                    <select name="perPage" id="perPage" class="form-select"
-                        onchange="document.getElementById('perPageForm').submit()">
+                    <select name="perPage" id="perPage" class="form-select" onchange="document.getElementById('perPageForm').submit()">
                         <option value="10" {{ Request::get('perPage') == '10' ? 'selected' : '' }}>10</option>
                         <option value="20" {{ Request::get('perPage') == '20' ? 'selected' : '' }}>20</option>
                         <option value="30" {{ Request::get('perPage') == '30' ? 'selected' : '' }}>30</option>
                     </select>
                 </form>
             </div>
-
             <div class="mt-3 d-flex justify-content-end">
-                <div class="mx-1 mt-2">{{ $trashList->firstItem() }} – {{ $trashList->lastItem() }} dari
+                <span class="mx-2 mt-2 small text-muted">
+                    Menunjukkan {{ $trashList->firstItem() }} hingga {{ $trashList->lastItem() }} daripada
                     {{ $trashList->total() }} rekod
+                </span>
+                <div class="pagination-wrapper">
+                    {{ $trashList->links('pagination::bootstrap-4') }}
                 </div>
-                <div>{{ $trashList->links() }}</div>
             </div>
         </div>
     </div>

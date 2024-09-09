@@ -38,7 +38,8 @@
                     @if (count($trashList) > 0)
                     @foreach ($trashList as $trash)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                    <td>{{ ($trashList->currentPage() - 1) * $trashList->perPage() + $loop->iteration }}
+                    </td>
                         <td>{{ $trash->computer_name }}</td>
                         <td>{{ $trash->ip_address }}</td>
                         <td>
@@ -77,7 +78,7 @@
                     </tr>
                     @endforeach
                     @else
-                    <td colspan="4">Tiada rekod</td>
+                    <td colspan="6">Tiada rekod</td>
                     @endif
                 </tbody>
             </table>
@@ -95,10 +96,13 @@
             </div>
 
             <div class="mt-3 d-flex justify-content-end">
-                <div class="mx-1 mt-2">{{ $trashList->firstItem() }} – {{ $trashList->lastItem() }} dari
+                <span class="mx-2 mt-2 small text-muted">
+                    Menunjukkan {{ $trashList->firstItem() }} hingga {{ $trashList->lastItem() }} daripada
                     {{ $trashList->total() }} rekod
+                </span>
+                <div class="pagination-wrapper">
+                    {{ $trashList->links('pagination::bootstrap-4') }}
                 </div>
-                <div>{{ $trashList->links() }}</div>
             </div>
         </div>
     </div>
@@ -125,8 +129,8 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 @isset($trash)
                 <form class="d-inline" method="POST" action="{{ route('lab-management.maintenance-records.forceDelete', ['labManagement' => $labManagement->id, 'id' => $trash->id]) }}">
-                    @method('DELETE')
-                    @csrf
+                    {{ method_field('delete') }}
+                    {{ csrf_field() }}
                     <button type="submit" class="btn btn-danger">Padam</button>
                 </form>
                 @endisset

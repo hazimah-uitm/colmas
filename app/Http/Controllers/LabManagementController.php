@@ -108,10 +108,6 @@ class LabManagementController extends Controller
 
     public function store(Request $request)
     {
-        $messages = [
-            'lab_checklist_id.required' => 'Sila isi senarai semak makmal sebelum hantar.',
-        ];
-
         $request->validate([
             'computer_lab_id' => 'required',
             'lab_checklist_id' => 'required|array',
@@ -129,7 +125,10 @@ class LabManagementController extends Controller
             'checked_at' => 'nullable',
             'submitted_by' => 'nullable',
             'submitted_at' => 'nullable',
-        ], $messages);
+        ], [
+            'computer_lab_id.required' => 'Sila pilih makmal komputer.',
+            'lab_checklist_id.required' => 'Sila isi senarai semak makmal sebelum hantar.',
+        ]);
 
         // Normalize the start date to Year-Month format
         $startDateMonthYear = Carbon::parse($request->start_time)->format('Y-m');
@@ -198,7 +197,6 @@ class LabManagementController extends Controller
     public function edit(Request $request, $id)
     {
         $user = User::find(auth()->id());
-        // Only retrieve assigned computer labs for Pemilik
         $computerLabList = $user->hasRole('Pemilik')
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
@@ -221,10 +219,6 @@ class LabManagementController extends Controller
 
     public function update(Request $request, $id)
     {
-        $messages = [
-            'lab_checklist_id.required' => 'Sila isi senarai semak makmal sebelum hantar.',
-        ];
-
         $request->validate([
             'computer_lab_id' => 'required',
             'lab_checklist_id' => 'required|array',
@@ -242,7 +236,10 @@ class LabManagementController extends Controller
             'checked_at' => 'nullable',
             'submitted_by' => 'nullable',
             'submitted_at' => 'nullable',
-        ], $messages);
+        ], [
+            'computer_lab_id.required' => 'Sila pilih makmal komputer.',
+            'lab_checklist_id.required' => 'Sila isi senarai semak makmal sebelum hantar.',
+        ]);
 
         $labManagement = LabManagement::findOrFail($id);
 

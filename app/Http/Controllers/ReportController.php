@@ -19,6 +19,7 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
+        $search = $request->input('search');
         $user = User::find(auth()->id());
         $perPage = $request->input('perPage', 10);
 
@@ -43,6 +44,11 @@ class ReportController extends Controller
             });
         } else {
             $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
+        }
+
+        // Apply search filter if present
+        if ($search) {
+            $labManagementList->where('remarks_submitter', 'LIKE', "%$search%");
         }
 
         // Filter by campus
@@ -137,24 +143,24 @@ class ReportController extends Controller
     {
         $user = Auth::user();
         $username = $user->name;
-    
+
         $labManagement = LabManagement::findOrFail($id);
         $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
-    
+
         $labManagement->date = Carbon::parse($labManagement->start_time)->format('d-m-Y');
         $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
         $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
         $labManagement->startTime = Carbon::parse($labManagement->start_time)->format('H:i');
         $labManagement->endTime = $labManagement->end_time ? Carbon::parse($labManagement->end_time)->format('H:i') : null;
-    
+
         $labName = $labManagement->computerLab->name;
         $month = $labManagement->month;
         $year = $labManagement->year;
-    
+
         $filename = $month . ' ' . $year . ' - ' . 'Laporan Selenggara ' . $labName . '.pdf';
-    
+
         // Load the HTML view content as a string
         $html = view('pages.report.pdf', [
             'labManagement' => $labManagement,
@@ -163,24 +169,22 @@ class ReportController extends Controller
             'workChecklists' => $workChecklists,
             'username' => $username,
         ])->render();
-    
+
         // Create DomPDF instance
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true); // Enable if you have images or assets that are not local
-    
+
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
-    
+
         // Set paper size and orientation (optional)
         $dompdf->setPaper('A4', 'portrait');
-    
+
         // Render the PDF
         $dompdf->render();
-    
+
         // Stream the PDF to the browser
         return $dompdf->stream($filename, ['Attachment' => false]);
     }
-    
-    
 }

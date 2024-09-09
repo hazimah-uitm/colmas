@@ -33,7 +33,7 @@
 
             <div class="mb-3">
                 <label for="computer_lab_id" class="form-label">Makmal Komputer</label>
-                <select class="form-select @error('computer_lab_id') is-invalid @enderror" id="computer_lab_id" name="computer_lab_id">
+                <select class="form-select {{ $errors->has('computer_lab_id') ? 'is-invalid' : '' }}" id="computer_lab_id" name="computer_lab_id">
                     <option value="" disabled>Pilih Makmal Komputer</option>
                     @foreach ($computerLabList as $computerLab)
                     <option value="{{ $computerLab->id }}" data-computers="{{ $computerLab->no_of_computer }}" @if ($computerLab->id == $labManagement->computer_lab_id) selected @endif>
@@ -41,32 +41,30 @@
                     </option>
                     @endforeach
                 </select>
-                @error('computer_lab_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                @if ($errors->has('computer_lab_id'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('computer_lab_id') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
             </div>
 
             <div class="mb-3">
                 <label for="computer_no" class="form-label">Bilangan Komputer</label>
-                <input type="text" class="form-control @error('computer_no') is-invalid @enderror" id="computer_no" value="{{ old('computer_no', $labManagement->computer_no ?? 0) }}" disabled>
+                <input type="text" class="form-control {{ $errors->has('computer_no') ? 'is-invalid' : '' }}" id="computer_no" value="{{ old('computer_no', $labManagement->computer_no ?? 0) }}" disabled>
                 <input type="hidden" name="computer_no" id="hidden_computer_no" value="{{ old('computer_no', $labManagement->computer_no ?? 0) }}">
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="start_time" class="form-label">Masa Mula</label>
-                    <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" value="{{ old('start_time') ?? ($labManagement->start_time ?? '') }}" disabled>
-                    @error('start_time')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <input type="datetime-local" class="form-control {{ $errors->has('start_time') ? 'is-invalid' : '' }}" id="start_time" name="start_time" value="{{ old('start_time') ?? ($labManagement->start_time ?? '') }}" disabled>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label for="end_time" class="form-label">Masa Tamat</label>
-                    <input type="text" class="form-control @error('end_time') is-invalid @enderror" id="end_time" name="end_time" value="{{ old('end_time') ?? ($labManagement->end_time ?? '') }}" disabled>
-                    @error('end_time')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <input type="text" class="form-control {{ $errors->has('end_time') ? 'is-invalid' : '' }}" id="end_time" name="end_time" value="{{ old('end_time') ?? ($labManagement->end_time ?? '') }}" disabled>
                 </div>
             </div>
 
@@ -74,30 +72,38 @@
                 <label class="form-label">Senarai Semak Makmal</label>
                 @foreach ($labCheckList as $labCheck)
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="lab_checklist_{{ $labCheck->id }}" name="lab_checklist_id[]" value="{{ $labCheck->id }}" @if (in_array($labCheck->id, old('lab_checklist_id', $labManagement->lab_checklist_id ?? []))) checked @endif>
+                    <input class="form-check-input {{ $errors->has('lab_checklist_id') ? 'is-invalid' : '' }}" type="checkbox" id="lab_checklist_{{ $labCheck->id }}" name="lab_checklist_id[]" value="{{ $labCheck->id }}" @if (in_array($labCheck->id, old('lab_checklist_id', $labManagement->lab_checklist_id ?? []))) checked @endif>
                     <label class="form-check-label" for="lab_checklist_{{ $labCheck->id }}">
                         {{ $labCheck->title }}
                     </label>
                 </div>
                 @endforeach
-                @error('lab_checklist_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                @if ($errors->has('lab_checklist_id'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('lab_checklist_id') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Senarai Perisian</label>
                 @foreach ($softwareList as $software)
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="software_{{ $software->id }}" name="software_id[]" value="{{ $software->id }}" @if (in_array($software->id, old('software_id', $labManagement->software_id ?? []))) checked @endif>
+                    <input class="form-check-input {{ $errors->has('software_id') ? 'is-invalid' : '' }}" type="checkbox" id="software_{{ $software->id }}" name="software_id[]" value="{{ $software->id }}" @if (in_array($software->id, old('software_id', $labManagement->software_id ?? []))) checked @endif>
                     <label class="form-check-label" for="software_{{ $software->id }}">
                         {{ $software->title }}
                     </label>
                 </div>
                 @endforeach
-                @error('software_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                @if ($errors->has('software_id'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('software_id') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
             </div>
 
             <input type="hidden" name="status" value="draft">

@@ -26,6 +26,10 @@
             <form method="POST" action="{{ $save_route }}">
                 {{ csrf_field() }}
 
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">{{ $error }}</div>
+                @endforeach
+
                 <div class="mb-3">
                     <label for="computer_lab_id" class="form-label">Makmal Komputer</label>
                     <select class="form-select {{ $errors->has('computer_lab_id') ? 'is-invalid' : '' }}" id="computer_lab_id"

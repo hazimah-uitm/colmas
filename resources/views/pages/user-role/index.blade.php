@@ -12,11 +12,11 @@
             </ol>
         </nav>
     </div>
-    <div class="ms-auto">
+    <!-- <div class="ms-auto">
         <a href="{{ route('user-role.trash') }}">
             <button type="button" class="btn btn-primary mt-2 mt-lg-0">Senarai Rekod Dipadam</button>
         </a>
-    </div>
+    </div> -->
 </div>
 <!--end breadcrumb-->
 <h6 class="mb-0 text-uppercase">Senarai Peranan Pengguna</h6>
