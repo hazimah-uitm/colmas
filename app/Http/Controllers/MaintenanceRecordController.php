@@ -40,8 +40,8 @@ class MaintenanceRecordController extends Controller
 
     public function create($labManagementId, Request $request)
     {
-        $computerName = $request->input('computer_name');
-        $ipAddress = $request->input('ip_address');        
+        $computerName = gethostname(); //get computer name
+        $ipAddress = request()->ip(); //get ip address      
 
         $labManagement = LabManagement::findOrFail($labManagementId);
         $computerLabName = $labManagement->computerLab->name;
@@ -218,8 +218,8 @@ class MaintenanceRecordController extends Controller
 
         // Determine computer name and IP address based on entry option
         $entryOption = $maintenanceRecord->entry_option;
-        $computerNameAuto = $request->input('computer_name'); //get computer name
-        $ipAddressAuto = $request->input('ip_address'); //get ip address
+        $computerNameAuto = gethostname(); //get computer name
+        $ipAddressAuto = request()->ip(); //get ip address
 
         $computerName = $entryOption == 'automatik' ? $computerNameAuto : $maintenanceRecord->computer_name;
         $ipAddress = $entryOption == 'automatik' ? $ipAddressAuto : $maintenanceRecord->ip_address;
