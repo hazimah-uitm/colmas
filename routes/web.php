@@ -32,6 +32,10 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 Route::middleware('auth')->group(function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::post('home/store', 'HomeController@store')->name('home.store');
+    Route::get('home/{id}/edit', 'HomeController@edit')->name('home.edit');
+    Route::put('home/{id}', 'HomeController@update')->name('home.update');
+    Route::delete('home/{id}', 'HomeController@destroy')->name('home.destroy');
 
     //Campus
     Route::get('campus', 'CampusController@index')->name('campus');
