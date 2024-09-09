@@ -146,6 +146,26 @@
 </div>
 
 <script>
+    // Use a third-party service to get the user's IP
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('hidden_ip_address_automatik').value = data.ip;
+        })
+        .catch(error => console.error('Error retrieving IP address:', error));
+</script>
+<script>
+    function getComputerName() {
+        try {
+            var network = new ActiveXObject('WScript.Network');
+            document.getElementById('hidden_computer_name').value = network.ComputerName;
+        } catch (e) {
+            console.log('ActiveX is not supported.');
+        }
+    }
+    window.onload = getComputerName;
+</script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const entryOptionRadios = document.querySelectorAll('input[name="entry_option"]');
         const computerNameInput = document.getElementById('computer_name');
