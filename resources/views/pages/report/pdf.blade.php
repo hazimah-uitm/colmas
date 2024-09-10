@@ -3,47 +3,66 @@
 
 <head>
     <title>{{ $labManagement->month }}-{{ $labManagement->year }} Laporan Selenggara
-        {{ $labManagement->computerLab->name }}</title>
+        {{ $labManagement->computerLab->name }}
+    </title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 12pt;
-            margin: 0;
+            font-size: 10pt;
+            /* Reduced font size */
+            margin: 10px;
+            /* Added margin */
             padding: 0;
+        }
+
+        .tick-icon,
+        .empty-icon {
+            font-size: 20pt;
+            font-family: 'DejaVu Sans', sans-serif;
+            /* Increase icon size */
         }
 
         .container {
             width: 100%;
-            padding: 10px;
+            padding: 5px;
+            /* Reduced padding */
             box-sizing: border-box;
         }
 
         .header,
         .footer {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            /* Reduced margin */
         }
 
         .header h1 {
-            font-size: 20pt;
-            margin: 10px 0;
+            font-size: 16pt;
+            /* Reduced header font size */
+            margin: 5px 0;
+            /* Reduced margin */
         }
 
         .content {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            /* Reduced margin */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            /* Reduced margin */
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 5px;
+            /* Reduced padding */
             text-align: left;
+            font-size: 9pt;
+            /* Reduced font size for table cells */
         }
 
         th {
@@ -52,16 +71,20 @@
 
         .tick-icon,
         .empty-icon {
-            font-size: 14px;
+            font-size: 12px;
+            /* Adjusted icon size */
         }
 
         h3 {
-            font-size: 16pt;
-            margin: 15px 0 10px;
+            font-size: 14pt;
+            /* Reduced font size */
+            margin: 10px 0 5px;
+            /* Reduced margin */
         }
 
         hr {
-            margin: 10px 0;
+            margin: 5px 0;
+            /* Reduced margin */
             border: none;
             border-top: 1px solid #ccc;
         }
@@ -126,37 +149,37 @@
                         <th>Nama Komputer</th>
                         <th>IP Address</th>
                         @foreach ($workChecklists as $workChecklist)
-                            <th>{{ $workChecklist->title }}</th>
+                        <th>{{ $workChecklist->title }}</th>
                         @endforeach
                         <th>Catatan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $maintenanceRecord->computer_name }}</td>
-                            <td>{{ $maintenanceRecord->ip_address }}</td>
-                            @if (!empty($maintenanceRecord->work_checklist_id))
-                                @foreach ($workChecklists as $workChecklist)
-                                    <td>
-                                        @php
-                                            $isSelected = in_array(
-                                                $workChecklist->id,
-                                                $maintenanceRecord->work_checklist_id);
-                                        @endphp
-                                        @if ($isSelected)
-                                            <span class="tick-icon">&#10004;</span>
-                                        @else
-                                            <span class="empty-icon" style="color: red">&#10006;</span>
-                                        @endif
-                                    </td>
-                                @endforeach
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $maintenanceRecord->computer_name }}</td>
+                        <td>{{ $maintenanceRecord->ip_address }}</td>
+                        @if (!empty($maintenanceRecord->work_checklist_id))
+                        @foreach ($workChecklists as $workChecklist)
+                        <td>
+                            @php
+                            $isSelected = in_array(
+                            $workChecklist->id,
+                            $maintenanceRecord->work_checklist_id);
+                            @endphp
+                            @if ($isSelected)
+                            <span class="tick-icon">&#10004;</span>
                             @else
-                                <td colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
+                            <span class="empty-icon" style="color: red">&#10006;</span>
                             @endif
-                            <td>{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
-                        </tr>
+                        </td>
+                        @endforeach
+                        @else
+                        <td colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
+                        @endif
+                        <td>{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -166,57 +189,66 @@
                 <thead>
                     <tr>
                         @foreach ($labCheckList as $labCheck)
-                            <th>{{ $labCheck->title }}</th>
+                        <th>{{ $labCheck->title }}</th>
                         @endforeach
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         @foreach ($labCheckList as $labCheck)
-                            <td>
-                                @php
-                                    $isSelected =
-                                        !empty($labManagement->lab_checklist_id) &&
-                                        in_array($labCheck->id, $labManagement->lab_checklist_id);
-                                @endphp
-                                @if ($isSelected)
-                                    <span class="tick-icon">&#10004;</span>
-                                @else
-                                    <span class="empty-icon" style="color: red">&#10006;</span>
-                                @endif
-                            </td>
+                        <td>
+                            @php
+                            $isSelected =
+                            !empty($labManagement->lab_checklist_id) &&
+                            in_array($labCheck->id, $labManagement->lab_checklist_id);
+                            @endphp
+                            @if ($isSelected)
+                            <span class="tick-icon">&#10004;</span>
+                            @else
+                            <span class="empty-icon" style="color: red">&#10006;</span>
+                            @endif
+                        </td>
                         @endforeach
                     </tr>
                 </tbody>
             </table>
 
             <h3>Senarai Perisian</h3>
+
             @php
-                // Extract selected software titles
-                $selectedSoftwareTitles = $softwareList
-                    ->filter(function ($software) use ($labManagement) {
-                        return !empty($labManagement->software_id) &&
-                            in_array($software->id, $labManagement->software_id);
-                    })
-                    ->pluck('title');
+            // Extract selected software titles
+            $selectedSoftwareTitles = $softwareList
+            ->filter(function ($software) use ($labManagement) {
+            return !empty($labManagement->software_id) &&
+            in_array($software->id, $labManagement->software_id);
+            })
+            ->pluck('title');
             @endphp
+
             <table>
                 <tbody>
+                    @if ($selectedSoftwareTitles->count() == 1)
+                    <tr>
+                        <td>
+                            <span class="tick-icon">&#10004;</span> {{ $selectedSoftwareTitles->first() }}
+                        </td>
+                    </tr>
+                    @else
                     @foreach ($selectedSoftwareTitles->chunk(2) as $chunk)
-                        <tr>
-                            @foreach ($chunk as $title)
-                                <td>
-                                    <span class="tick-icon">&#10004;</span> {{ $title }}
-                                </td>
-                            @endforeach
-                            @if (count($chunk) == 1)
-                                <td></td> <!-- Empty cell if there's an odd number of titles -->
-                            @endif
-                        </tr>
+                    <tr>
+                        @foreach ($chunk as $title)
+                        <td>
+                            <span class="tick-icon">&#10004;</span> {{ $title }}
+                        </td>
+                        @endforeach
+                        @if (count($chunk) == 1)
+                        <td></td> <!-- Empty cell if there's an odd number of titles -->
+                        @endif
+                    </tr>
                     @endforeach
+                    @endif
                 </tbody>
             </table>
-
 
             <table>
                 <tr>

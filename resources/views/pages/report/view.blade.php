@@ -170,6 +170,7 @@
                     <div class="card shadow">
                         <div class="card-body">
                             <h6 class="mb-3 text-uppercase">Senarai Perisian</h6>
+                            <hr />
                             <div class="row">
                                 @foreach ($softwareList as $software)
                                     @if (!empty($labManagement->software_id) && in_array($software->id, $labManagement->software_id))
