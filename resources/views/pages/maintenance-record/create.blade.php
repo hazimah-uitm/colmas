@@ -188,25 +188,5 @@
         toggleEntryOptions();
     });
 </script>
-<script>
-    // Use a third-party service to get the user's IP
-    fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('ip_address').value = data.ip;
-        })
-        .catch(error => console.error('Error retrieving IP address:', error));
-</script>
-<script>
-    function getComputerName() {
-        try {
-            var network = new ActiveXObject('WScript.Network');
-            document.getElementById('computer_name').value = network.ComputerName;
-        } catch (e) {
-            console.log('ActiveX is not supported.');
-        }
-    }
-    window.onload = getComputerName;
-</script>
 <!-- End Page Wrapper -->
 @endsection
