@@ -34,9 +34,10 @@
             <div class="mb-3">
                 <label for="computer_lab_id" class="form-label">Makmal Komputer</label>
                 <select class="form-select {{ $errors->has('computer_lab_id') ? 'is-invalid' : '' }}" id="computer_lab_id" name="computer_lab_id">
-                    <option value="" disabled>Pilih Makmal Komputer</option>
+                    <option value="" disabled {{ old('computer_lab_id', $labManagement->computer_lab_id) ? '' : 'selected' }}>Pilih Makmal Komputer</option>
                     @foreach ($computerLabList as $computerLab)
-                    <option value="{{ $computerLab->id }}" data-computers="{{ $computerLab->no_of_computer }}" @if ($computerLab->id == $labManagement->computer_lab_id) selected @endif>
+                    <option value="{{ $computerLab->id }}" data-computers="{{ $computerLab->no_of_computer }}"
+                        {{ old('computer_lab_id', $labManagement->computer_lab_id) == $computerLab->id ? 'selected' : '' }}>
                         {{ $computerLab->name }}
                     </option>
                     @endforeach
