@@ -135,6 +135,19 @@
 
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const computerNameInput = document.getElementById('computer_name');
+        
+        // This will only work in trusted intranet environments with proper permissions
+        try {
+            const hostname = window.location.hostname;  // Fallback method (usually gives the server name, not client)
+            computerNameInput.value = hostname;  // Or other methods to get the client PC name
+        } catch (error) {
+            console.error("Unable to retrieve the client's PC name.");
+        }
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
