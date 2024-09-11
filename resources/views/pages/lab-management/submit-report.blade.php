@@ -47,92 +47,39 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <table class="table">
+                            <table class="table table-bordered">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>Bil. Keseluruhan Komputer</th>
-                                        <th>Bil. Komputer Telah Diselenggara</th>
-                                        <th>Bil. Komputer Rosak</th>
-                                        <th>Bil. Komputer Belum Diselenggara</th>
+                                        <th class="text-center">Bil. Keseluruhan Komputer</th>
+                                        <th class="text-center">Bil. Komputer Telah Diselenggara</th>
+                                        <th class="text-center">Bil. Komputer Rosak</th>
+                                        <th class="text-center">Bil. Komputer Belum Diselenggara</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $labManagement->computer_no ?? '-' }}</td>
-                                        <td>{{ $labManagement->pc_maintenance_no ?? '-' }}</td>
-                                        <td>{{ $labManagement->pc_damage_no ?? '-' }}</td>
-                                        <td>{{ $labManagement->pc_unmaintenance_no ?? '-' }}</td>
+                                        <td class="text-center">{{ $labManagement->computer_no ?? '-' }}</td>
+                                        <td class="text-center">{{ $labManagement->pc_maintenance_no ?? '-' }}</td>
+                                        <td class="text-center">{{ $labManagement->pc_damage_no ?? '-' }}</td>
+                                        <td class="text-center">{{ $labManagement->pc_unmaintenance_no ?? '-' }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div class="card">
                                 <div class="card-body">
-                                    <h6 class="mb-3 text-uppercase">Senarai Rekod PC Diselenggara/Rosak</h6>
-                                    <table class="table">
-                                        <thead class="bg-light">
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Nama Komputer</th>
-                                                <th colspan="{{ count($workChecklists) }}">Kerja Selenggara</th>
-                                                <th>Catatan</th>
-                                            </tr>
-                                            <tr>
-                                                <th></th>
-                                                <th>IP Address</th>
-                                                @foreach ($workChecklists as $workChecklist)
-                                                    <th>{{ $workChecklist->title }}</th>
-                                                @endforeach
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $maintenanceRecord->computer_name }} <br>
-                                                        {{ $maintenanceRecord->ip_address }}</td>
-                                                    @if (!empty($maintenanceRecord->work_checklist_id))
-                                                        @foreach ($workChecklists as $workChecklist)
-                                                            <td>
-                                                                @php
-                                                                    $isSelected = in_array(
-                                                                        $workChecklist->id,
-                                                                        $maintenanceRecord->work_checklist_id);
-                                                                @endphp
-                                                                @if ($isSelected)
-                                                                    <span class="tick-icon">&#10004;</span>
-                                                                @else
-                                                                    <span class="empty-icon"
-                                                                        style="color: red;">&#10006;</span>
-                                                                @endif
-                                                            </td>
-                                                        @endforeach
-                                                    @else
-                                                        <td colspan="{{ count($workChecklists) }}">Komputer Bermasalah
-                                                        </td>
-                                                    @endif
-                                                    <td>{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
                                     <h6 class="mb-3 text-uppercase">Senarai Semak Makmal</h6>
-                                    <table class="table">
+                                    <table class="table table-bordered">
                                         <thead class="bg-light">
                                             <tr>
                                                 @foreach ($labCheckList as $labCheck)
-                                                    <th>{{ $labCheck->title }}</th>
+                                                    <th class="text-center">{{ $labCheck->title }}</th>
                                                 @endforeach
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 @foreach ($labCheckList as $labCheck)
-                                                    <td>
+                                                    <td class="text-center">
                                                         @php
                                                             $isSelected =
                                                                 !empty($labManagement->lab_checklist_id) &&
@@ -148,6 +95,59 @@
                                                     </td>
                                                 @endforeach
                                             </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="mb-3 text-uppercase">Senarai Rekod PC Diselenggara/Rosak</h6>
+                                    <table class="table table-bordered">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="text-center" >No.</th>
+                                                <th class="text-center" >Nama Komputer</th>
+                                                <th class="text-center" colspan="{{ count($workChecklists) }}">Kerja Selenggara</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center" >IP Address</th>
+                                                @foreach ($workChecklists as $workChecklist)
+                                                    <th class="text-center" >{{ $workChecklist->title }}</th>
+                                                @endforeach
+                                                <th rowspan="2" class="text-center">Catatan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
+                                                <tr>
+                                                    <td class="text-center" >{{ $loop->iteration }}</td>
+                                                    <td>{{ $maintenanceRecord->computer_name }} <br>
+                                                        {{ $maintenanceRecord->ip_address }}</td>
+                                                    @if (!empty($maintenanceRecord->work_checklist_id))
+                                                        @foreach ($workChecklists as $workChecklist)
+                                                            <td class="text-center" >
+                                                                @php
+                                                                    $isSelected = in_array(
+                                                                        $workChecklist->id,
+                                                                        $maintenanceRecord->work_checklist_id);
+                                                                @endphp
+                                                                @if ($isSelected)
+                                                                    <span class="tick-icon">&#10004;</span>
+                                                                @else
+                                                                    <span class="empty-icon"
+                                                                        style="color: red;">&#10006;</span>
+                                                                @endif
+                                                            </td>
+                                                        @endforeach
+                                                    @else
+                                                        <td class="text-center" colspan="{{ count($workChecklists) }}">Komputer Bermasalah
+                                                        </td>
+                                                    @endif
+                                                    <td class="text-center">{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
