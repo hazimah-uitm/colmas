@@ -163,7 +163,8 @@
             const selectedOption = document.querySelector('input[name="entry_option"]:checked').value;
 
             if (selectedOption === 'automatik') {
-                computerNameInput.value = hiddenComputerNameAuto;
+                // computerNameInput.value = hiddenComputerNameAuto;
+                computerNameInput.value = hiddenComputerNameManual;
                 computerNameInput.setAttribute('disabled', true);
                 ipAddressInput.value = hiddenIpAddress;
                 ipAddressInput.setAttribute('disabled', true);
