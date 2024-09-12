@@ -55,7 +55,7 @@
             $computerNo = $labManagement->computer_no;
             $pcDamageNo = $labManagement->pc_damage_no ?? 0;
             $totalPCMaintenance = $pcMaintenanceNo;
-            $pcUnmaintenanceNo = $computerNo - $totalPCMaintenance;
+            $pcUnmaintenanceNo = $computerNo - $totalPCMaintenance - $pcDamageNo;
         @endphp
         <tr>
             <td>{{ $computerNo }}</td>
