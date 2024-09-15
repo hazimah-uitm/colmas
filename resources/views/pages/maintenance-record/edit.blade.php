@@ -60,7 +60,7 @@
 
                 <div class="mb-3" id="computerNameContainer">
                     <label for="computer_name" class="form-label">Nama Komputer</label>
-                    <input type="text" class="form-control{{ $errors->has('computer_name') ? 'is-invalid' : '' }}"
+                    <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}"
                         id="computer_name" name="computer_name" value="{{ old('computer_name', $computerName) }}">
                     <input type="hidden" id="hidden_computer_name_manual" value="{{ $computerName }}">
                     <input type="hidden" name="hidden_computer_name_automatik" id="hidden_computer_name_automatik"
@@ -76,7 +76,7 @@
 
                 <div class="mb-3" id="ipAddressContainer">
                     <label for="ip_address" class="form-label">Alamat IP</label>
-                    <input type="text" class="form-control @error('ip_address') is-invalid @enderror" id="ip_address"
+                    <input type="text" class="form-control{{ $errors->has('ip_address') ? 'is-invalid' : '' }}" id="ip_address"
                         name="ip_address" value="{{ old('ip_address', $ipAddress) }}" disabled>
                     <input type="hidden" name="hidden_ip_address_automatik" id="hidden_ip_address_automatik"
                         value="{{ $ipAddressAuto }}">
