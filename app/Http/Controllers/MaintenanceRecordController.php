@@ -41,7 +41,6 @@ class MaintenanceRecordController extends Controller
     public function create($labManagementId, Request $request)
     {
         $ipAddress = $request->ip();
-        $computerName = gethostbyaddr($ipAddress);
 
         $labManagement = LabManagement::findOrFail($labManagementId);
         $computerLabName = $labManagement->computerLab->name;
@@ -53,7 +52,6 @@ class MaintenanceRecordController extends Controller
             'save_route' => route('lab-management.maintenance-records.store', ['labManagement' => $labManagementId]),
             'str_mode' => 'Tambah',
             'workChecklists' => $workChecklists,
-            'computerName' => $computerName,
             'ipAddress' => $ipAddress,
             'labManagement' => $labManagement,
             'computerLabName' => $computerLabName,
@@ -108,7 +106,7 @@ class MaintenanceRecordController extends Controller
             return redirect()->back()->withErrors(['work_checklist_id' => 'Sila semak proses kerja: ' . $errorMessages])->withInput();
         }
 
-        $computerName = $request->input('entry_option') === 'automatik' ? $request->input('hidden_computer_name_automatik') : $request->input('computer_name');
+        $computerName = $request->input('computer_name');
         $ipAddress = $request->input('entry_option') === 'automatik' ? $request->input('hidden_ip_address_automatik') : null;
 
         // Remove spaces from the computer name and convert to uppercase
@@ -219,9 +217,8 @@ class MaintenanceRecordController extends Controller
         // Determine computer name and IP address based on entry option
         $entryOption = $maintenanceRecord->entry_option;
         $ipAddressAuto = $request->header('X-Forwarded-For') ? explode(',', $request->header('X-Forwarded-For'))[0] : $request->ip();
-        $computerNameAuto = gethostbyaddr($ipAddressAuto);
 
-        $computerName = $entryOption == 'automatik' ? $computerNameAuto : $maintenanceRecord->computer_name;
+        $computerName = $maintenanceRecord->computer_name;
         $ipAddress = $entryOption == 'automatik' ? $ipAddressAuto : $maintenanceRecord->ip_address;
 
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
@@ -233,7 +230,6 @@ class MaintenanceRecordController extends Controller
             'workChecklists' => $workChecklists,
             'computerName' => $computerName,
             'ipAddress' => $ipAddress,
-            'computerNameAuto' => $computerNameAuto,
             'ipAddressAuto' => $ipAddressAuto,
             'labManagement' => $labManagement,
             'computerLabName' => $computerLabName,
@@ -291,7 +287,7 @@ class MaintenanceRecordController extends Controller
 
         $entryOption = $request->input('entry_option');
 
-        $computerName = $entryOption === 'automatik' ? $request->input('hidden_computer_name_automatik') : $request->input('computer_name');
+        $computerName = $request->input('computer_name');
         $ipAddress = $entryOption === 'automatik' ? $request->input('hidden_ip_address_automatik') : $request->input('ip_address');
 
         // Ensure values are not null

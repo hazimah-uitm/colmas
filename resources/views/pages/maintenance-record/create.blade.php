@@ -57,8 +57,7 @@
 
             <div class="mb-3" id="computerNameContainer">
                 <label for="computer_name" class="form-label">Nama Komputer</label>
-                <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}" id="computer_name" name="computer_name" value="{{ old('computer_name', $computerName) }}" {{ old('entry_option', $defaultEntryOption) == 'automatik' ? 'disabled' : '' }}>
-                <input type="hidden" name="hidden_computer_name_automatik" value="{{ $computerName }}">
+                <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}" id="computer_name" name="computer_name" value="{{ old('computer_name') }}" {{ old('entry_option', $defaultEntryOption) == 'automatik' ? 'disabled' : '' }}>
                 <input type="hidden" name="hidden_computer_name_manual" value="{{ old('computer_name') }}">
                 @if ($errors->has('computer_name'))
                 <div class="invalid-feedback">
@@ -145,7 +144,6 @@
         const manualRadio = document.getElementById('manual');
         const computerNameInput = document.getElementById('computer_name');
         const ipAddressInput = document.getElementById('ip_address');
-        const hiddenComputerNameAuto = document.querySelector('input[name="hidden_computer_name_automatik"]').value;
         const hiddenComputerNameManual = document.querySelector('input[name="hidden_computer_name_manual"]').value;
         const hiddenIpAddressAuto = document.querySelector('input[name="hidden_ip_address_automatik"]').value;
         const workProcessSection = document.getElementById('workProcessSection');
@@ -154,9 +152,9 @@
 
         function toggleEntryOptions() {
             if (autoRadio.checked) {
-                computerNameInput.value = hiddenComputerNameAuto;
+                computerNameInput.value = hiddenComputerNameManual;
                 ipAddressInput.value = hiddenIpAddressAuto;
-                computerNameInput.disabled = true;
+                computerNameInput.disabled = false;
                 ipAddressContainer.style.display = 'block';
                 ipAddressInput.disabled = true;
                 workProcessSection.style.display = 'block';

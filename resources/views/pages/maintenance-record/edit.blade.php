@@ -63,8 +63,6 @@
                     <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}"
                         id="computer_name" name="computer_name" value="{{ old('computer_name', $computerName) }}">
                     <input type="hidden" id="hidden_computer_name_manual" value="{{ $computerName }}">
-                    <input type="hidden" name="hidden_computer_name_automatik" id="hidden_computer_name_automatik"
-                        value="{{ $computerNameAuto }}">
                     @if ($errors->has('computer_name'))
                         <div class="invalid-feedback">
                             @foreach ($errors->get('computer_name') as $error)
@@ -161,7 +159,6 @@
             const aduanUnitNoContainer = document.getElementById('aduanUnitNoContainer');
             const remarksContainer = document.getElementById('remarksContainer');
             const workChecklistContainer = document.getElementById('workChecklistContainer');
-            const hiddenComputerNameAuto = document.getElementById('hidden_computer_name_automatik').value;
             const hiddenComputerNameManual = document.getElementById('hidden_computer_name_manual').value;
             const hiddenIpAddress = document.getElementById('hidden_ip_address_automatik').value;
 
@@ -169,8 +166,8 @@
                 const selectedOption = document.querySelector('input[name="entry_option"]:checked').value;
 
                 if (selectedOption === 'automatik') {
-                    computerNameInput.value = hiddenComputerNameAuto;
-                    computerNameInput.setAttribute('disabled', true);
+                    computerNameInput.value = hiddenComputerNameManual;
+                    computerNameInput.removeAttribute('disabled');
                     ipAddressInput.value = hiddenIpAddress;
                     ipAddressInput.setAttribute('disabled', true);
                     computerNameContainer.style.display = 'block';
