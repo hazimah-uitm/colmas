@@ -41,6 +41,7 @@ class MaintenanceRecordController extends Controller
     public function create($labManagementId, Request $request)
     {
         $ipAddress = $request->ip();
+        $computerName = gethostbyaddr($ipAddress);
 
         $labManagement = LabManagement::findOrFail($labManagementId);
         $computerLabName = $labManagement->computerLab->name;
@@ -53,6 +54,7 @@ class MaintenanceRecordController extends Controller
             'str_mode' => 'Tambah',
             'workChecklists' => $workChecklists,
             'ipAddress' => $ipAddress,
+            'computerName' => $computerName,
             'labManagement' => $labManagement,
             'computerLabName' => $computerLabName,
             'defaultEntryOption' => $defaultEntryOption
@@ -128,7 +130,6 @@ class MaintenanceRecordController extends Controller
         // Check for existing records with the same computer_name, ip_address, and lab_management_id within the same month and year
         $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
             ->where('computer_name', $computerName)
-            ->where('ip_address', $ipAddress)
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
             ->whereNull('deleted_at')
@@ -137,20 +138,36 @@ class MaintenanceRecordController extends Controller
         if ($existingRecord) {
             return redirect()->back()
                 ->withInput() // Preserve the old input data
-                ->withErrors('Rekod selenggara PC bagi nama komputer atau alamat IP pada bulan dan tahun tersebut telah wujud');
+                ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud');
+        }
+
+        // Only check for duplicate IP address if entry_option is 'automatik'
+        if ($entryOption === 'automatik' && $ipAddress) {
+            $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+                ->where('ip_address', $ipAddress)
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year)
+                ->whereNull('deleted_at')
+                ->first();
+
+            if ($existingRecord) {
+                return redirect()->back()
+                    ->withInput() // Preserve the old input data
+                    ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud');
+            }
         }
 
         // Check for unique aduan_unit_no and vms_no
         if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->exists()) {
-            return redirect()->back()->withErrors('Aduan unit no sudah wujud.');
+            return redirect()->back()->withInput()->withErrors('Aduan unit no sudah wujud.');
         }
 
         if ($request->input('vms_no') && MaintenanceRecord::where('vms_no', $request->input('vms_no'))->exists()) {
-            return redirect()->back()->withErrors('VMS no sudah wujud.');
+            return redirect()->back()->withInput()->withErrors('VMS no sudah wujud.');
         }
 
         $maintenanceRecord = new MaintenanceRecord();
-        $maintenanceRecord->fill($request->except('entry_option', 'hidden_computer_name_automatik', 'hidden_computer_name_manual', 'hidden_ip_address_automatik', 'hidden_ip_address_manual'));
+        $maintenanceRecord->fill($request->except('entry_option', 'hidden_computer_name_manual', 'hidden_ip_address_automatik', 'hidden_ip_address_manual'));
 
         $maintenanceRecord->lab_management_id = $labManagementId;
         $maintenanceRecord->entry_option = $request->input('entry_option');
@@ -290,13 +307,6 @@ class MaintenanceRecordController extends Controller
         $computerName = $request->input('computer_name');
         $ipAddress = $entryOption === 'automatik' ? $request->input('hidden_ip_address_automatik') : $request->input('ip_address');
 
-        // Ensure values are not null
-        if ($entryOption === 'automatik') {
-            if (is_null($computerName) || is_null($ipAddress)) {
-                return redirect()->back()->withErrors('Nama komputer atau alamat IP tidak dapat dijana secara automatik.');
-            }
-        }
-
         // Remove spaces from the computer name and convert to uppercase
         if ($computerName) {
             $computerName = strtoupper(str_replace(' ', '', $computerName));
@@ -312,7 +322,6 @@ class MaintenanceRecordController extends Controller
 
         $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
             ->where('computer_name', $computerName)
-            ->where('ip_address', $ipAddress)
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
             ->where('id', '!=', $recordId)
@@ -322,7 +331,24 @@ class MaintenanceRecordController extends Controller
         if ($existingRecord) {
             return redirect()->back()
                 ->withInput() // Preserve the old input data
-                ->withErrors('Rekod selenggara PC bagi nama komputer atau alamat IP pada bulan dan tahun tersebut telah wujud');
+                ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud');
+        }
+
+
+        if ($entryOption === 'automatik' && $ipAddress) {
+            $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+                ->where('ip_address', $ipAddress)
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year)
+                ->where('id', '!=', $recordId)
+                ->whereNull('deleted_at')
+                ->first();
+        }
+
+        if ($existingRecord) {
+            return redirect()->back()
+                ->withInput() // Preserve the old input data
+                ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud');
         }
 
         if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->where('id', '!=', $recordId)->exists()) {
@@ -333,7 +359,7 @@ class MaintenanceRecordController extends Controller
             return redirect()->back()->withInput()->withErrors('VMS no sudah wujud.');
         }
 
-        $maintenanceRecord->fill($request->except('entry_option', 'hidden_computer_name_automatik', 'hidden_ip_address_automatik'));
+        $maintenanceRecord->fill($request->except('entry_option', 'hidden_ip_address_automatik'));
         $maintenanceRecord->lab_management_id = $labManagementId;
         $maintenanceRecord->entry_option = $entryOption;
         $maintenanceRecord->computer_name = $computerName;
@@ -447,13 +473,13 @@ class MaintenanceRecordController extends Controller
     {
         // Retrieve the soft-deleted record
         $deletedRecord = MaintenanceRecord::onlyTrashed()->findOrFail($id);
-    
+
         // Get the start time of the lab management
         $labManagement = LabManagement::findOrFail($labManagementId);
         $startTime = Carbon::parse($labManagement->start_time);
         $month = $startTime->format('m');
         $year = $startTime->format('Y');
-    
+
         // Check for existing records with the same computer_name, ip_address, and lab_management_id within the same month and year
         $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
             ->where('computer_name', $deletedRecord->computer_name)
@@ -462,59 +488,59 @@ class MaintenanceRecordController extends Controller
             ->whereYear('created_at', $year)
             ->whereNull('deleted_at')
             ->first();
-    
+
         if ($existingRecord) {
             return redirect()->back()
                 ->withInput()
                 ->withErrors('Rekod selenggara PC bagi nama komputer atau alamat IP pada bulan dan tahun tersebut telah wujud dan tidak dapat dikembalikan.');
         }
-    
+
         // Check for unique aduan_unit_no and vms_no
         if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->exists()) {
             return redirect()->back()->withErrors('Aduan unit no sudah wujud.');
         }
-    
+
         if ($request->input('vms_no') && MaintenanceRecord::where('vms_no', $request->input('vms_no'))->exists()) {
             return redirect()->back()->withErrors('VMS no sudah wujud.');
         }
-    
+
         // Retrieve total number of PCs
         $totalPCs = $labManagement->computer_no;
-    
+
         // Retrieve total number of maintenance records (excluding soft-deleted records)
         $pcMaintenanceNo = MaintenanceRecord::where('lab_management_id', $labManagementId)
             ->whereNull('deleted_at')
             ->count();
-    
+
         // Check if the total number of maintenance records equals the total number of PCs
         if ($pcMaintenanceNo >= $totalPCs) {
             return redirect()->back()->withErrors('Pemulihan gagal kerana rekod penyelenggaraan telah mencapai jumlah keseluruhan PC.');
         }
-    
+
         // Restore the record
         $deletedRecord->restore();
-    
+
         // Recalculate the maintenance and damage numbers
         $pcMaintenanceNo = MaintenanceRecord::where('lab_management_id', $labManagementId)
             ->whereNull('deleted_at')
             ->count();
-    
+
         $pcDamageNo = MaintenanceRecord::where('lab_management_id', $labManagementId)
             ->where('entry_option', 'pc_rosak')
             ->whereNull('deleted_at')
             ->count();
-    
+
         $labManagement->pc_damage_no = $pcDamageNo;
         $labManagement->pc_maintenance_no = $pcMaintenanceNo - $pcDamageNo;
         $labManagement->pc_unmaintenance_no = $labManagement->computer_no - $labManagement->pc_maintenance_no - $labManagement->pc_damage_no;
-    
+
         $labManagement->save();
-    
+
         return redirect()->route('lab-management.maintenance-records', ['labManagement' => $labManagementId])
             ->with('success', 'Maklumat berjaya dipulihkan');
     }
-    
-    
+
+
     public function forceDelete($labManagementId, $id)
     {
         // Permanently delete the record

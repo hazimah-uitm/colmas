@@ -57,7 +57,7 @@
 
             <div class="mb-3" id="computerNameContainer">
                 <label for="computer_name" class="form-label">Nama Komputer</label>
-                <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}" id="computer_name" name="computer_name" value="{{ old('computer_name') }}" {{ old('entry_option', $defaultEntryOption) == 'automatik' ? 'disabled' : '' }}>
+                <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}" id="computer_name" name="computer_name" value="{{ old('computer_name', $computerName) }}" {{ old('entry_option', $defaultEntryOption) == 'automatik' ? 'disabled' : '' }}>
                 <input type="hidden" name="hidden_computer_name_manual" value="{{ old('computer_name') }}">
                 @if ($errors->has('computer_name'))
                 <div class="invalid-feedback">
