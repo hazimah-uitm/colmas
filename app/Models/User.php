@@ -65,4 +65,19 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Position::class);
     }
+
+    public function assignedComputerLabs()
+    {
+        return $this->hasMany(ComputerLab::class, 'pemilik_id');
+    }
+
+    public function computerLabHistories()
+    {
+        return $this->hasMany(ComputerLabHistory::class, 'owner');
+    }    
+
+    public function canAccessLab($labId)
+    {
+        return $this->hasRole('Pemilik') && $this->assignedComputerLabs->contains('id', $labId);
+    }
 }

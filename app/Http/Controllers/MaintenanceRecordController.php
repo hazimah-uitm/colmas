@@ -40,8 +40,8 @@ class MaintenanceRecordController extends Controller
 
     public function create($labManagementId, Request $request)
     {
-        $ipAddress = $request->ip();
-        $computerName = gethostbyaddr($ipAddress);
+        $ipAddress = $request->header('X-Forwarded-For') ? explode(',', $request->header('X-Forwarded-For'))[0] : $request->ip();
+        $computerName = null;
 
         $labManagement = LabManagement::findOrFail($labManagementId);
         $computerLabName = $labManagement->computerLab->name;
