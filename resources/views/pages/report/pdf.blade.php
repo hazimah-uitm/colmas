@@ -26,7 +26,7 @@
             /* Center the card */
             max-width: 800px;
             /* Set a maximum width for the card */
-            border: 1px solid #ddd;
+            border: 1px solid #d5d8dc;
             /* Optional: add a subtle border */
         }
 
@@ -164,14 +164,14 @@
                     <thead>
                         <tr>
                             @foreach ($labCheckList as $labCheck)
-                                <th style="text-align: center">{{ $labCheck->title }}</th>
+                                <th style="text-align: center; border-color: #cacfd2">{{ $labCheck->title }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             @foreach ($labCheckList as $labCheck)
-                                <td style="text-align: center">
+                                <td style="text-align: center; border-color: #cacfd2">
                                     @php
                                         $isSelected =
                                             !empty($labManagement->lab_checklist_id) &&
@@ -194,24 +194,24 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="text-align: center">No.</th>
-                            <th style="text-align: center">Nama Komputer</th>
-                            <th style="text-align: center">IP Address</th>
+                            <th style="text-align: center; border-color: #cacfd2">No.</th>
+                            <th style="text-align: center; border-color: #cacfd2">Nama Komputer</th>
+                            <th style="text-align: center; border-color: #cacfd2">IP Address</th>
                             @foreach ($workChecklists as $workChecklist)
-                                <th style="text-align: center">{{ $workChecklist->title }}</th>
+                                <th style="text-align: center; border-color: #cacfd2">{{ $workChecklist->title }}</th>
                             @endforeach
-                            <th style="text-align: center">Catatan</th>
+                            <th style="text-align: center; border-color: #cacfd2">Catatan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
                             <tr>
-                                <td style="text-align: center">{{ $loop->iteration }}</td>
-                                <td style="text-align: center">{{ $maintenanceRecord->computer_name }}</td>
-                                <td style="text-align: center">{{ $maintenanceRecord->ip_address }}</td>
+                                <td style="text-align: center; border-color: #cacfd2">{{ $loop->iteration }}</td>
+                                <td style="text-align: center; border-color: #cacfd2">{{ $maintenanceRecord->computer_name }}</td>
+                                <td style="text-align: center; border-color: #cacfd2">{{ $maintenanceRecord->ip_address }}</td>
                                 @if (!empty($maintenanceRecord->work_checklist_id))
                                     @foreach ($workChecklists as $workChecklist)
-                                        <td style="text-align: center">
+                                        <td style="text-align: center; border-color: #cacfd2">
                                             @php
                                                 $isSelected = in_array(
                                                     $workChecklist->id,
@@ -225,10 +225,10 @@
                                         </td>
                                     @endforeach
                                 @else
-                                    <td style="text-align: center" colspan="{{ count($workChecklists) }}">Komputer
+                                    <td style="text-align: center; border-color: #cacfd2" colspan="{{ count($workChecklists) }}">Komputer
                                         Bermasalah</td>
                                 @endif
-                                <td style="text-align: center">{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                                <td style="text-align: center; border-color: #cacfd2">{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -259,12 +259,12 @@
                             @foreach ($selectedSoftwareTitles->chunk(2) as $chunk)
                                 <tr>
                                     @foreach ($chunk as $title)
-                                        <td>
+                                        <td style="border: 0px">
                                             <span class="tick-icon">&#10004;</span> {{ $title }}
                                         </td>
                                     @endforeach
                                     @if (count($chunk) == 1)
-                                        <td></td> <!-- Empty cell if there's an odd number of titles -->
+                                        <td style="border: 0px"></td> <!-- Empty cell if there's an odd number of titles -->
                                     @endif
                                 </tr>
                             @endforeach
