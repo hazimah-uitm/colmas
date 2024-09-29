@@ -77,6 +77,7 @@
     </div>
 </div>
 
+@hasanyrole('Superadmin|Admin|Pegawai Penyemak')
 <div class="row row-cols-xl">
     <div class="col">
         <div class="card radius-10 border-warning border-start border-0 border-4">
@@ -93,6 +94,8 @@
         </div>
     </div>
 </div>
+@endhasanyrole
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
     <div class="col">
         <div class="card radius-10 border-info border-start border-0 border-4">
