@@ -15,6 +15,21 @@
             padding: 0;
         }
 
+        .card {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            /* Stronger shadow */
+            padding: 10px;
+            /* Padding inside the card */
+            background-color: white;
+            /* Card background */
+            margin: 20px auto;
+            /* Center the card */
+            max-width: 800px;
+            /* Set a maximum width for the card */
+            border: 1px solid #ddd;
+            /* Optional: add a subtle border */
+        }
+
         .tick-icon,
         .empty-icon {
             font-size: 20pt;
@@ -100,155 +115,163 @@
         <div class="content">
             <table>
                 <tr>
-                    <th>Nama Pemilik</th>
-                    <td>{{ $labManagement->computerLab->pemilik->name }}</td>
+                    <th style="border: 0px">Nama Pemilik</th>
+                    <td style="border: 0px">{{ $labManagement->computerLab->pemilik->name }}</td>
                 </tr>
                 <tr>
-                    <th>Makmal Komputer</th>
-                    <td>{{ $labManagement->computerLab->name }}, {{ $labManagement->computerLab->campus->name }}</td>
+                    <th style="border: 0px">Makmal Komputer</th>
+                    <td style="border: 0px">{{ $labManagement->computerLab->name }},
+                        {{ $labManagement->computerLab->campus->name }}</td>
                 </tr>
             </table>
 
             <table>
                 <tr>
-                    <th>Bulan</th>
-                    <th>Tahun</th>
-                    <th>Masa Mula</th>
-                    <th>Masa Tamat</th>
+                    <th style="border: 0px">Bulan</th>
+                    <th style="border: 0px">Tahun</th>
+                    <th style="border: 0px">Masa Mula</th>
+                    <th style="border: 0px">Masa Tamat</th>
                 </tr>
                 <tr>
-                    <td>{{ $labManagement->month }}</td>
-                    <td>{{ $labManagement->year }}</td>
-                    <td>{{ $labManagement->start_time }}</td>
-                    <td>{{ $labManagement->end_time ?? '-' }}</td>
+                    <td style="border: 0px">{{ $labManagement->month }}</td>
+                    <td style="border: 0px">{{ $labManagement->year }}</td>
+                    <td style="border: 0px">{{ $labManagement->start_time }}</td>
+                    <td style="border: 0px">{{ $labManagement->end_time ?? '-' }}</td>
                 </tr>
             </table>
 
 
             <table>
                 <tr>
-                    <th>Bil. Keseluruhan Komputer</th>
-                    <th>Bil. Komputer Telah Diselenggara</th>
-                    <th>Bil. Komputer Rosak</th>
-                    <th>Bil. Komputer Belum Diselenggara</th>
+                    <th style="border: 0px; text-align: center">Bil. Keseluruhan Komputer</th>
+                    <th style="border: 0px; text-align: center">Bil. Komputer Telah Diselenggara</th>
+                    <th style="border: 0px; text-align: center">Bil. Komputer Rosak</th>
+                    <th style="border: 0px; text-align: center">Bil. Komputer Belum Diselenggara</th>
                 </tr>
                 <tr>
-                    <td>{{ $labManagement->computer_no ?? '-' }}</td>
-                    <td>{{ $labManagement->pc_maintenance_no ?? '-' }}</td>
-                    <td>{{ $labManagement->pc_damage_no ?? '-' }}</td>
-                    <td>{{ $labManagement->pc_unmaintenance_no ?? '-' }}</td>
+                    <td style="border: 0px; text-align: center">{{ $labManagement->computer_no ?? '-' }}</td>
+                    <td style="border: 0px; text-align: center">{{ $labManagement->pc_maintenance_no ?? '-' }}</td>
+                    <td style="border: 0px; text-align: center">{{ $labManagement->pc_damage_no ?? '-' }}</td>
+                    <td style="border: 0px; text-align: center">{{ $labManagement->pc_unmaintenance_no ?? '-' }}</td>
                 </tr>
                 </tbody>
             </table>
 
-            <h3>Senarai Rekod PC Diselenggara/Rosak</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Nama Komputer</th>
-                        <th>IP Address</th>
-                        @foreach ($workChecklists as $workChecklist)
-                        <th>{{ $workChecklist->title }}</th>
+
+            <div class="card">
+                <h3>Senarai Semak Makmal</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            @foreach ($labCheckList as $labCheck)
+                                <th style="text-align: center">{{ $labCheck->title }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @foreach ($labCheckList as $labCheck)
+                                <td style="text-align: center">
+                                    @php
+                                        $isSelected =
+                                            !empty($labManagement->lab_checklist_id) &&
+                                            in_array($labCheck->id, $labManagement->lab_checklist_id);
+                                    @endphp
+                                    @if ($isSelected)
+                                        <span class="tick-icon">&#10004;</span>
+                                    @else
+                                        <span class="empty-icon" style="color: red">&#10006;</span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Senarai Rekod PC Diselenggara/Rosak</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">No.</th>
+                            <th style="text-align: center">Nama Komputer</th>
+                            <th style="text-align: center">IP Address</th>
+                            @foreach ($workChecklists as $workChecklist)
+                                <th style="text-align: center">{{ $workChecklist->title }}</th>
+                            @endforeach
+                            <th style="text-align: center">Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
+                            <tr>
+                                <td style="text-align: center">{{ $loop->iteration }}</td>
+                                <td style="text-align: center">{{ $maintenanceRecord->computer_name }}</td>
+                                <td style="text-align: center">{{ $maintenanceRecord->ip_address }}</td>
+                                @if (!empty($maintenanceRecord->work_checklist_id))
+                                    @foreach ($workChecklists as $workChecklist)
+                                        <td style="text-align: center">
+                                            @php
+                                                $isSelected = in_array(
+                                                    $workChecklist->id,
+                                                    $maintenanceRecord->work_checklist_id);
+                                            @endphp
+                                            @if ($isSelected)
+                                                <span class="tick-icon">&#10004;</span>
+                                            @else
+                                                <span class="empty-icon" style="color: red">&#10006;</span>
+                                            @endif
+                                        </td>
+                                    @endforeach
+                                @else
+                                    <td style="text-align: center" colspan="{{ count($workChecklists) }}">Komputer
+                                        Bermasalah</td>
+                                @endif
+                                <td style="text-align: center">{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                            </tr>
                         @endforeach
-                        <th>Catatan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $maintenanceRecord->computer_name }}</td>
-                        <td>{{ $maintenanceRecord->ip_address }}</td>
-                        @if (!empty($maintenanceRecord->work_checklist_id))
-                        @foreach ($workChecklists as $workChecklist)
-                        <td>
-                            @php
-                            $isSelected = in_array(
-                            $workChecklist->id,
-                            $maintenanceRecord->work_checklist_id);
-                            @endphp
-                            @if ($isSelected)
-                            <span class="tick-icon">&#10004;</span>
-                            @else
-                            <span class="empty-icon" style="color: red">&#10006;</span>
-                            @endif
-                        </td>
-                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Senarai Perisian</h3>
+                @php
+                    // Extract selected software titles
+                    $selectedSoftwareTitles = $softwareList
+                        ->filter(function ($software) use ($labManagement) {
+                            return !empty($labManagement->software_id) &&
+                                in_array($software->id, $labManagement->software_id);
+                        })
+                        ->pluck('title');
+                @endphp
+
+                <table>
+                    <tbody>
+                        @if ($selectedSoftwareTitles->count() == 1)
+                            <tr>
+                                <td style="border: 0px">
+                                    <span class="tick-icon">&#10004;</span> {{ $selectedSoftwareTitles->first() }}
+                                </td>
+                            </tr>
                         @else
-                        <td colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
+                            @foreach ($selectedSoftwareTitles->chunk(2) as $chunk)
+                                <tr>
+                                    @foreach ($chunk as $title)
+                                        <td>
+                                            <span class="tick-icon">&#10004;</span> {{ $title }}
+                                        </td>
+                                    @endforeach
+                                    @if (count($chunk) == 1)
+                                        <td></td> <!-- Empty cell if there's an odd number of titles -->
+                                    @endif
+                                </tr>
+                            @endforeach
                         @endif
-                        <td>{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            <h3>Senarai Semak Makmal</h3>
-            <table>
-                <thead>
-                    <tr>
-                        @foreach ($labCheckList as $labCheck)
-                        <th>{{ $labCheck->title }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        @foreach ($labCheckList as $labCheck)
-                        <td>
-                            @php
-                            $isSelected =
-                            !empty($labManagement->lab_checklist_id) &&
-                            in_array($labCheck->id, $labManagement->lab_checklist_id);
-                            @endphp
-                            @if ($isSelected)
-                            <span class="tick-icon">&#10004;</span>
-                            @else
-                            <span class="empty-icon" style="color: red">&#10006;</span>
-                            @endif
-                        </td>
-                        @endforeach
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Senarai Perisian</h3>
-
-            @php
-            // Extract selected software titles
-            $selectedSoftwareTitles = $softwareList
-            ->filter(function ($software) use ($labManagement) {
-            return !empty($labManagement->software_id) &&
-            in_array($software->id, $labManagement->software_id);
-            })
-            ->pluck('title');
-            @endphp
-
-            <table>
-                <tbody>
-                    @if ($selectedSoftwareTitles->count() == 1)
-                    <tr>
-                        <td>
-                            <span class="tick-icon">&#10004;</span> {{ $selectedSoftwareTitles->first() }}
-                        </td>
-                    </tr>
-                    @else
-                    @foreach ($selectedSoftwareTitles->chunk(2) as $chunk)
-                    <tr>
-                        @foreach ($chunk as $title)
-                        <td>
-                            <span class="tick-icon">&#10004;</span> {{ $title }}
-                        </td>
-                        @endforeach
-                        @if (count($chunk) == 1)
-                        <td></td> <!-- Empty cell if there's an odd number of titles -->
-                        @endif
-                    </tr>
-                    @endforeach
-                    @endif
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
 
             <table>
                 <tr>
