@@ -89,7 +89,7 @@ class HomeController extends Controller
         $selectedYear = $request->input('year');
 
         // Calculate totals
-        $totalDihantarReports = $labManagementData->where('status', 'telah_dihantar')->count();
+        $totalDihantarReports = $labManagementData->where('status', 'dihantar')->count();
         $totalPC = $this->getTotalPC($filteredComputerLabs, $selectedMonth, $selectedYear);
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
@@ -199,8 +199,7 @@ class HomeController extends Controller
 
         $labManagementData = $labManagementData->get();
         $totalLab = ComputerLab::where('publish_status', 1)->count();
-        $totalSentReports = $labManagementData->where('status', 'dihantar')->count();
-        $totalDihantarReports = $labManagementData->where('status', 'telah_dihantar')->count();
+        $totalDihantarReports = $labManagementData->where('status', 'dihantar')->count();
         $totalPC = $labManagementData->sum('computer_no');
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
@@ -227,7 +226,6 @@ class HomeController extends Controller
 
         return view('home', [
             'labManagementList' => $labManagementData,
-            'totalSentReports' => $totalSentReports,
             'totalDihantarReports' => $totalDihantarReports,
             'totalPC' => $totalPC,
             'totalMaintenancePC' => $totalMaintenancePC,
