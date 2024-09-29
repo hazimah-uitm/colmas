@@ -89,7 +89,7 @@ class HomeController extends Controller
         $selectedYear = $request->input('year');
 
         // Calculate totals
-        $totalReviewedReports = $labManagementData->where('status', 'telah_disemak')->count();
+        $totalDihantarReports = $labManagementData->where('status', 'telah_dihantar')->count();
         $totalPC = $this->getTotalPC($filteredComputerLabs, $selectedMonth, $selectedYear);
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
@@ -125,7 +125,7 @@ class HomeController extends Controller
         // Return view with data
         return view('home', [
             'labManagementList' => $labManagementData,
-            'totalReviewedReports' => $totalReviewedReports,
+            'totalDihantarReports' => $totalDihantarReports,
             'totalPC' => $totalPC,
             'totalMaintenancePC' => $totalMaintenancePC,
             'totalDamagePC' => $totalDamagePC,
@@ -200,7 +200,7 @@ class HomeController extends Controller
         $labManagementData = $labManagementData->get();
         $totalLab = ComputerLab::where('publish_status', 1)->count();
         $totalSentReports = $labManagementData->where('status', 'dihantar')->count();
-        $totalReviewedReports = $labManagementData->where('status', 'telah_disemak')->count();
+        $totalDihantarReports = $labManagementData->where('status', 'telah_dihantar')->count();
         $totalPC = $labManagementData->sum('computer_no');
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
@@ -228,7 +228,7 @@ class HomeController extends Controller
         return view('home', [
             'labManagementList' => $labManagementData,
             'totalSentReports' => $totalSentReports,
-            'totalReviewedReports' => $totalReviewedReports,
+            'totalDihantarReports' => $totalDihantarReports,
             'totalPC' => $totalPC,
             'totalMaintenancePC' => $totalMaintenancePC,
             'totalDamagePC' => $totalDamagePC,

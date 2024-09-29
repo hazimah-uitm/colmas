@@ -76,6 +76,23 @@
         </div>
     </div>
 </div>
+
+<div class="row row-cols-xl">
+    <div class="col">
+        <div class="card radius-10 border-warning border-start border-0 border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <p class="mb-0">Jumlah Laporan Menunggu Semakan</p>
+                        <h4 class="my-1 text-warning">{{ $totalDihantarReports > 0 ? $totalDihantarReports : 0 }}</h4>
+                    </div>
+                    <div class="text-warning ms-auto font-35"><i class='bx bx-time' ></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
     <div class="col">
         <div class="card radius-10 border-info border-start border-0 border-4">
