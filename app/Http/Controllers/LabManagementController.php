@@ -67,11 +67,14 @@ class LabManagementController extends Controller
     
         // Format dates
         foreach ($labManagementList as $labManagement) {
-            $labManagement->date = Carbon::parse($labManagement->start_time)->format('d-m-Y');
-            $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
-            $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
-            $labManagement->startTime = Carbon::parse($labManagement->start_time)->format('H:i');
-            $labManagement->endTime = Carbon::parse($labManagement->end_time)->format('H:i');
+            $startTime = Carbon::parse($labManagement->start_time)->timezone('Asia/Kuching');
+            $endTime = Carbon::parse($labManagement->end_time)->timezone('Asia/Kuching');
+        
+            $labManagement->date = $startTime->format('d-m-Y');
+            $labManagement->month = $startTime->format('F');
+            $labManagement->year = $startTime->format('Y');
+            $labManagement->startTime = $startTime->format('H:i');
+            $labManagement->endTime = $endTime->format('H:i');
         }
     
         return view('pages.lab-management.index', [
@@ -131,7 +134,7 @@ class LabManagementController extends Controller
         ]);
 
         // Normalize the start date to Year-Month format
-        $startDateMonthYear = Carbon::parse($request->start_time)->format('Y-m');
+        $startDateMonthYear = Carbon::parse($request->start_time)->timezone('Asia/Kuching')->format('Y-m');
 
         // Check for existing record with the same computer_lab_id and start_date (month and year)
         $existingRecord = LabManagement::where('computer_lab_id', $request->computer_lab_id)
@@ -245,7 +248,7 @@ class LabManagementController extends Controller
 
 
         // Normalize the start date to Year-Month format
-        $startDateMonthYear = Carbon::parse($request->start_time)->format('Y-m');
+        $startDateMonthYear = Carbon::parse($request->start_time)->timezone('Asia/Kuching')->format('Y-m');
 
         // Check for existing record with the same computer_lab_id and start_date (month and year), excluding the current record
         $existingRecord = LabManagement::where('computer_lab_id', $request->computer_lab_id)

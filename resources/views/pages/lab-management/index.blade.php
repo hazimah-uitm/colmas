@@ -184,7 +184,7 @@
                             @endhasanyrole
                             @endif
 
-                            @if (auth()->user()->hasRole('Pegawai Penyemak') && $labManagement->status === 'dihantar')
+                            @if (auth()->user()->hasanyrole('Pegawai Penyemak|Superadmin') && $labManagement->status === 'dihantar')
                             <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#checkModal{{ $labManagement->id }}">
                                 <i class="bx bx-check"></i> Semak

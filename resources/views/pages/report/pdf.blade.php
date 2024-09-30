@@ -275,31 +275,31 @@
 
             <table>
                 <tr>
-                    <th>Catatan/Ulasan Pemilik</th>
-                    <td>{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
+                    <th style="border: 0px">Catatan/Ulasan Pemilik</th>
+                    <td style="border: 0px">{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
                 </tr>
                 <tr>
-                    <th>Catatan/Ulasan Pegawai Penyemak</th>
-                    <td>{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
+                    <th style="border: 0px">Catatan/Ulasan Pegawai Penyemak</th>
+                    <td style="border: 0px">{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
                 </tr>
                 <tr>
-                    <th>Status</th>
-                    <td>{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
+                    <th style="border: 0px">Status</th>
+                    <td style="border: 0px">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
                 </tr>
             </table>
 
             <table>
                 <tr>
-                    <th>Dihantar oleh</th>
-                    <td>{{ $labManagement->submittedBy->name ?? '-' }}</td>
-                    <th>Dihantar pada</th>
-                    <td>{{ $labManagement->submitted_at ?? '-' }}</td>
+                    <th style="border: 0px">Dihantar oleh</th>
+                    <td style="border: 0px">{{ $labManagement->submittedBy->name ?? '-' }}</td>
+                    <th style="border: 0px">Dihantar pada</th>
+                    <td style="border: 0px">{{ $labManagement->submitted_at ?? '-' }}</td>
                 </tr>
                 <tr>
-                    <th>Disemak oleh</th>
-                    <td>{{ $labManagement->checkedBy->name ?? '-' }}</td>
-                    <th>Disemak pada</th>
-                    <td>{{ $labManagement->checked_at ?? '-' }}</td>
+                    <th style="border: 0px">Disemak oleh</th>
+                    <td style="border: 0px">{{ $labManagement->checkedBy->name ?? '-' }}</td>
+                    <th style="border: 0px">Disemak pada</th>
+                    <td style="border: 0px">{{ $labManagement->checked_at ?? '-' }}</td>
                 </tr>
             </table>
         </div>

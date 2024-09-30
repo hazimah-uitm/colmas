@@ -43,10 +43,10 @@
 <table class="table mb-5">
     <thead class="bg-light">
         <tr>
-            <th>Bil. Keseluruhan Komputer</th>
-            <th>Bil. Komputer Telah Diselenggara</th>
-            <th>Bil. Komputer Rosak</th>
-            <th>Bil. Komputer Belum Diselenggara</th>
+            <th class="text-center">Bil. Keseluruhan Komputer</th>
+            <th class="text-center">Bil. Komputer Telah Diselenggara</th>
+            <th class="text-center">Bil. Komputer Rosak</th>
+            <th class="text-center">Bil. Komputer Belum Diselenggara</th>
         </tr>
     </thead>
     <tbody>
@@ -58,10 +58,10 @@
             $pcUnmaintenanceNo = $computerNo - $totalPCMaintenance - $pcDamageNo;
         @endphp
         <tr>
-            <td>{{ $computerNo }}</td>
-            <td>{{ $totalPCMaintenance }}</td>
-            <td>{{ $pcDamageNo }}</td>
-            <td>{{ $pcUnmaintenanceNo }}</td>
+            <td class="text-center">{{ $computerNo }}</td>
+            <td class="text-center">{{ $totalPCMaintenance }}</td>
+            <td class="text-center">{{ $pcDamageNo }}</td>
+            <td class="text-center">{{ $pcUnmaintenanceNo }}</td>
         </tr>
     </tbody>
 </table>
