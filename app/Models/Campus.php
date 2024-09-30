@@ -29,4 +29,9 @@ class Campus extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function computerLab()
+    {
+        return $this->hasMany(ComputerLab::class);
+    }
 }
