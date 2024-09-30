@@ -25,17 +25,25 @@
                     {{ csrf_field() }}
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Kata Laluan Semasa</label>
-                        <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password" required>
-                        @error('current_password')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="password" class="form-control {{ $errors->has('current_password') ? 'is-invalid' : '' }}" id="current_password" name="current_password" required>
+                        @if ($errors->has('current_password'))
+                        <div class="invalid-feedback">
+                            @foreach ($errors->get('current_password') as $error)
+                            {{ $error }}
+                            @endforeach
+                        </div>
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Kata Laluan Baru</label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
-                        @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" id="password" name="password" required>
+                        @if ($errors->has('password'))
+                        <div class="invalid-feedback">
+                            @foreach ($errors->get('password') as $error)
+                            {{ $error }}
+                            @endforeach
+                        </div>
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Sahkan Kata Laluan Baru</label>
