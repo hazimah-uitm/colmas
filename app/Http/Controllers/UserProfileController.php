@@ -56,7 +56,7 @@ class UserProfileController extends Controller
         $user = User::findOrFail($id);
 
         // Update the user's basic information
-        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'campus_id'));
+        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'campus_id', 'office_phone_no'));
         $user->save();
 
         return redirect()->route('profile.show', $id) // Corrected route name
