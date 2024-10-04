@@ -50,11 +50,18 @@ class HomeController extends Controller
 
         if ($request->filled('month')) {
             $labManagementData->whereMonth('start_time', $request->input('month'));
+        } else {
+            // Use the current month if no month is provided
+            $labManagementData->whereMonth('start_time', date('m'));
         }
-
+        
         if ($request->filled('year')) {
             $labManagementData->whereYear('start_time', $request->input('year'));
+        } else {
+            // Use the current year if no year is provided
+            $labManagementData->whereYear('start_time', date('Y'));
         }
+        
 
         if ($request->filled('pemilik_id')) {
             $labManagementData->whereHas('computerLab', function ($query) use ($request) {
