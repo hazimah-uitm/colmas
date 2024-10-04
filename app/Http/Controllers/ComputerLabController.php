@@ -91,7 +91,7 @@ class ComputerLabController extends Controller
     {
         $computerLab = ComputerLab::findOrFail($id);
         $pemilikList = User::role('Pemilik')->get();
-        $campusList = Campus::where('id', $computerLab->campus_id)->where('publish_status', 1)->get();
+        $campusList = Campus::where('publish_status', 1)->get();
 
         return view('pages.computer-lab.edit', [
             'save_route' => route('computer-lab.update', $id),

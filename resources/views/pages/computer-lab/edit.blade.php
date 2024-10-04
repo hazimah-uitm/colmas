@@ -57,7 +57,7 @@
                 <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id" name="campus_id">
                     @foreach ($campusList as $campus)
                     <option value="{{ $campus->id }}"
-                        {{ old('campus_id') == $campus->id || ($user->campus_id ?? '') == $campus->id ? 'selected' : '' }}>
+                        {{ old('campus_id', $computerLab->campus_id) == $campus->id ? 'selected' : '' }}>
                         {{ $campus->name }}
                     </option>
                     @endforeach

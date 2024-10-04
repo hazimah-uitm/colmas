@@ -38,7 +38,7 @@ class ComputerLab extends Model
 
     public function campus()
     {
-        return $this->belongsTo(Campus::class);
+        return $this->belongsTo(Campus::class, 'campus_id');
     }
 
     public function maintenanceRecord()
