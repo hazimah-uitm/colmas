@@ -55,7 +55,7 @@
         </div>
 
         <!-- Note Section -->
-        <p class="text-primary mt-4 fst-italic">Sebarang perubahan/pertambahan maklumat boleh maklum kepada moderator (Hazimah).</p>
+        <p class="text-danger mt-4 fst-italic">**Sebarang perubahan/pertambahan maklumat boleh maklum kepada moderator (Hazimah).</p>
 
         <div class="table-responsive">
             <table class="table">
