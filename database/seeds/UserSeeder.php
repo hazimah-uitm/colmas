@@ -25,6 +25,17 @@ class UserSeeder extends Seeder
                 'publish_status' => true,
                 'email_verified_at' => now(), 
             ],
+            [
+                'name' => 'Hiatus',
+                'staff_id' => '222222',
+                'email' => 'test@gmail.com',
+                'password' => Hash::make('hazimah123'),
+                'position_id' => 2,
+                'campus_id' => 1,
+                'office_phone_no' => '082123456',
+                'publish_status' => true,
+                'email_verified_at' => now(), 
+            ]
         ]);
     }
 }
