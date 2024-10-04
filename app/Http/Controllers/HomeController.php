@@ -71,7 +71,10 @@ class HomeController extends Controller
         }
 
         // Fetch lab management data
-        $labManagementData = $labManagementData->get();
+        $labManagementData = $labManagementData
+            ->whereMonth('created_at', date('m'))  // Filters by the current month
+            ->whereYear('created_at', date('Y'))   // Filters by the current year
+            ->get();
 
         // Fetch all computer labs for dropdown
         $allComputerLabs = ComputerLab::where('publish_status', 1)->get();
@@ -145,24 +148,24 @@ class HomeController extends Controller
         $totalPC = 0;
         foreach ($filteredComputerLabs as $computerLab) {
             $query = ComputerLabHistory::where('computer_lab_id', $computerLab->id);
-    
+
             if ($selectedMonth) {
                 $query->whereMonth('month_year', $selectedMonth);
             }
-    
+
             if ($selectedYear) {
                 $query->whereYear('month_year', $selectedYear);
             }
-    
+
             $latestHistory = $query->orderBy('month_year', 'desc')->first();
             if ($latestHistory) {
                 $totalPC += $latestHistory->pc_no;
             }
         }
         return $totalPC;
-    }    
+    }
 
-    
+
     public function store(Request $request)
     {
         $request->validate([
