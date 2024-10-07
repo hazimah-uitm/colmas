@@ -48,7 +48,7 @@ class ComputerLab extends Model
 
     public function labManagement()
     {
-        return $this->hasMany(LabManagement::class);
+        return $this->hasMany(LabManagement::class, 'computer_lab_id');
     }
 
     public function histories()

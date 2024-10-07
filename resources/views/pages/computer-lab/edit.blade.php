@@ -79,7 +79,7 @@
                     @else
                     @foreach ($pemilikList as $pemilik)
                     <option value="{{ $pemilik->id }}"
-                        {{ old('pemilik_id') == $pemilik->id || ($user->pemilik_id ?? '') == $pemilik->id ? 'selected' : '' }}>
+                        {{ old('pemilik_id', $computerLab->pemilik_id) == $pemilik->id ? 'selected' : '' }}>
                         {{ $pemilik->name }}
                     </option>
                     @endforeach

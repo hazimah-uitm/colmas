@@ -79,8 +79,8 @@ class HomeController extends Controller
 
         // Fetch lab management data
         $labManagementData = $labManagementData
-            ->whereMonth('created_at', date('m')) 
-            ->whereYear('created_at', date('Y')) 
+            ->whereMonth('created_at', date('m'))  // Filters by the current month
+            ->whereYear('created_at', date('Y'))   // Filters by the current year
             ->get();
 
         // Fetch all computer labs for dropdown

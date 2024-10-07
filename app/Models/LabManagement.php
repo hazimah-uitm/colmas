@@ -41,17 +41,17 @@ class LabManagement extends Model
 
     public function computerLab()
     {
-        return $this->belongsTo(ComputerLab::class);
+        return $this->belongsTo(ComputerLab::class, 'computer_lab_id');
     }
 
     public function software()
     {
-        return $this->belongsTo(Software::class);
+        return $this->belongsTo(Software::class, 'software_id');
     }
 
     public function labChecklist()
     {
-        return $this->belongsTo(LabChecklist::class);
+        return $this->belongsTo(LabChecklist::class, 'lab_checklist_id');
     }
 
     public function maintenanceRecords()
