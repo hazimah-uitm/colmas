@@ -79,8 +79,8 @@ class HomeController extends Controller
 
         // Fetch lab management data
         $labManagementData = $labManagementData
-            ->whereMonth('created_at', date('m'))  // Filters by the current month
-            ->whereYear('created_at', date('Y'))   // Filters by the current year
+            ->whereMonth('created_at', date('m')) 
+            ->whereYear('created_at', date('Y')) 
             ->get();
 
         // Fetch all computer labs for dropdown
@@ -103,7 +103,7 @@ class HomeController extends Controller
         $totalPC = $this->getTotalPC($filteredComputerLabs, $selectedMonth, $selectedYear);
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
-        $totalUnmaintenancePC = $totalPC - $totalMaintenancePC;
+        $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
 
         // Calculate unmaintained labs including drafts
         $maintainedLabIds = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])
