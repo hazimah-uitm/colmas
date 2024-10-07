@@ -164,6 +164,7 @@ class LabManagementController extends Controller
 
         $labManagement->lab_checklist_id = $request->input('lab_checklist_id', []);
         $labManagement->software_id = $request->input('software_id', []);
+        $labManagement->pc_unmaintenance_no = $labManagement->computer_no - $labManagement->pc_maintenance_no - $labManagement->pc_damage_no;
         $labManagement->save();
 
         return redirect()->route('lab-management')
@@ -278,11 +279,11 @@ class LabManagementController extends Controller
         $labManagement->fill($request->all());
         $labManagement->lab_checklist_id = $request->input('lab_checklist_id', []); // Store as JSON array
         $labManagement->software_id = $request->input('software_id', []); // Store as JSON array
+        $labManagement->pc_unmaintenance_no = $labManagement->computer_no - $labManagement->pc_maintenance_no - $labManagement->pc_damage_no;
         $labManagement->save();
 
         return redirect()->route('lab-management')->with('success', 'Maklumat berjaya dikemaskini');
     }
-
 
     public function submit(Request $request, $id)
     {

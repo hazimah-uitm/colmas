@@ -103,7 +103,7 @@ class HomeController extends Controller
         $totalPC = $this->getTotalPC($filteredComputerLabs, $selectedMonth, $selectedYear);
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
-        $totalUnmaintenancePC = $labManagementData->sum('pc_unmaintenance_no');
+        $totalUnmaintenancePC = $totalPC - $totalMaintenancePC;
 
         // Calculate unmaintained labs including drafts
         $maintainedLabIds = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])
