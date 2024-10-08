@@ -27,65 +27,69 @@ class HomeController extends Controller
     {
         $user = User::find(auth()->id());
         $announcements = Announcement::all();
-
+    
         // Initialize LabManagement query based on user roles
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+            // Admin and Superadmin see all lab management data
             $labManagementData = LabManagement::query();
+            $computerLabList = ComputerLab::where('publish_status', 1)->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
+            // Pegawai Penyemak only sees lab management data for labs in their campus
             $labManagementData = LabManagement::whereHas('computerLab', function ($query) use ($user) {
                 $query->where('campus_id', $user->campus_id);
             });
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->where('campus_id', $user->campus_id)
+                ->get();
         } else {
+            // Regular Pemilik only sees lab management data for their own labs
             $labManagementData = LabManagement::whereHas('computerLab', function ($query) use ($user) {
                 $query->where('pemilik_id', $user->id);
             });
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->where('pemilik_id', $user->id)
+                ->get();
         }
-
-        // Apply filters
+    
+        // Apply additional filters based on request inputs
         if ($request->filled('campus_id')) {
             $labManagementData->whereHas('computerLab', function ($query) use ($request) {
                 $query->where('campus_id', $request->input('campus_id'));
             });
         }
-
+    
         if ($request->filled('month')) {
             $labManagementData->whereMonth('start_time', $request->input('month'));
         } else {
-            // Use the current month if no month is provided
             $labManagementData->whereMonth('start_time', date('m'));
         }
-        
+    
         if ($request->filled('year')) {
             $labManagementData->whereYear('start_time', $request->input('year'));
         } else {
-            // Use the current year if no year is provided
             $labManagementData->whereYear('start_time', date('Y'));
         }
-        
-
+    
         if ($request->filled('pemilik_id')) {
             $labManagementData->whereHas('computerLab', function ($query) use ($request) {
                 $query->where('pemilik_id', $request->input('pemilik_id'));
             });
         }
-
+    
         if ($request->filled('computer_lab_id')) {
             $labManagementData->where('computer_lab_id', $request->input('computer_lab_id'));
         }
-
+    
         if ($request->filled('status')) {
             $labManagementData->where('status', $request->input('status'));
         }
-
+    
         // Fetch lab management data
         $labManagementData = $labManagementData
             ->whereMonth('created_at', date('m'))  // Filters by the current month
             ->whereYear('created_at', date('Y'))   // Filters by the current year
             ->get();
-
-        // Fetch all computer labs for dropdown
-        $allComputerLabs = ComputerLab::where('publish_status', 1)->get();
-
+    
         // Fetch filtered computer labs based on filter
         $filteredComputerLabsQuery = ComputerLab::where('publish_status', 1);
         if ($request->filled('computer_lab_id')) {
@@ -93,45 +97,41 @@ class HomeController extends Controller
         }
         $filteredComputerLabs = $filteredComputerLabsQuery->get();
         $totalLab = $filteredComputerLabs->count();
-
+    
         // Retrieve selected month and year from request
         $selectedMonth = $request->input('month');
         $selectedYear = $request->input('year');
-
+    
         // Calculate totals
         $totalDihantarReports = $labManagementData->where('status', 'dihantar')->count();
         $totalPC = $this->getTotalPC($filteredComputerLabs, $selectedMonth, $selectedYear);
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
         $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
-
+    
         // Calculate unmaintained labs including drafts
         $maintainedLabIds = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])
             ->pluck('computer_lab_id')
             ->unique();
         $totalUnmaintainedLabs = $totalLab - $maintainedLabIds->count();
-
+    
         // Determine assigned labs based on user role
         $assignedComputerLabs = ($user->hasAnyRole(['Admin', 'Superadmin']))
             ? $filteredComputerLabs
             : (($user->hasRole('Pegawai Penyemak'))
                 ? $filteredComputerLabs->where('campus_id', $user->campus_id)
                 : $user->assignedComputerLabs->intersect($filteredComputerLabs));
-
+    
         // Fetch lists for the view
-        $computerLabList = $allComputerLabs;
-        $pemilikList = User::role('Pemilik')
-            ->whereIn('id', $assignedComputerLabs->pluck('pemilik_id'))
-            ->get();
         $campusList = Campus::whereIn('id', $assignedComputerLabs->pluck('campus_id'))->get();
         $statusList = LabManagement::select('status')->distinct()->pluck('status');
-
+    
         // Format lab management data for the view
         foreach ($labManagementData as $labManagement) {
             $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
             $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
         }
-
+    
         // Return view with data
         return view('home', [
             'labManagementList' => $labManagementData,
@@ -141,7 +141,6 @@ class HomeController extends Controller
             'totalDamagePC' => $totalDamagePC,
             'totalUnmaintenancePC' => $totalUnmaintenancePC,
             'computerLabList' => $computerLabList,
-            'pemilikList' => $pemilikList,
             'campusList' => $campusList,
             'statusList' => $statusList,
             'announcements' => $announcements,
@@ -222,7 +221,6 @@ class HomeController extends Controller
                 : $user->assignedComputerLabs);
 
         $computerLabList = ComputerLab::whereIn('id', $assignedComputerLabs->pluck('id'))->get();
-        $pemilikList = User::role('Pemilik')->whereIn('id', $assignedComputerLabs->pluck('pemilik_id'))->get();
         $campusList = Campus::whereIn('id', $assignedComputerLabs->pluck('campus_id'))->get();
         $statusList = LabManagement::select('status')->distinct()->pluck('status');
 
@@ -242,7 +240,6 @@ class HomeController extends Controller
             'totalDamagePC' => $totalDamagePC,
             'totalUnmaintenancePC' => $totalUnmaintenancePC,
             'computerLabList' => $computerLabList,
-            'pemilikList' => $pemilikList,
             'campusList' => $campusList,
             'statusList' => $statusList,
             'announcements' => $announcements,

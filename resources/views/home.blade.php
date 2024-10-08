@@ -18,19 +18,6 @@
                                 </select>
                             </div>
                         @endhasanyrole
-                        @hasanyrole('Pegawai Penyemak|Superadmin')
-                            <div class="mb-2 ms-2 col-12 col-md-auto">
-                                <select name="pemilik_id" id="pemilik_id" class="form-select">
-                                    <option value="">Semua Pemilik</option>
-                                    @foreach ($pemilikList as $pemilik)
-                                        <option value="{{ $pemilik->id }}"
-                                            {{ Request::get('pemilik_id') == $pemilik->id ? 'selected' : '' }}>
-                                            {{ $pemilik->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endhasanyrole
                         <div class="mb-2 ms-2 col-12 col-md-auto">
                             <select name="status" id="status" class="form-select">
                                 <option value="">Semua Status</option>
@@ -292,7 +279,6 @@
             e.preventDefault(); // Prevent default reset behavior
             const url = new URL(window.location.href);
             url.searchParams.delete('campus_id');
-            url.searchParams.delete('pemilik_id');
             url.searchParams.delete('computer_lab_id');
             url.searchParams.delete('status');
             url.searchParams.delete('month');
