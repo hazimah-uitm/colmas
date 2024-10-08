@@ -124,7 +124,6 @@ class HomeController extends Controller
     
         // Fetch lists for the view
         $campusList = Campus::whereIn('id', $assignedComputerLabs->pluck('campus_id'))->get();
-        $statusList = LabManagement::select('status')->distinct()->pluck('status');
     
         // Format lab management data for the view
         foreach ($labManagementData as $labManagement) {
@@ -142,7 +141,6 @@ class HomeController extends Controller
             'totalUnmaintenancePC' => $totalUnmaintenancePC,
             'computerLabList' => $computerLabList,
             'campusList' => $campusList,
-            'statusList' => $statusList,
             'announcements' => $announcements,
             'totalLab' => $totalLab,
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
@@ -222,7 +220,6 @@ class HomeController extends Controller
 
         $computerLabList = ComputerLab::whereIn('id', $assignedComputerLabs->pluck('id'))->get();
         $campusList = Campus::whereIn('id', $assignedComputerLabs->pluck('campus_id'))->get();
-        $statusList = LabManagement::select('status')->distinct()->pluck('status');
 
         foreach ($labManagementData as $labManagement) {
             $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
@@ -241,14 +238,12 @@ class HomeController extends Controller
             'totalUnmaintenancePC' => $totalUnmaintenancePC,
             'computerLabList' => $computerLabList,
             'campusList' => $campusList,
-            'statusList' => $statusList,
             'announcements' => $announcements,
             'announcement' => $announcement, // Pass the specific announcement to the view
             'totalLab' => $totalLab,
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs
         ]);
     }
-
 
     public function update(Request $request, $id)
     {
