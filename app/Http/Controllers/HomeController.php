@@ -97,6 +97,11 @@ class HomeController extends Controller
         // Fetch filtered computer labs based on filter
         $filteredComputerLabsQuery = ComputerLab::where('publish_status', 1);
         
+        // Ensure Pegawai Penyemak only view the computer lab within their campus in the filtered query
+        if ($user->hasRole('Pegawai Penyemak')) {
+            $filteredComputerLabsQuery->where('campus_id', $user->campus_id);
+        }
+        
         // Ensure Pemilik only sees their own computer labs in the filtered query
         if ($user->hasRole('Pemilik')) {
             $filteredComputerLabsQuery->where('pemilik_id', $user->id);
