@@ -14,13 +14,13 @@ class ComputerLabSeeder extends Seeder
     {
         ComputerLab::insert([
             [
-                'code' => 'B4003',
+                'code' => 'B4001',
                 'name' => 'Makmal Komputer 1',
-                'campus_id' => 2,
-                'pemilik_id' => 2,
+                'campus_id' => 1,
+                'pemilik_id' => 3,
                 'username' => 'UiTM',
                 'password' => 'uitm123',
-                'no_of_computer' => 15,
+                'no_of_computer' => 5,
                 'publish_status' => true
             ],
             [
@@ -30,7 +30,17 @@ class ComputerLabSeeder extends Seeder
                 'pemilik_id' => 2,
                 'username' => 'UiTM 1',
                 'password' => 'uitm123',
-                'no_of_computer' => 30,
+                'no_of_computer' => 3,
+                'publish_status' => true
+            ],
+            [
+                'code' => 'B4003',
+                'name' => 'Makmal Komputer 3',
+                'campus_id' => 2,
+                'pemilik_id' => 2,
+                'username' => 'UiTM 1',
+                'password' => 'uitm123',
+                'no_of_computer' => 2,
                 'publish_status' => true
             ],
         ]);

@@ -143,7 +143,7 @@ class HomeController extends Controller
                 : $user->assignedComputerLabs->intersect($filteredComputerLabs));
     
         // Fetch lists for the view
-        $campusList = Campus::whereIn('id', $assignedComputerLabs->pluck('campus_id'))->get();
+        $campusList = Campus::all();
     
         // Format lab management data for the view
         foreach ($labManagementData as $labManagement) {
