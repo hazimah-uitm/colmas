@@ -27,15 +27,22 @@ class HomeController extends Controller
     {
         $user = User::find(auth()->id());
         $announcements = Announcement::all();
+        
+        $currentMonth = date('m');
+        $currentYear = date('Y');
     
-        // Initialize LabManagement query based on user roles
+        // Initialize LabManagement query
+        $labManagementQuery = LabManagement::query()
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear);
+    
+        // Filter based on user role
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             // Admin and Superadmin see all lab management data
-            $labManagementData = LabManagement::query();
             $computerLabList = ComputerLab::where('publish_status', 1)->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             // Pegawai Penyemak only sees lab management data for labs in their campus
-            $labManagementData = LabManagement::whereHas('computerLab', function ($query) use ($user) {
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
                 $query->where('campus_id', $user->campus_id);
             });
             $computerLabList = ComputerLab::where('publish_status', 1)
@@ -43,7 +50,7 @@ class HomeController extends Controller
                 ->get();
         } else {
             // Regular Pemilik only sees lab management data for their own labs
-            $labManagementData = LabManagement::whereHas('computerLab', function ($query) use ($user) {
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
                 $query->where('pemilik_id', $user->id);
             });
             $computerLabList = ComputerLab::where('publish_status', 1)
@@ -53,58 +60,62 @@ class HomeController extends Controller
     
         // Apply additional filters based on request inputs
         if ($request->filled('campus_id')) {
-            $labManagementData->whereHas('computerLab', function ($query) use ($request) {
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($request) {
                 $query->where('campus_id', $request->input('campus_id'));
             });
         }
     
         if ($request->filled('month')) {
-            $labManagementData->whereMonth('start_time', $request->input('month'));
+            $labManagementQuery->whereMonth('start_time', $request->input('month'));
         } else {
-            $labManagementData->whereMonth('start_time', date('m'));
+            $labManagementQuery->whereMonth('start_time', date('m'));
         }
     
         if ($request->filled('year')) {
-            $labManagementData->whereYear('start_time', $request->input('year'));
+            $labManagementQuery->whereYear('start_time', $request->input('year'));
         } else {
-            $labManagementData->whereYear('start_time', date('Y'));
+            $labManagementQuery->whereYear('start_time', date('Y'));
         }
     
         if ($request->filled('pemilik_id')) {
-            $labManagementData->whereHas('computerLab', function ($query) use ($request) {
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($request) {
                 $query->where('pemilik_id', $request->input('pemilik_id'));
             });
         }
     
         if ($request->filled('computer_lab_id')) {
-            $labManagementData->where('computer_lab_id', $request->input('computer_lab_id'));
+            $labManagementQuery->where('computer_lab_id', $request->input('computer_lab_id'));
         }
     
         if ($request->filled('status')) {
-            $labManagementData->where('status', $request->input('status'));
+            $labManagementQuery->where('status', $request->input('status'));
         }
     
-        // Fetch lab management data
-        $labManagementData = $labManagementData
-            ->whereMonth('created_at', date('m'))  // Filters by the current month
-            ->whereYear('created_at', date('Y'))   // Filters by the current year
-            ->get();
+        // Execute the query to fetch lab management data
+        $labManagementData = $labManagementQuery->get();
     
         // Fetch filtered computer labs based on filter
         $filteredComputerLabsQuery = ComputerLab::where('publish_status', 1);
+        
+        // Ensure Pemilik only sees their own computer labs in the filtered query
+        if ($user->hasRole('Pemilik')) {
+            $filteredComputerLabsQuery->where('pemilik_id', $user->id);
+        }
+        
         if ($request->filled('computer_lab_id')) {
             $filteredComputerLabsQuery->where('id', $request->input('computer_lab_id'));
         }
+        
         $filteredComputerLabs = $filteredComputerLabsQuery->get();
         $totalLab = $filteredComputerLabs->count();
     
-        // Retrieve selected month and year from request
-        $selectedMonth = $request->input('month');
-        $selectedYear = $request->input('year');
-    
         // Calculate totals
         $totalDihantarReports = $labManagementData->where('status', 'dihantar')->count();
-        $totalPC = $this->getTotalPC($filteredComputerLabs, $selectedMonth, $selectedYear);
+        
+        // Ensure total PC count is restricted to the user's computer labs
+        $totalPC = $this->getTotalPC($filteredComputerLabs, $request->input('month'), $request->input('year'));
+        
+        // Only sum maintenance and damage PCs from the filtered lab management data
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
         $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
@@ -146,6 +157,8 @@ class HomeController extends Controller
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
         ]);
     }
+    
+    
 
     private function getTotalPC($filteredComputerLabs, $selectedMonth = null, $selectedYear = null)
     {
