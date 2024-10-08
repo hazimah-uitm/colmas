@@ -156,9 +156,7 @@ class HomeController extends Controller
             'totalLab' => $totalLab,
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
         ]);
-    }
-    
-    
+    }    
 
     private function getTotalPC($filteredComputerLabs, $selectedMonth = null, $selectedYear = null)
     {
