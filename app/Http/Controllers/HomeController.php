@@ -110,6 +110,10 @@ class HomeController extends Controller
         if ($request->filled('computer_lab_id')) {
             $filteredComputerLabsQuery->where('id', $request->input('computer_lab_id'));
         }
+
+        if ($request->filled('campus_id')) {
+            $filteredComputerLabsQuery->where('campus_id', $request->input('campus_id'));
+        }        
         
         $filteredComputerLabs = $filteredComputerLabsQuery->get();
         $totalLab = $filteredComputerLabs->count();
