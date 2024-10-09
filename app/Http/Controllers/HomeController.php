@@ -134,13 +134,22 @@ class HomeController extends Controller
             ->pluck('computer_lab_id')
             ->unique();
         $totalUnmaintainedLabs = $totalLab - $maintainedLabIds->count();
+
+        $months = range(1, 12); // Get months from January to December
+        $unmaintainedLabsPerMonth = [];
+        
+        foreach ($months as $month) {
+            $maintainedLabsThisMonth = LabManagement::whereMonth('created_at', $month)
+                ->whereYear('created_at', $currentYear)
+                ->pluck('computer_lab_id')
+                ->unique();
     
-        // Determine assigned labs based on user role
-        $assignedComputerLabs = ($user->hasAnyRole(['Admin', 'Superadmin']))
-            ? $filteredComputerLabs
-            : (($user->hasRole('Pegawai Penyemak'))
-                ? $filteredComputerLabs->where('campus_id', $user->campus_id)
-                : $user->assignedComputerLabs->intersect($filteredComputerLabs));
+            $unmaintainedLabsThisMonth = $computerLabList->filter(function ($lab) use ($maintainedLabsThisMonth) {
+                return !$maintainedLabsThisMonth->contains($lab->id);
+            });
+    
+            $unmaintainedLabsPerMonth[$month] = $unmaintainedLabsThisMonth;
+        }
     
         // Fetch lists for the view
         $campusList = Campus::all();
@@ -164,6 +173,7 @@ class HomeController extends Controller
             'announcements' => $announcements,
             'totalLab' => $totalLab,
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
+            'unmaintainedLabsPerMonth' => $unmaintainedLabsPerMonth,
         ]);
     }    
 
