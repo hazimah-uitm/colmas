@@ -216,7 +216,7 @@
             <form action="{{ isset($announcement) ? route('home.update', $announcement->id) : route('home.store') }}" method="POST">
                 {{ csrf_field() }}
                 @if (isset($announcement))
-                    {{ method_field('put') }}
+                {{ method_field('put') }}
                 @endif
 
                 <div class="mb-3">
@@ -230,28 +230,27 @@
                 </div>
 
                 <div class="mb-3">
-                <label for="publish_status" class="form-label">Status</label>
-                <div class="form-check">
-                    <input type="radio" id="aktif" name="publish_status" value="1"
-                        class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
-                        {{ ($announcement->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
-                    <label class="form-check-label" for="aktif">Aktif</label>
+                    <label for="publish_status" class="form-label">Status</label>
+                    <div class="form-check">
+                        <input type="radio" id="aktif" name="publish_status" value="1"
+                            class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                            {{ ($announcement->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="aktif">Aktif</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="tidak_aktif" name="publish_status" value="0"
+                            class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                            {{ ($announcement->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
+                    </div>
+                    @if ($errors->has('publish_status'))
+                    <div class="invalid-feedback d-block">
+                        @foreach ($errors->get('publish_status') as $error)
+                        {{ $errors->first('publish_status') }}
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
-                <div class="form-check">
-                    <input type="radio" id="tidak_aktif" name="publish_status" value="0"
-                        class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
-                        {{ ($announcement->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
-                    <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
-                </div>
-                @if ($errors->has('publish_status'))
-                <div class="invalid-feedback d-block">
-                    @foreach ($errors->get('publish_status') as $error)
-                    {{ $errors->first('publish_status') }}
-                    @endforeach
-                </div>
-                @endif
-            </div>
-
 
                 <button type="submit" class="btn btn-primary">{{ isset($announcement) ? 'Kemas Kini' : 'Tambah' }} Makluman</button>
             </form>
@@ -260,8 +259,17 @@
 
         <hr>
 
-        {{-- Display existing announcements --}}
+        <!-- Display makluman -->
+        @php
+        // Filter active announcements for Pemilik role
+        $activeAnnouncements = $announcements->filter(function ($announcement) {
+        return $announcement->publish_status === 'Aktif';
+        });
+        @endphp
+
         @forelse($announcements as $announcement)
+        <!-- Check if the user is Superadmin or Admin to see all announcements -->
+        @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin', 'Pegawai Penyemak']))
         <div class="card mb-3">
             <div class="card-body bg-white">
                 <h6 class="card-title">{{ $announcement->title }}</h6>
@@ -273,20 +281,59 @@
                     <span class="card-text badge bg-danger">Tidak Aktif</span>
                     @endif
                 </p>
-                @hasanyrole('Superadmin|Admin|Pegawai Penyemak')
+
                 <a href="{{ route('home.edit', $announcement->id) }}" class="btn btn-warning">Kemas Kini</a>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $announcement->id }}">Padam</button>
-                @endhasanyrole
             </div>
         </div>
+
+        @elseif (auth()->user()->hasRole('Pemilik') && $announcement->publish_status === 'Aktif')
+        <!-- Pemilik role can see only Aktif announcements -->
+        <div class="card mb-3">
+            <div class="card-body bg-white">
+                <h6 class="card-title">{{ $announcement->title }}</h6>
+                <p class="card-text">{{ $announcement->desc }}</p>
+                <p class="card-footer">{{ $announcement->created_at->format('j F Y') }}</p>
+            </div>
+        </div>
+        @endif
         @empty
+        <!-- Show message when there are no announcements -->
         <div class="alert alert-info" role="alert">
             Tiada makluman
         </div>
         @endforelse
+
+        @if ($activeAnnouncements->isEmpty() && auth()->user()->hasRole('Pemilik'))
+        <div class="alert alert-info" role="alert">
+            Tiada makluman
+        </div>
+        @endif
     </div>
 </div>
 
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ $announcement->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Pengesahan Padam Rekod</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">{{ $announcement->title }}</span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <form class="d-inline" method="POST" action="{{ route('home.destroy', $announcement->id) }}">
+                    {{ method_field('delete') }}
+                    {{ csrf_field() }}
+                    <button type="submit" class="btn btn-danger">Padam</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     document.getElementById('homeFilter').addEventListener('change', function() {
