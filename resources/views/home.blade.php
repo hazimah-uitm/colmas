@@ -210,7 +210,7 @@
     <div class="card-body">
         <h5>Makluman</h5>
 
-        @hasanyrole('Superadmin|Admin')
+        @hasanyrole('Superadmin|Admin|Pegawai Penyemak')
         <div class="mb-4 bg-white p-4 border rounded">
             <form action="{{ isset($announcement) ? route('home.update', $announcement->id) : route('home.store') }}"
                 method="POST">
@@ -267,7 +267,7 @@
 
         @forelse($announcements as $announcement)
         <!-- Check if the user is Superadmin or Admin to see all announcements -->
-        @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin']))
+        @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin', 'Pegawai Penyemak']))
         <div class="card mb-3">
             <div class="card-body bg-white">
                 <h6 class="card-title">{{ $announcement->title }}</h6>
