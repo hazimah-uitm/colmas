@@ -308,43 +308,46 @@
         </div>
         @endif
 
-        <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal{{ $announcement->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Pengesahan Padam Rekod</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">{{ $announcement->title }}</span>?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <form class="d-inline" method="POST" action="{{ route('home.destroy', $announcement->id) }}">
-                            {{ method_field('delete') }}
-                            {{ csrf_field() }}
-                            <button type="submit" class="btn btn-danger">Padam</button>
-                        </form>
-                    </div>
-                </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ $announcement->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Pengesahan Padam Rekod</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">{{ $announcement->title }}</span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <form class="d-inline" method="POST" action="{{ route('home.destroy', $announcement->id) }}">
+                    {{ method_field('delete') }}
+                    {{ csrf_field() }}
+                    <button type="submit" class="btn btn-danger">Padam</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
-        <script>
-            document.getElementById('homeFilter').addEventListener('change', function() {
-                this.submit();
-            });
+<script>
+    document.getElementById('homeFilter').addEventListener('change', function() {
+        this.submit();
+    });
 
-            document.getElementById('resetButton').addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent default reset behavior
-                const url = new URL(window.location.href);
-                url.searchParams.delete('campus_id');
-                url.searchParams.delete('computer_lab_id');
-                url.searchParams.delete('status');
-                url.searchParams.delete('month');
-                url.searchParams.delete('year');
-                window.location.href = url.toString(); // Redirect to the URL with reset filters
-            });
-        </script>
-        @endsection
+    document.getElementById('resetButton').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default reset behavior
+        const url = new URL(window.location.href);
+        url.searchParams.delete('campus_id');
+        url.searchParams.delete('computer_lab_id');
+        url.searchParams.delete('status');
+        url.searchParams.delete('month');
+        url.searchParams.delete('year');
+        window.location.href = url.toString(); // Redirect to the URL with reset filters
+    });
+</script>
+@endsection
