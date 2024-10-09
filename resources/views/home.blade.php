@@ -92,9 +92,9 @@
 
 <div class="row row-cols-xl">
 <div class="col">
-        <div class="card radius-10 alert alert-primary text-dark">
+        <div class="card radius-10 alert alert-info text-dark">
             <div class="card-body">
-                <h5 class="mb-0 text-uppercase">Senarai Makmal Belum Diselenggara</h5>
+                <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Belum Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
                     @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
                         <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
