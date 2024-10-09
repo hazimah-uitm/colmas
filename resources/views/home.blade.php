@@ -68,7 +68,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                    <h5 class="mb-0 text-uppercase">Jumlah Laporan Menunggu Semakan</h5>
+                        <h5 class="mb-0 text-uppercase">Jumlah Laporan Menunggu Semakan</h5>
                         <h4 class="my-1 {{ $totalDihantarReports > 0 ? 'text-warning' : 'text-primary' }}">
                             {{ $totalDihantarReports > 0 ? $totalDihantarReports : 0 }}
                         </h4>
@@ -91,24 +91,24 @@
 @endhasanyrole
 
 <div class="row row-cols-xl">
-<div class="col">
+    <div class="col">
         <div class="card radius-10 alert alert-info text-dark">
             <div class="card-body">
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Belum Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
                     @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
-                        <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
-                            <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                            @if ($unmaintainedLabs->isEmpty())
-                                <p class="text-success">Semua makmal telah diselenggara</p>
-                            @else
-                                <ul>
-                                    @foreach ($unmaintainedLabs as $lab)
-                                        <li>{{ $lab->name }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
+                    <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($unmaintainedLabs->isEmpty())
+                        <p class="text-success">Semua makmal telah diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($unmaintainedLabs as $lab)
+                            <li>{{ $lab->name }}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -227,6 +227,28 @@
                     <label for="desc" class="form-label">Keterangan</label>
                     <textarea class="form-control" id="desc" name="desc" rows="3" required>{{ $announcement->desc ?? old('desc') }}</textarea>
                 </div>
+                <div class="mb-3">
+                    <label for="publish_status" class="form-label">Status</label>
+                    <div class="form-check">
+                        <input type="radio" id="aktif" name="publish_status" value="1"
+                            class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                            {{ ($announcement->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="aktif">Aktif</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" id="tidak_aktif" name="publish_status" value="0"
+                            class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
+                            {{ ($announcement->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
+                    </div>
+                    @if ($errors->has('publish_status'))
+                    <div class="invalid-feedback d-block">
+                        @foreach ($errors->get('publish_status') as $error)
+                        {{ $errors->first('publish_status') }}
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
                 <button type="submit" class="btn btn-primary">{{ isset($announcement) ? 'Kemas Kini' : 'Tambah' }}
                     Makluman</button>
             </form>
@@ -236,39 +258,70 @@
         <hr>
 
         <!-- Display makluman -->
+        @php
+        // Filter active announcements for Pemilik role
+        $activeAnnouncements = $announcements->filter(function ($announcement) {
+        return $announcement->publish_status === 'Aktif';
+        });
+        @endphp
+
         @forelse($announcements as $announcement)
+        <!-- Check if the user is Superadmin or Admin to see all announcements -->
+        @if (auth()->user()->hasAnyRole(['Superadmin', 'Admin']))
         <div class="card mb-3">
             <div class="card-body bg-white">
                 <h6 class="card-title">{{ $announcement->title }}</h6>
                 <p class="card-text">{{ $announcement->desc }}</p>
-                <p class="card-footer text-muted"><i>{{ $announcement->created_at->format('j F Y') }}</i></p>
+                <p class="card-footer">{{ $announcement->created_at->format('j F Y') }}
+                    @if ($announcement->publish_status === 'Aktif')
+                    | <span class="card-text badge bg-success">Aktif</span>
+                    @else
+                    <span class="card-text badge bg-danger">Tidak Aktif</span>
+                    @endif
+                </p>
 
-                @hasanyrole('Superadmin|Admin')
                 <a href="{{ route('home.edit', $announcement->id) }}" class="btn btn-warning">Kemas Kini</a>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#deleteModal{{ $announcement->id }}">Padam</button>
-                @endhasanyrole
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $announcement->id }}">Padam</button>
             </div>
         </div>
 
+        @elseif (auth()->user()->hasRole('Pemilik') && $announcement->publish_status === 'Aktif')
+        <!-- Pemilik role can see only Aktif announcements -->
+        <div class="card mb-3">
+            <div class="card-body bg-white">
+                <h6 class="card-title">{{ $announcement->title }}</h6>
+                <p class="card-text">{{ $announcement->desc }}</p>
+                <p class="card-footer">{{ $announcement->created_at->format('j F Y') }}</p>
+            </div>
+        </div>
+        @endif
+        @empty
+        <!-- Show message when there are no announcements -->
+        <div class="alert alert-info" role="alert">
+            Tiada makluman
+        </div>
+        @endforelse
+
+        @if ($activeAnnouncements->isEmpty() && auth()->user()->hasRole('Pemilik'))
+        <div class="alert alert-info" role="alert">
+            Tiada makluman
+        </div>
+        @endif
+
         <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal{{ $announcement->id }}" tabindex="-1"
-            aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal{{ $announcement->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="deleteModalLabel">Pengesahan Padam Rekod</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Adakah anda pasti ingin memadam rekod <span
-                            style="font-weight: 600;">{{ $announcement->title }}</span>?
+                        Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">{{ $announcement->title }}</span>?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <form class="d-inline" method="POST"
-                            action="{{ route('home.destroy', $announcement->id) }}">
+                        <form class="d-inline" method="POST" action="{{ route('home.destroy', $announcement->id) }}">
                             {{ method_field('delete') }}
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-danger">Padam</button>
@@ -277,28 +330,21 @@
                 </div>
             </div>
         </div>
-        @empty
-        <div class="alert alert-info" role="alert">
-            Tiada makluman
-        </div>
-        @endforelse
-    </div>
-</div>
 
-<script>
-    document.getElementById('homeFilter').addEventListener('change', function() {
-        this.submit();
-    });
+        <script>
+            document.getElementById('homeFilter').addEventListener('change', function() {
+                this.submit();
+            });
 
-    document.getElementById('resetButton').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default reset behavior
-        const url = new URL(window.location.href);
-        url.searchParams.delete('campus_id');
-        url.searchParams.delete('computer_lab_id');
-        url.searchParams.delete('status');
-        url.searchParams.delete('month');
-        url.searchParams.delete('year');
-        window.location.href = url.toString(); // Redirect to the URL with reset filters
-    });
-</script>
-@endsection
+            document.getElementById('resetButton').addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent default reset behavior
+                const url = new URL(window.location.href);
+                url.searchParams.delete('campus_id');
+                url.searchParams.delete('computer_lab_id');
+                url.searchParams.delete('status');
+                url.searchParams.delete('month');
+                url.searchParams.delete('year');
+                window.location.href = url.toString(); // Redirect to the URL with reset filters
+            });
+        </script>
+        @endsection

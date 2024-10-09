@@ -17,6 +17,7 @@ class CreateAnnouncementsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('desc');
+            $table->boolean('publish_status');
             $table->softDeletes();
             $table->timestamps();
         });

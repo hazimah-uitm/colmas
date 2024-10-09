@@ -213,11 +213,12 @@ class HomeController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
+            'publish_status' => 'required|in:1,0',
         ]);
 
         Announcement::updateOrCreate(
             ['id' => $request->input('announcement_id')],
-            $request->only('title', 'desc')
+            $request->only('title', 'desc', 'publish_status')
         );
 
         return redirect()->route('home');
@@ -392,10 +393,11 @@ class HomeController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
+            'publish_status' => 'required|in:1,0',
         ]);
 
         $announcement = Announcement::findOrFail($id);
-        $announcement->update($request->only('title', 'desc'));
+        $announcement->update($request->only('title', 'desc', 'publish_status'));
 
         return redirect()->route('home');
     }
