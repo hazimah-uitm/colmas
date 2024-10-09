@@ -92,7 +92,7 @@
 
 <div class="row row-cols-xl">
 <div class="col">
-        <div class="card radius-10 border-success border-start border-0 border-4">
+        <div class="card radius-10 alert alert-primary text-dark">
             <div class="card-body">
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Belum Diselenggara</h5>
                 <div class="row mt-3">
