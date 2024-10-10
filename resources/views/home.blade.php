@@ -223,7 +223,7 @@
 
 <div class="card">
     <div class="card-body">
-        <h5>Makluman</h5>
+        <h5>MAKLUMAN</h5>
         @if ($announcements->isNotEmpty())
         @foreach ($announcements as $announcement )
         <div class="card mb-3">
