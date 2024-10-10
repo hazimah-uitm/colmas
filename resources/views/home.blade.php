@@ -122,14 +122,14 @@
             <div class="card-body">
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Telah Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
-                    @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
+                    @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
                     <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
                         <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                        @if ($unmaintainedLabs->isEmpty())
-                        <p class="text-success">Semua makmal telah diselenggara</p>
+                        @if ($maintainedLabs->isEmpty())
+                        <p class="text-danger">Semua makmal belum diselenggara</p>
                         @else
                         <ul>
-                            @foreach ($unmaintainedLabs as $lab)
+                            @foreach ($maintainedLabs as $lab)
                             <li>{{ $lab->name }}</li>
                             @endforeach
                         </ul>
@@ -141,6 +141,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
     <div class="col">

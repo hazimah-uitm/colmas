@@ -104,6 +104,7 @@ class HomeController extends Controller
     
         $months = range(1, 12); // Get months from January to December
         $unmaintainedLabsPerMonth = [];
+        $maintainedLabsPerMonth = [];
     
         // If a specific month is selected, focus only on that month
         if ($currentMonth) {
@@ -123,6 +124,18 @@ class HomeController extends Controller
             });
     
             $unmaintainedLabsPerMonth[$month] = $unmaintainedLabsThisMonth;
+        }
+
+        foreach ($months as $month) {
+            // Fetch maintained labs for the specified month and year
+            $maintainedLabsThisMonth = LabManagement::whereMonth('created_at', $month)
+                ->whereYear('created_at', $currentYear)
+                ->whereIn('status', ['dihantar', 'telah_disemak'])
+                ->pluck('computer_lab_id')
+                ->unique();
+        
+            // Get the list of maintained labs for this month
+            $maintainedLabsPerMonth[$month] = ComputerLab::whereIn('id', $maintainedLabsThisMonth)->get();
         }
     
         // Fetch lists for the view
@@ -148,6 +161,7 @@ class HomeController extends Controller
             'totalLab' => $totalLab,
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
             'unmaintainedLabsPerMonth' => $unmaintainedLabsPerMonth,
+            'maintainedLabsPerMonth' => $maintainedLabsPerMonth,
             'currentYear' =>  $currentYear
         ]);
     }    
