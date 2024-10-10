@@ -42,6 +42,11 @@ Route::middleware('auth')->group(function () {
     Route::get('campus/view/{id}', 'CampusController@show')->name('campus.show');
     Route::get('/campus/search', 'CampusController@search')->name('campus.search');
 
+    //Announcement
+    Route::get('announcement', 'AnnouncementController@index')->name('announcement');
+    Route::get('announcement/view/{id}', 'AnnouncementController@show')->name('announcement.show');
+    Route::get('/announcement/search', 'AnnouncementController@search')->name('announcement.search');
+
     //Position
     Route::get('position', 'PositionController@index')->name('position');
     Route::get('position/view/{id}', 'PositionController@show')->name('position.show');
@@ -154,6 +159,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/campus/trash', 'CampusController@trashList')->name('campus.trash');
         Route::get('/campus/{id}/restore', 'CampusController@restore')->name('campus.restore');
         Route::delete('/campus/{id}/force-delete', 'CampusController@forceDelete')->name('campus.forceDelete');
+
+        //Announcement
+        Route::get('announcement/create', 'AnnouncementController@create')->name('announcement.create');
+        Route::post('announcement/store', 'AnnouncementController@store')->name('announcement.store');
+        Route::get('announcement/{id}/edit', 'AnnouncementController@edit')->name('announcement.edit');
+        Route::post('announcement/{id}', 'AnnouncementController@update')->name('announcement.update');
+        Route::delete('announcement/{id}', 'AnnouncementController@destroy')->name('announcement.destroy');
+        Route::get('/announcement/trash', 'AnnouncementController@trashList')->name('announcement.trash');
+        Route::get('/announcement/{id}/restore', 'AnnouncementController@restore')->name('announcement.restore');
+        Route::delete('/announcement/{id}/force-delete', 'AnnouncementController@forceDelete')->name('announcement.forceDelete');
 
         //Position
         Route::get('position/create', 'PositionController@create')->name('position.create');
