@@ -92,7 +92,7 @@
 
 <div class="row row-cols-xl">
     <div class="col">
-        <div class="card radius-10 alert alert-info text-dark">
+        <div class="card radius-10 border-danger border-start border-0 border-4">
             <div class="card-body">
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Belum Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
@@ -118,7 +118,7 @@
 
 <div class="row row-cols-xl">
     <div class="col">
-        <div class="card radius-10 alert alert-info text-dark">
+        <div class="card radius-10 border-success border-start border-0 border-4">
             <div class="card-body">
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Telah Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
@@ -159,14 +159,14 @@
         </div>
     </div>
     <div class="col">
-        <div class="card radius-10 border-primary border-start border-0 border-4">
+        <div class="card radius-10 border-info border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
                         <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                        <h4 class="text-primary my-1">{{ $totalPC > 0 ? $totalPC : 0 }}</h4>
+                        <h4 class="text-info my-1">{{ $totalPC > 0 ? $totalPC : 0 }}</h4>
                     </div>
-                    <div class="text-primary ms-auto font-35"><i class="bx bx-desktop computer-icon"></i>
+                    <div class="text-info ms-auto font-35"><i class="bx bx-desktop computer-icon"></i>
                     </div>
                 </div>
             </div>
@@ -175,45 +175,45 @@
 </div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
     <div class="col">
-        <div class="card radius-10 border-success border-start border-0 border-4">
+        <div class="card radius-10 border-info border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
                         <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
                         <p class="mb-0 text-uppercase">Selesai Diselenggara</p>
-                        <h4 class="my-1 text-success">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
+                        <h4 class="my-1 text-info">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
                     </div>
-                    <div class="text-success ms-auto font-35"><i class='bx bx-check-square'></i></div>
+                    <div class="text-info ms-auto font-35"><i class='bx bx-check-square'></i></div>
                 </div>
             </div>
         </div>
     </div>
     
     <div class="col">
-        <div class="card radius-10 border-danger border-start border-0 border-4">
+        <div class="card radius-10 border-info border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
                         <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
                         <p class="mb-0 text-uppercase">Rosak</p>
-                        <h4 class="my-1 text-danger">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
+                        <h4 class="my-1 text-info">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
                     </div>
-                    <div class="text-danger ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
+                    <div class="text-info ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col">
-        <div class="card radius-10 border-warning border-start border-0 border-4">
+        <div class="card radius-10 border-info border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
                         <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
                         <p class="mb-0 text-uppercase">Belum Diselenggara</p>
-                        <h4 class="my-1 text-warning">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
+                        <h4 class="my-1 text-info">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
                     </div>
-                    <div class="text-warning ms-auto font-35"><i class='bx bx-time-five'></i></div>
+                    <div class="text-info ms-auto font-35"><i class='bx bx-time-five'></i></div>
                 </div>
             </div>
         </div>
