@@ -132,11 +132,13 @@ class HomeController extends Controller
                 ->whereYear('created_at', $currentYear)
                 ->whereIn('status', ['dihantar', 'telah_disemak'])
                 ->pluck('computer_lab_id')
-                ->unique();
+                ->unique(); // Get unique computer lab IDs that were maintained this month
         
-            // Get the list of maintained labs for this month
-            $maintainedLabsPerMonth[$month] = ComputerLab::whereIn('id', $maintainedLabsThisMonth)->get();
-        }
+            // Get the list of maintained labs for this month, filtered by $computerLabList
+            $maintainedLabsPerMonth[$month] = $computerLabList->filter(function ($lab) use ($maintainedLabsThisMonth) {
+                return $maintainedLabsThisMonth->contains($lab->id); // Check if the lab is maintained this month
+            });
+        }        
     
         // Fetch lists for the view
         $campusList = Campus::all();
