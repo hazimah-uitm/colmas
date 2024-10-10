@@ -116,13 +116,39 @@
     </div>
 </div>
 
+<div class="row row-cols-xl">
+    <div class="col">
+        <div class="card radius-10 alert alert-info text-dark">
+            <div class="card-body">
+                <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Telah Diselenggara {{ $currentYear }}</h5>
+                <div class="row mt-3">
+                    @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
+                    <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($unmaintainedLabs->isEmpty())
+                        <p class="text-success">Semua makmal telah diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($unmaintainedLabs as $lab)
+                            <li>{{ $lab->name }}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
     <div class="col">
         <div class="card radius-10 border-info border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                        <p class="mb-0">Jumlah Makmal Komputer</p>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Makmal Komputer</span></p>
                         <h4 class="text-info my-1">{{ $totalLab > 0 ? $totalLab : 0 }}</h4>
                     </div>
                     <div class="text-info ms-auto font-35"><i class="bx bxs-building"></i>
@@ -132,28 +158,11 @@
         </div>
     </div>
     <div class="col">
-        <div class="card radius-10 border-secondary border-start border-0 border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <p class="mb-0">Jumlah Makmal Komputer Belum Diselenggara</p>
-                        <h4 class="text-secondary my-1">{{ $totalUnmaintainedLabs > 0 ? $totalUnmaintainedLabs : 0 }}
-                        </h4>
-                    </div>
-                    <div class="text-secondary ms-auto font-35"><i class="bx bx-wrench"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
-    <div class="col">
         <div class="card radius-10 border-primary border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                        <p class="mb-0">Jumlah Komputer</p>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
                         <h4 class="text-primary my-1">{{ $totalPC > 0 ? $totalPC : 0 }}</h4>
                     </div>
                     <div class="text-primary ms-auto font-35"><i class="bx bx-desktop computer-icon"></i>
@@ -162,28 +171,30 @@
             </div>
         </div>
     </div>
+</div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
     <div class="col">
         <div class="card radius-10 border-success border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                        <p class="mb-0">Jumlah Komputer Selesai Diselenggara</p>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                        <p class="mb-0 text-uppercase">Selesai Diselenggara</p>
                         <h4 class="my-1 text-success">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
                     </div>
-                    <div class="text-success ms-auto font-35"><i class='bx bx-check-square'></i></i>
-                    </div>
+                    <div class="text-success ms-auto font-35"><i class='bx bx-check-square'></i></div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
+    
     <div class="col">
         <div class="card radius-10 border-danger border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                        <p class="mb-0">Jumlah Komputer Rosak</p>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                        <p class="mb-0 text-uppercase">Rosak</p>
                         <h4 class="my-1 text-danger">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
                     </div>
                     <div class="text-danger ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
@@ -191,12 +202,14 @@
             </div>
         </div>
     </div>
+
     <div class="col">
         <div class="card radius-10 border-warning border-start border-0 border-4">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                        <p class="mb-0">Jumlah Komputer Belum Diselenggara</p>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                        <p class="mb-0 text-uppercase">Belum Diselenggara</p>
                         <h4 class="my-1 text-warning">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
                     </div>
                     <div class="text-warning ms-auto font-35"><i class='bx bx-time-five'></i></div>
@@ -205,6 +218,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="card">
     <div class="card-body">
