@@ -227,14 +227,14 @@
                         <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
                         <ul>
                             <li>
-                                <p class="card-text">{{ $announcement->desc }}</p>
+                                <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
                             </li>
                         </ul>
                     </div>
                 </div>
             @endforeach
         @else
-            <div class="alert alert-info" role="alert">
+            <div class="card-body bg-white" role="alert">
                 Tiada makluman
             </div>
         @endif
