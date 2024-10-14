@@ -1,17 +1,22 @@
 @extends('layouts.master')
 @section('content')
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Pengurusan Rekod Selenggara Komputer</div>
-    <div class="ps-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('lab-management.maintenance-records', ['labManagement' => $labManagement->id]) }}">Senarai
-                        Rekod {{ $computerLabName }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Senarai Rekod PC Diselenggara/Rosak Dipadam</li>
-            </ol>
-        </nav>
+<div class="page-breadcrumb mb-3">
+    <div class="row align-items-center">
+        <!-- Breadcrumb Title and Navigation -->
+        <div class="col-12 col-md-9 d-flex align-items-center">
+            <div class="breadcrumb-title pe-3">Pengurusan Rekod Selenggara Komputer</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('lab-management.maintenance-records', ['labManagement' => $labManagement->id]) }}">Senarai
+                                Rekod {{ $computerLabName }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Senarai Rekod PC Diselenggara/Rosak Dipadam</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
 <h6 class="mb-0 text-uppercase">Senarai Rekod PC Diselenggara/Rosak Dipadam</h6>
@@ -38,8 +43,8 @@
                     @if (count($trashList) > 0)
                     @foreach ($trashList as $trash)
                     <tr>
-                    <td>{{ ($trashList->currentPage() - 1) * $trashList->perPage() + $loop->iteration }}
-                    </td>
+                        <td>{{ ($trashList->currentPage() - 1) * $trashList->perPage() + $loop->iteration }}
+                        </td>
                         <td>{{ $trash->computer_name }}</td>
                         <td>{{ $trash->ip_address }}</td>
                         <td>

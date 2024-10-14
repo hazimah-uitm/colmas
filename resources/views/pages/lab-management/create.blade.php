@@ -2,18 +2,23 @@
 
 @section('content')
 <!--breadcrumb-->
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Pengurusan Rekod Selenggara</div>
-    <div class="ps-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
-                </li>
-                <li class="breadcrumb-item"><a href="{{ route('lab-management') }}">Rekod Selenggara Makmal Komputer</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Rekod</li>
-            </ol>
-        </nav>
+<div class="page-breadcrumb mb-3">
+    <div class="row align-items-center">
+        <!-- Breadcrumb Title and Navigation -->
+        <div class="col-12 col-md-9 d-flex align-items-center">
+            <div class="breadcrumb-title pe-3">Pengurusan Rekod Selenggara</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ route('lab-management') }}">Rekod Selenggara Makmal Komputer</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ $str_mode }} Rekod</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
 <!--end breadcrumb-->

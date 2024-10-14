@@ -2,16 +2,21 @@
 
 @section('content')
 <!-- Breadcrumb -->
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-    <div class="breadcrumb-title pe-3">Edit Profil Pengguna</div>
-    <div class="ps-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                <li class="breadcrumb-item"><a href="{{ route('profile.show', ['id' => $user->id]) }}">Profil</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit Profil</li>
-            </ol>
-        </nav>
+<div class="page-breadcrumb mb-3">
+    <div class="row align-items-center">
+        <!-- Breadcrumb Title and Navigation -->
+        <div class="col-12 col-md-9 d-flex align-items-center">
+            <div class="breadcrumb-title pe-3">Edit Profil Pengguna</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('profile.show', ['id' => $user->id]) }}">Profil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Profil</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
 <!-- End Breadcrumb -->
@@ -27,7 +32,7 @@
                 <form method="POST" action="{{ $save_route }}">
                     {{ csrf_field() }}
                     {{ method_field('put') }}
-                    
+
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama</label>
                         <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name"
