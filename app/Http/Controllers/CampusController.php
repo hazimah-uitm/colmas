@@ -30,21 +30,22 @@ class CampusController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:campuses',
+            'name' => 'required|unique:campuses,name', // Change from exists to unique
             'publish_status' => 'required|in:1,0',
-        ],[
-            'name.required'     => 'Sila isi nama kampus',
-            'name.unique' => 'Nama kampus telah wujud',
+        ], [
+            'name.required' => 'Sila isi nama kampus',
+            'name.unique' => 'Nama kampus telah wujud atau masih dalam rekod yang dihapuskan',
             'publish_status.required' => 'Sila isi status kampus',
         ]);
-
+    
         $campus = new Campus();
-
+    
         $campus->fill($request->all());
         $campus->save();
-
+    
         return redirect()->route('campus')->with('success', 'Maklumat berjaya disimpan');
     }
+    
 
     public function show($id)
     {
@@ -67,22 +68,23 @@ class CampusController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:campuses,name,' . $id,
+            'name' => 'required|unique:campuses,name,' . $id, // Ignore the current record's ID
             'publish_status' => 'required|in:1,0',
-        ],[
-            'name.required'     => 'Sila isi nama kampus',
-            'name.unique' => 'Nama kampus telah wujud',
+        ], [
+            'name.required' => 'Sila isi nama kampus',
+            'name.unique' => 'Nama kampus telah wujud atau masih dalam rekod yang dihapuskan',
             'publish_status.required' => 'Sila isi status kampus',
         ]);
-
+    
         $campus = Campus::findOrFail($id);
-
+    
         $campus->fill($request->all());
         $campus->save();
-
+    
         return redirect()->route('campus')->with('success', 'Maklumat berjaya dikemaskini');
     }
-
+    
+    
     public function search(Request $request)
     {
         $search = $request->input('search');
@@ -120,10 +122,23 @@ class CampusController extends Controller
 
     public function restore($id)
     {
-        Campus::withTrashed()->where('id', $id)->restore();
-
+        $trashedCampus = Campus::withTrashed()->findOrFail($id);
+    
+        // Check if a non-deleted campus with the same name exists
+        $existingCampus = Campus::where('name', $trashedCampus->name)->first();
+    
+        if ($existingCampus) {
+            // Handle duplicate name scenario
+            // For example, append a suffix to make it unique
+            $trashedCampus->name = $trashedCampus->name . ' (Restored)';
+        }
+    
+        // Restore the record
+        $trashedCampus->restore();
+    
         return redirect()->route('campus')->with('success', 'Maklumat berjaya dikembalikan');
     }
+    
 
 
     public function forceDelete($id)
