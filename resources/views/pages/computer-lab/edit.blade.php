@@ -46,9 +46,9 @@
 
             <div class="mb-3">
                 <label for="name" class="form-label">Nama Makmal Komputer</label>
-                <input type="text" class="form-control{{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
-                    name="name" value="{{ old('name') ?? ($computerLab->name ?? '') }}">
-                @if ($errors->has('name'))
+                <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
+                    name="name" value="{{ old('name', $computerLab->name ?? '') }}">
+                    @if ($errors->has('name'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('name') as $error)
                     {{ $error }}

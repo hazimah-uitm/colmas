@@ -122,24 +122,10 @@ class CampusController extends Controller
 
     public function restore($id)
     {
-        $trashedCampus = Campus::withTrashed()->findOrFail($id);
-    
-        // Check if a non-deleted campus with the same name exists
-        $existingCampus = Campus::where('name', $trashedCampus->name)->first();
-    
-        if ($existingCampus) {
-            // Handle duplicate name scenario
-            // For example, append a suffix to make it unique
-            $trashedCampus->name = $trashedCampus->name . ' (Restored)';
-        }
-    
-        // Restore the record
-        $trashedCampus->restore();
+        Campus::withTrashed()->where('id', $id)->restore();
     
         return redirect()->route('campus')->with('success', 'Maklumat berjaya dikembalikan');
     }
-    
-
 
     public function forceDelete($id)
     {

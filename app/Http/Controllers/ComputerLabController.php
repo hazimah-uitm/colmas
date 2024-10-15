@@ -57,8 +57,8 @@ class ComputerLabController extends Controller
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
         ], [
-            'name.required' => 'Sila isi nama kampus',
-            'name.unique' => 'Nama kampus telah wujud',
+            'name.required' => 'Sila isi nama makmal komputer',
+            'name.unique' => 'Nama makmal komputer telah wujud',
             'campus_id.required' => 'Sila pilih kampus',
             'campus_id.exists' => 'Kampus yang dipilih tidak sah',
             'pemilik_id.required' => 'Sila pilih pemilik',
@@ -71,8 +71,6 @@ class ComputerLabController extends Controller
         $computerLab = new ComputerLab();
         $computerLab->fill($request->all());
         $computerLab->save();
-
-        $this->logHistory($computerLab, 'Tambah');
 
         return redirect()->route('computer-lab')->with('success', 'Maklumat berjaya disimpan');
     }
@@ -120,8 +118,8 @@ class ComputerLabController extends Controller
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
         ],[
-            'name.required' => 'Sila isi nama kampus',
-            'name.unique' => 'Nama kampus telah wujud',
+            'name.required' => 'Sila isi nama makmal komputer',
+            'name.unique' => 'Nama makmal komputer telah wujud',
             'campus_id.required' => 'Sila pilih kampus',
             'campus_id.exists' => 'Kampus yang dipilih tidak sah',
             'pemilik_id.required' => 'Sila pilih pemilik',
@@ -134,8 +132,6 @@ class ComputerLabController extends Controller
         $computerLab = ComputerLab::findOrFail($id);
         $computerLab->fill($request->all());
         $computerLab->save();
-
-        $this->logHistory($computerLab, 'Kemaskini');
 
         return redirect()->route('computer-lab')->with('success', 'Maklumat berjaya dikemaskini');
     }
@@ -164,8 +160,6 @@ class ComputerLabController extends Controller
 
         $computerLab->delete();
 
-        $this->logHistory($computerLab, 'Padam');
-
         return redirect()->route('computer-lab')->with('success', 'Maklumat berjaya dihapuskan');
     }
 
@@ -193,39 +187,5 @@ class ComputerLabController extends Controller
         $computerLab->forceDelete();
 
         return redirect()->route('computer-lab.trash')->with('success', 'Maklumat berjaya dihapuskan sepenuhnya');
-    }
-
-    protected function logHistory($computerLab, $action)
-    {
-        $publishStatusMapping = [
-            'Aktif' => 1,
-            'Tidak Aktif' => 0,
-        ];
-
-        $publishStatus = isset($publishStatusMapping[$computerLab->publish_status])
-            ? $publishStatusMapping[$computerLab->publish_status]
-            : $computerLab->publish_status;
-
-        ComputerLabHistory::create([
-            'computer_lab_id' => $computerLab->id,
-            'code' => $computerLab->code,
-            'name' => $computerLab->name,
-            'pc_no' => $computerLab->no_of_computer,
-            'owner' => $computerLab->pemilik_id,
-            'month_year' => now(),
-            'action' => $action,
-            'publish_status' => $publishStatus,
-        ]);
-    }
-
-    public function history($id)
-    {
-        $computerLab = ComputerLab::findOrFail($id);
-        $historyList = $computerLab->histories()->latest()->paginate(10);
-
-        return view('pages.computer-lab.history', [
-            'computerLab' => $computerLab,
-            'historyList' => $historyList,
-        ]);
     }
 }
