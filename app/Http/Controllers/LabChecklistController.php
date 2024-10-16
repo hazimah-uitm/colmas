@@ -33,10 +33,11 @@ class LabChecklistController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:lab_checklists,title',
             'publish_status' => 'required|in:1,0'
         ],[
             'title.required'     => 'Sila isi perkara',
+            'title.unique'     => 'Tajuk telah wujud atau masih dalam rekod yang dipadam',
             'publish_status.required'     => 'Sila pilih status',
         ]);
 
@@ -70,10 +71,11 @@ class LabChecklistController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:lab_checklists,title,' . $id,
             'publish_status' => 'required|in:1,0'
         ],[
             'title.required'     => 'Sila isi perkara',
+            'title.unique'     => 'Tajuk telah wujud atau masih dalam rekod yang dipadam',
             'publish_status.required'     => 'Sila pilih status',
         ]);
 

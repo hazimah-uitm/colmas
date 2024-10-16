@@ -23,13 +23,13 @@
                                     <tr>
                                         <th class="mb-3 text-uppercase">Nama Pemilik</th>
                                         <td class="mb-3 text-uppercase">
-                                            {{ $labManagement->computerLab->pemilik->name }}
+                                            {{ $labManagement->computerLab->pemilik->name ?? '-' }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="mb-3 text-uppercase">Makmal Komputer</th>
-                                        <td class="mb-3 text-uppercase">{{ $labManagement->computerLab->name }},
-                                            {{ $labManagement->computerLab->campus->name }} </td>
+                                        <td class="mb-3 text-uppercase">{{ $labManagement->computerLab->name ?? '-'}},
+                                            {{ $labManagement->computerLab->campus->name ?? '-'}} </td>
                                     </tr>
                                     <tr>
                                         <th>Bulan</th>
@@ -40,10 +40,10 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $labManagement->month }}</td>
-                                        <td>{{ $labManagement->year }}</td>
-                                        <td>{{ $labManagement->start_time }}</td>
-                                        <td>{{ $labManagement->end_time }}</td>
+                                        <td>{{ $labManagement->month ?? '-'}}</td>
+                                        <td>{{ $labManagement->year ?? '-'}}</td>
+                                        <td>{{ $labManagement->start_time ?? '-'}}</td>
+                                        <td>{{ $labManagement->end_time ?? '-'}}</td>
                                     </tr>
                                 </tbody>
                             </table>

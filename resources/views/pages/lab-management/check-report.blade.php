@@ -23,13 +23,13 @@
                                     <tr>
                                         <th class="mb-3 text-uppercase">Nama Pemilik</th>
                                         <td class="mb-3 text-uppercase">
-                                            {{ $labManagement->computerLab->pemilik->name }}
+                                            {{ $labManagement->computerLab->pemilik->name ?? '-'}}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="mb-3 text-uppercase">Makmal Komputer</th>
-                                        <td class="mb-3 text-uppercase">{{ $labManagement->computerLab->name }},
-                                            {{ $labManagement->computerLab->campus->name }}
+                                        <td class="mb-3 text-uppercase">{{ $labManagement->computerLab->name ?? '-'}},
+                                            {{ $labManagement->computerLab->campus->name ?? '-'}}
                                         </td>
                                     </tr>
                                     <tr>

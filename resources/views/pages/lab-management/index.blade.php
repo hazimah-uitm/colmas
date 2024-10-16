@@ -133,13 +133,13 @@
                     <tr>
                         <td>{{ ($labManagementList->currentPage() - 1) * $labManagementList->perPage() + $loop->iteration }}
                         </td>
-                        <td>{{ $labManagement->computerLab->campus->name }}</td>
-                        <td>{{ $labManagement->computerLab->name }}</td>
-                        <td>{{ $labManagement->computerLab->pemilik->name }}</td>
-                        <td>{{ $labManagement->computer_no }}</td>
-                        <td>{{ $labManagement->month }}</td>
-                        <td>{{ $labManagement->year }}</td>
-                        <td>{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
+                        <td>{{ $labManagement->computerLab->campus->name ?? '-' }}</td>
+                        <td>{{ $labManagement->computerLab->name ?? '-' }}</td>
+                        <td>{{ $labManagement->computerLab->pemilik->name ?? '-' }}</td>
+                        <td>{{ $labManagement->computer_no ?? '-' }}</td>
+                        <td>{{ $labManagement->month ?? '-' }}</td>
+                        <td>{{ $labManagement->year ?? '-' }}</td>
+                        <td>{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) ?? '-'}}</td>
                         <td>
                             @if (!in_array($labManagement->status, ['dihantar', 'telah_disemak']))
                             <a href="{{ route('lab-management.maintenance-records', ['labManagement' => $labManagement->id]) }}"
