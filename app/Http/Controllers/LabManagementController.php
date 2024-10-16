@@ -138,12 +138,13 @@ class LabManagementController extends Controller
 
         // Check for existing record with the same computer_lab_id and start_date (month and year)
         $existingRecord = LabManagement::where('computer_lab_id', $request->computer_lab_id)
+            ->withTrashed()
             ->whereRaw("DATE_FORMAT(start_time, '%Y-%m') = ?", [$startDateMonthYear])
             ->first();
 
         if ($existingRecord) {
             return redirect()->back()
-                ->withErrors(['error' => 'Rekod selenggara makmal komputer pada bulan dan tahun tersebut telah wujud'])
+                ->withErrors(['error' => 'Rekod selenggara makmal komputer pada bulan dan tahun tersebut telah wujud atau masih dalam rekod telah dipadam'])
                 ->withInput();
         }
 
@@ -253,6 +254,7 @@ class LabManagementController extends Controller
 
         // Check for existing record with the same computer_lab_id and start_date (month and year), excluding the current record
         $existingRecord = LabManagement::where('computer_lab_id', $request->computer_lab_id)
+            ->withTrashed()
             ->whereRaw("DATE_FORMAT(start_time, '%Y-%m') = ?", [$startDateMonthYear])
             ->where('id', '<>', $id)
             ->first();

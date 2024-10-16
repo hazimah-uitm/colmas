@@ -129,31 +129,31 @@ class MaintenanceRecordController extends Controller
 
         // Check for existing records with the same computer_name, ip_address, and lab_management_id within the same month and year
         $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+            ->withTrashed()
             ->where('computer_name', $computerName)
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
-            ->whereNull('deleted_at')
             ->first();
 
         if ($existingRecord) {
             return redirect()->back()
                 ->withInput() // Preserve the old input data
-                ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud');
+                ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
         }
 
         // Only check for duplicate IP address if entry_option is 'automatik'
         if ($entryOption === 'automatik' && $ipAddress) {
             $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+                ->withTrashed()
                 ->where('ip_address', $ipAddress)
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year)
-                ->whereNull('deleted_at')
                 ->first();
 
             if ($existingRecord) {
                 return redirect()->back()
                     ->withInput() // Preserve the old input data
-                    ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud');
+                    ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
             }
         }
 
@@ -321,34 +321,34 @@ class MaintenanceRecordController extends Controller
         $year = $startTime->format('Y');
 
         $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+            ->withTrashed()
             ->where('computer_name', $computerName)
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
             ->where('id', '!=', $recordId)
-            ->whereNull('deleted_at')
             ->first();
 
         if ($existingRecord) {
             return redirect()->back()
                 ->withInput() // Preserve the old input data
-                ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud');
+                ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
         }
 
 
         if ($entryOption === 'automatik' && $ipAddress) {
             $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+                ->withTrashed()
                 ->where('ip_address', $ipAddress)
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year)
                 ->where('id', '!=', $recordId)
-                ->whereNull('deleted_at')
                 ->first();
         }
 
         if ($existingRecord) {
             return redirect()->back()
                 ->withInput() // Preserve the old input data
-                ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud');
+                ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
         }
 
         if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->where('id', '!=', $recordId)->exists()) {
@@ -457,7 +457,7 @@ class MaintenanceRecordController extends Controller
     public function trashList($labManagementId)
     {
         $trashList = MaintenanceRecord::onlyTrashed()->latest()->paginate(10);
-        $workChecklists = WorkChecklist::all();
+        $workChecklists = WorkChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($labManagementId);
         $computerLabName = $labManagement->computerLab->name;
 
