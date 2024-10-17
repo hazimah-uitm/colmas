@@ -34,7 +34,7 @@ class CampusController extends Controller
             'publish_status' => 'required|in:1,0',
         ], [
             'name.required' => 'Sila isi nama kampus',
-            'name.unique' => 'Nama kampus telah wujud atau masih dalam rekod yang dihapuskan',
+            'name.unique' => 'Nama kampus telah wujud atau masih dalam rekod dipadam',
             'publish_status.required' => 'Sila isi status kampus',
         ]);
     
@@ -72,7 +72,7 @@ class CampusController extends Controller
             'publish_status' => 'required|in:1,0',
         ], [
             'name.required' => 'Sila isi nama kampus',
-            'name.unique' => 'Nama kampus telah wujud atau masih dalam rekod yang dipadam',
+            'name.unique' => 'Nama kampus telah wujud atau masih dalam rekod dipadam',
             'publish_status.required' => 'Sila isi status kampus',
         ]);
     
