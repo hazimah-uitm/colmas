@@ -60,12 +60,19 @@
             <div class="menu-title">Rekod Selenggara</div>
         </a>
     </li>
-    <li class="{{ Request::is('report*') ? 'mm-active' : '' }}">
-        <a href="{{ route('report') }}">
-            <div class="parent-icon"><i class='bx bxs-report'></i>
-            </div>
-            <div class="menu-title">Laporan Selenggara</div>
+        <li class="{{ request()->routeIs('report*', 'yearly-report*') ? 'mm-active' : '' }}">
+        <a class="has-arrow">
+            <div class="parent-icon"><i class='bx bxs-report'></i></div>
+            <div class="menu-title">Laporan</div>
         </a>
+        <ul>
+            <li class="{{ request()->routeIs('report*') ? 'mm-active' : '' }}">
+                <a href="{{ route('report') }}"><i class="bx bx-right-arrow-alt"></i>Laporan Selenggara</a>
+            </li>
+            <li class="{{ request()->routeIs('yearly-report*') ? 'mm-active' : '' }}">
+                <a href="{{ route('yearly-report') }}"><i class="bx bx-right-arrow-alt"></i>Laporan Tahunan</a>
+            </li>
+        </ul>
     </li>
 
     <li class="menu-label">Tetapan</li>

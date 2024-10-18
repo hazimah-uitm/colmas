@@ -115,6 +115,8 @@ Route::middleware('auth')->group(function () {
     Route::get('report/view/{id}', 'ReportController@show')->name('report.show');
     Route::get('/report/{id}/pdf', 'ReportController@downloadPdf')->name('report.pdf');
 
+    // Report
+    Route::get('yearly-report', 'YearlyReportController@index')->name('yearly-report');
 
     Route::middleware([RoleMiddleware::class . ':Superadmin'])->group(function () {
         // Superadmin - Activity Log
