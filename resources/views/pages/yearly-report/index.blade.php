@@ -30,7 +30,7 @@
     @foreach ($campusData as $campusItem)
         <div class="card mb-4 shadow-sm">
             <div class="card-body text-uppercase">
-            <h4>{{ $campusItem['campus']->name }}</h4>
+                <h4>{{ $campusItem['campus']->name }}</h4>
                 <table class="table table-bordered table-hover">
                     <thead class="table-light">
                         <tr>
@@ -47,7 +47,7 @@
                                 @foreach ($months as $month)
                                     <td class="text-center">
                                         <span style="font-size: 12px;">
-                                            {{ $campusItem['maintainedLabsPerMonth'][$month]->contains($lab) ? '✔️' : '❌' }}
+                                            {{ $campusItem['maintainedLabsPerMonth'][$month]->contains($lab->id) ? '✔️' : '❌' }}
                                         </span>
                                     </td>
                                 @endforeach
