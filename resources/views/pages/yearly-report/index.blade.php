@@ -34,7 +34,7 @@
                 <table class="table table-bordered table-hover">
                     <thead class="table-light">
                         <tr>
-                            <th>Makmal</th>
+                            <th>Makmal Komputer</th>
                             @foreach ($months as $month)
                                 <th>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</th>
                             @endforeach
