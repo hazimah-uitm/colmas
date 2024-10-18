@@ -27,19 +27,36 @@ class YearlyReportController extends Controller
     {
         $user = User::find(auth()->id());
         $announcements = Announcement::where('publish_status', 1)->get();
-        $campusList = Campus::with('computerLab')->get(); // Get all campuses
         $currentYear = $request->input('year', date('Y'));
         $months = range(1, 12); // January to December
-
+    
+        // Filter campuses based on user role
+        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+            // Admin or superadmin can access all campuses
+            $campusList = Campus::with('computerLab')->get();
+        } elseif ($user->hasRole('Pegawai Penyemak')) {
+            // Pegawai Penyemak can access only their campus
+            $campusList = Campus::with('computerLab')
+                ->where('id', $user->campus_id)
+                ->get();
+        } else {
+            // Other users can access only the campuses with labs they are assigned to
+            $assignedComputerLabs = $user->assignedComputerLabs; // Assuming this relationship exists
+            $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
+            $campusList = Campus::with('computerLab')
+                ->whereIn('id', $campusIds)
+                ->get();
+        }
+    
         // Prepare an array to store the results for each campus
         $campusData = [];
-
+    
         foreach ($campusList as $campus) {
             // Get the labs for each campus
             $computerLabList = ComputerLab::where('publish_status', 1)
                 ->where('campus_id', $campus->id)
                 ->get();
-
+    
             // Query for lab management data for each campus and year
             $maintainedLabsPerMonth = [];
             foreach ($months as $month) {
@@ -51,15 +68,14 @@ class YearlyReportController extends Controller
                     ->whereIn('status', ['dihantar', 'telah_disemak'])
                     ->pluck('computer_lab_id')
                     ->unique();
-
+    
                 // Map lab maintenance status
-                // Update this part of your controller
                 $maintainedLabsPerMonth[$month] = $computerLabList->map(function ($lab) use ($maintainedLabsThisMonth) {
-                    // Return the lab ID instead of '✓' or 'X'
+                    // Return the lab ID if maintained this month, otherwise null
                     return $maintainedLabsThisMonth->contains($lab->id) ? $lab->id : null;
                 })->filter(); // Remove null values
             }
-
+    
             // Store the data for this campus
             $campusData[] = [
                 'campus' => $campus,
@@ -67,7 +83,7 @@ class YearlyReportController extends Controller
                 'maintainedLabsPerMonth' => $maintainedLabsPerMonth
             ];
         }
-
+    
         return view('pages.yearly-report.index', [
             'months' => $months,
             'campusData' => $campusData, // Send campus data to the view
@@ -75,4 +91,5 @@ class YearlyReportController extends Controller
             'announcements' => $announcements,
         ]);
     }
+     
 }
