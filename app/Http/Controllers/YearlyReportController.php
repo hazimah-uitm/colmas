@@ -60,15 +60,29 @@ class YearlyReportController extends Controller
                 ->get();
         }
 
+    
+        // Filter labs based on user role
+        $labManagementList = LabManagement::query(); // Initialize the query
+        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+            // Admin or superadmin can access all labs, so no further filtering needed
+        } elseif ($user->hasRole('Pegawai Penyemak')) {
+            $labManagementList->whereHas('computerLab', function ($query) use ($user) {
+                $query->where('campus_id', $user->campus_id);
+            });
+        } else {
+            $assignedComputerLabs = $user->assignedComputerLabs; // Assuming you have a relationship for assigned labs
+            $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
+        }
+    
         // Prepare an array to store the results for each campus
         $campusData = [];
-
+    
         foreach ($campusList as $campus) {
             // Get the labs for each campus
             $computerLabList = ComputerLab::where('publish_status', 1)
                 ->where('campus_id', $campus->id)
                 ->get();
-
+    
             // Query for lab management data for each campus and year
             $maintainedLabsPerMonth = [];
             foreach ($months as $month) {
@@ -80,13 +94,14 @@ class YearlyReportController extends Controller
                     ->whereIn('status', ['dihantar'])
                     ->pluck('computer_lab_id')
                     ->unique();
-
+    
                 // Map lab maintenance status
                 $maintainedLabsPerMonth[$month] = $computerLabList->map(function ($lab) use ($maintainedLabsThisMonth) {
+                    // Return the lab ID if maintained this month, otherwise null
                     return $maintainedLabsThisMonth->contains($lab->id) ? $lab->id : null;
                 })->filter(); 
             }
-
+    
             // Store the data for this campus
             $campusData[] = [
                 'campus' => $campus,
@@ -94,7 +109,7 @@ class YearlyReportController extends Controller
                 'maintainedLabsPerMonth' => $maintainedLabsPerMonth
             ];
         }
-
+    
         return view('pages.yearly-report.index', [
             'months' => $months,
             'campusData' => $campusData, // Send campus data to the view
@@ -102,6 +117,5 @@ class YearlyReportController extends Controller
             'announcements' => $announcements,
         ]);
     }
-
-
+    
 }
