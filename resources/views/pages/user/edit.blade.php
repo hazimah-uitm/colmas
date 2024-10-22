@@ -30,7 +30,7 @@
             {{ csrf_field() }}
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Pertama</label>
+                <label for="name" class="form-label">Nama Penuh</label>
                 <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
                     name="name" value="{{ old('name') ?? ($user->name ?? '') }}">
                 @if ($errors->has('name'))
