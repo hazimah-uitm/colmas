@@ -65,9 +65,9 @@ class YearlyReportController extends Controller
         
             $maintainedLabsPerMonth = [];
             foreach ($months as $month) {
-                $maintainedLabsThisMonth = LabManagement::query()  // Use a fresh query here
-                    ->whereMonth('end_time', $month)  // use `end_time`
-                    ->whereYear('end_time', $currentYear)  // use `end_time`
+                $maintainedLabsThisMonth = LabManagement::query()  
+                    ->whereMonth('end_time', $month)  
+                    ->whereYear('end_time', $currentYear)  
                     ->whereHas('computerLab', function ($query) use ($campus) {
                         $query->where('campus_id', $campus->id);
                     })
