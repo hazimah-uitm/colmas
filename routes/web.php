@@ -115,8 +115,19 @@ Route::middleware('auth')->group(function () {
     Route::get('report/view/{id}', 'ReportController@show')->name('report.show');
     Route::get('/report/{id}/pdf', 'ReportController@downloadPdf')->name('report.pdf');
 
-    // Report
+    // Yearly Report
     Route::get('yearly-report', 'YearlyReportController@index')->name('yearly-report');
+
+    //Announcement
+    Route::get('announcement/create', 'AnnouncementController@create')->name('announcement.create');
+    Route::post('announcement/store', 'AnnouncementController@store')->name('announcement.store');
+    Route::get('announcement/{id}/edit', 'AnnouncementController@edit')->name('announcement.edit');
+    Route::post('announcement/{id}', 'AnnouncementController@update')->name('announcement.update');
+    Route::delete('announcement/{id}', 'AnnouncementController@destroy')->name('announcement.destroy');
+    Route::get('/announcement/trash', 'AnnouncementController@trashList')->name('announcement.trash');
+    Route::get('/announcement/{id}/restore', 'AnnouncementController@restore')->name('announcement.restore');
+    Route::delete('/announcement/{id}/force-delete', 'AnnouncementController@forceDelete')->name('announcement.forceDelete');
+
 
     Route::middleware([RoleMiddleware::class . ':Superadmin'])->group(function () {
         // Superadmin - Activity Log
@@ -161,16 +172,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/campus/trash', 'CampusController@trashList')->name('campus.trash');
         Route::get('/campus/{id}/restore', 'CampusController@restore')->name('campus.restore');
         Route::delete('/campus/{id}/force-delete', 'CampusController@forceDelete')->name('campus.forceDelete');
-
-        //Announcement
-        Route::get('announcement/create', 'AnnouncementController@create')->name('announcement.create');
-        Route::post('announcement/store', 'AnnouncementController@store')->name('announcement.store');
-        Route::get('announcement/{id}/edit', 'AnnouncementController@edit')->name('announcement.edit');
-        Route::post('announcement/{id}', 'AnnouncementController@update')->name('announcement.update');
-        Route::delete('announcement/{id}', 'AnnouncementController@destroy')->name('announcement.destroy');
-        Route::get('/announcement/trash', 'AnnouncementController@trashList')->name('announcement.trash');
-        Route::get('/announcement/{id}/restore', 'AnnouncementController@restore')->name('announcement.restore');
-        Route::delete('/announcement/{id}/force-delete', 'AnnouncementController@forceDelete')->name('announcement.forceDelete');
 
         //Position
         Route::get('position/create', 'PositionController@create')->name('position.create');
