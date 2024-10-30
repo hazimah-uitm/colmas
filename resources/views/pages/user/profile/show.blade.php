@@ -31,41 +31,41 @@
                 <table class="table table-borderless">
                     <tr>
                         <th>Nama</th>
-                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->name ?? '-'}}</td>
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->email ?? '-'}}</td>
                     </tr>
                     <tr>
                         <th>Staff ID</th>
-                        <td>{{ $user->staff_id }}</td>
+                        <td>{{ $user->staff_id ?? '-'}}</td>
                     </tr>
                     <tr>
                         <th>Jawatan</th>
-                        <td>{{ $user->position->title }} ({{ $user->position->grade }})</td>
+                        <td>{{ $user->position->title ?? '-'}} ({{ $user->position->grade ?? '-'}})</td>
                     </tr>
                     <tr>
                         <th>Kampus</th>
-                        <td>{{ $user->campus->name }}</td>
+                        <td>{{ $user->campus->name ?? '-'}}</td>
                     </tr>
                     <tr>
                         <th>Alamat Emel</th>
-                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->email ?? '-'}}</td>
                     </tr>
                     <tr>
                         <th>No. Telefon Pejabat</th>
-                        <td>{{ $user->office_phone_no }}</td>
+                        <td>{{ $user->office_phone_no ?? '-'}}</td>
                     </tr>
                     <tr>
                         <th>Peranan</th>
                         <td>
                             @if ($user->roles->count() === 1)
-                            {{ ucwords(str_replace('-', ' ', $user->roles->first()->name)) }}
+                            {{ ucwords(str_replace('-', ' ', $user->roles->first()->name ?? '-')) }}
                             @else
                             <ul>
                                 @foreach ($user->roles as $role)
-                                <li>{{ ucwords(str_replace('-', ' ', $role->name)) }}</li>
+                                <li>{{ ucwords(str_replace('-', ' ', $role->name ?? '-')) }}</li>
                                 @endforeach
                             </ul>
                             @endif
@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td>{{ $user->publish_status }}</td>
+                        <td>{{ $user->publish_status ?? '-'}}</td>
                     </tr>
                 </table>
                 <div class="d-flex flex-column flex-md-row justify-content-between mt-3">
