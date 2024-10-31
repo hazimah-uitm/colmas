@@ -27,15 +27,15 @@ class HomeController extends Controller
     {
         $user = User::find(auth()->id());
         $announcements = Announcement::where('publish_status', 1)->get();
-    
+
         $currentYear = $request->input('year', date('Y')); // Get the selected year
         $currentMonth = $request->input('month', date('n')); // Get the selected month
-    
+
         // Initialize LabManagement query
         $labManagementQuery = LabManagement::query()
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear);
-    
+
         // Filter based on user role
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             // Admin and Superadmin see all lab management data
@@ -57,7 +57,7 @@ class HomeController extends Controller
                 ->where('pemilik_id', $user->id)
                 ->get();
         }
-    
+
         // Apply additional filters based on request inputs
         if ($request->filled('campus_id')) {
             $labManagementQuery->whereHas('computerLab', function ($query) use ($request) {
@@ -66,63 +66,63 @@ class HomeController extends Controller
             // Also filter computer labs by campus
             $computerLabList = $computerLabList->where('campus_id', $request->input('campus_id'));
         }
-    
+
         if ($request->filled('computer_lab_id')) {
             $labManagementQuery->where('computer_lab_id', $request->input('computer_lab_id'));
             // Also filter computer labs by lab ID
             $computerLabList = $computerLabList->where('id', $request->input('computer_lab_id'));
         }
-    
+
         if ($request->filled('status')) {
             $labManagementQuery->where('status', $request->input('status'));
         }
-    
+
         // Execute the query to fetch lab management data
         $labManagementData = $labManagementQuery->get();
-    
+
         // Fetch filtered computer labs based on the previously applied filters
         $filteredComputerLabs = $computerLabList;
-    
+
         $totalLab = $filteredComputerLabs->count();
-    
+
         // Calculate totals
         $totalDihantarReports = $labManagementData->where('status', 'dihantar')->count();
-    
+
         // Ensure total PC count is restricted to the user's computer labs
         $totalPC = $this->getTotalPC($filteredComputerLabs, $request->input('month'), $request->input('year'));
-    
+
         // Only sum maintenance and damage PCs from the filtered lab management data
         $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->sum('pc_damage_no');
         $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
-    
+
         // Calculate unmaintained labs including drafts
         $maintainedLabIds = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])
             ->pluck('computer_lab_id')
             ->unique();
         $totalUnmaintainedLabs = $totalLab - $maintainedLabIds->count();
-    
+
         $months = range(1, 12); // Get months from January to December
         $unmaintainedLabsPerMonth = [];
         $maintainedLabsPerMonth = [];
-    
+
         // If a specific month is selected, focus only on that month
         if ($currentMonth) {
             $months = [$currentMonth]; // Limit to the selected month
         }
-    
+
         foreach ($months as $month) {
             // Fetch maintained labs for the specified month and year
             $maintainedLabsThisMonth = LabManagement::whereMonth('created_at', $month)
                 ->whereYear('created_at', $currentYear)
                 ->pluck('computer_lab_id')
                 ->unique();
-    
+
             // Filter unmaintained labs
             $unmaintainedLabsThisMonth = $computerLabList->filter(function ($lab) use ($maintainedLabsThisMonth) {
                 return !$maintainedLabsThisMonth->contains($lab->id);
             });
-    
+
             $unmaintainedLabsPerMonth[$month] = $unmaintainedLabsThisMonth;
         }
 
@@ -133,22 +133,38 @@ class HomeController extends Controller
                 ->whereIn('status', ['dihantar', 'telah_disemak'])
                 ->pluck('computer_lab_id')
                 ->unique(); // Get unique computer lab IDs that were maintained this month
-        
+
             // Get the list of maintained labs for this month, filtered by $computerLabList
             $maintainedLabsPerMonth[$month] = $computerLabList->filter(function ($lab) use ($maintainedLabsThisMonth) {
                 return $maintainedLabsThisMonth->contains($lab->id); // Check if the lab is maintained this month
             });
-        }        
-    
+        }
+
         // Fetch lists for the view
         $campusList = Campus::all();
-    
+
         // Format lab management data for the view
         foreach ($labManagementData as $labManagement) {
             $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
             $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
         }
-    
+
+        // New logic to get owner data with computer labs and PC count
+        $ownersWithLabs = ComputerLab::with(['pemilik', 'campus'])
+            ->select('id', 'name', 'pemilik_id', 'campus_id')
+            ->where('publish_status', 1)
+            ->get()
+            ->groupBy('campus_id');
+
+        foreach ($ownersWithLabs as $campusId => $labs) {
+            foreach ($labs as $lab) {
+                $lab->pc_count = ComputerLabHistory::where('computer_lab_id', $lab->id)
+                    ->whereMonth('month_year', $currentMonth)
+                    ->whereYear('month_year', $currentYear)
+                    ->sum('pc_no');
+            }
+        }
+
         // Return view with data
         return view('home', [
             'labManagementList' => $labManagementData,
@@ -164,9 +180,10 @@ class HomeController extends Controller
             'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
             'unmaintainedLabsPerMonth' => $unmaintainedLabsPerMonth,
             'maintainedLabsPerMonth' => $maintainedLabsPerMonth,
-            'currentYear' =>  $currentYear
+            'currentYear' =>  $currentYear,
+            'ownersWithLabs' => $ownersWithLabs
         ]);
-    }    
+    }
 
     private function getTotalPC($filteredComputerLabs, $selectedMonth = null, $selectedYear = null)
     {

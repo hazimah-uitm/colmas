@@ -10,9 +10,9 @@
                         <select name="campus_id" id="campus_id" class="form-select">
                             <option value="">Semua Kampus</option>
                             @foreach ($campusList as $campus)
-                                <option value="{{ $campus->id }}" {{ Request::get('campus_id') == $campus->id ? 'selected' : '' }}>
-                                    {{ $campus->name }}
-                                </option>
+                            <option value="{{ $campus->id }}" {{ Request::get('campus_id') == $campus->id ? 'selected' : '' }}>
+                                {{ $campus->name }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -21,9 +21,9 @@
                         <select name="computer_lab_id" id="computer_lab_id" class="form-select">
                             <option value="">Semua Makmal Komputer</option>
                             @foreach ($computerLabList as $computerLab)
-                                <option value="{{ $computerLab->id }}" {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
-                                    {{ $computerLab->name }}
-                                </option>
+                            <option value="{{ $computerLab->id }}" {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
+                                {{ $computerLab->name }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -32,18 +32,18 @@
                             <option value="">Semua Bulan</option>
                             @for ($i = 1; $i <= 12; $i++)
                                 <option value="{{ $i }}" {{ Request::get('month', date('m')) == $i ? 'selected' : '' }}>
-                                    {{ date('F', mktime(0, 0, 0, $i, 1)) }}
+                                {{ date('F', mktime(0, 0, 0, $i, 1)) }}
                                 </option>
-                            @endfor
+                                @endfor
                         </select>
                     </div>
                     <div class="mb-2 ms-2 col-12 col-md-auto">
                         <select name="year" id="year" class="form-select">
                             <option value="">Semua Tahun</option>
                             @for ($i = date('Y'); $i >= date('Y') - 10; $i--)
-                                <option value="{{ $i }}" {{ Request::get('year', date('Y')) == $i ? 'selected' : '' }}>
-                                    {{ $i }}
-                                </option>
+                            <option value="{{ $i }}" {{ Request::get('year', date('Y')) == $i ? 'selected' : '' }}>
+                                {{ $i }}
+                            </option>
                             @endfor
                         </select>
                     </div>
@@ -70,13 +70,13 @@
                         </h4>
                     </div>
                     @if ($totalDihantarReports > 0)
-                        <div class="ms-auto mt-3">
-                            <a href="{{ route('lab-management') }}" class="btn btn-warning">Papar</a>
-                        </div>
+                    <div class="ms-auto mt-3">
+                        <a href="{{ route('lab-management') }}" class="btn btn-warning">Papar</a>
+                    </div>
                     @else
-                        <div class="ms-auto mt-3">
-                            <a href="{{ route('lab-management') }}" class="btn btn-primary" style="display: none;">Papar</a>
-                        </div>
+                    <div class="ms-auto mt-3">
+                        <a href="{{ route('lab-management') }}" class="btn btn-primary" style="display: none;">Papar</a>
+                    </div>
                     @endif
                 </div>
             </div>
@@ -85,6 +85,52 @@
 </div>
 @endhasanyrole
 
+<div class="row">
+    <div class="col">
+        <div class="card shadow-sm radius-10 mb-4">
+            <div class="card-body">
+                <h5 class="text-center text-uppercase text-primary mb-4">Senarai Makmal Komputer mengikut Pemilik</h5>
+
+                <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- Three-column responsive grid for campuses -->
+                    @foreach($ownersWithLabs as $campusId => $labs)
+                        <div class="col">
+                            <div class="card border-secondary h-100"> <!-- Campus Card -->
+                                <div class="card-header bg-light">
+                                    <h6 class="text-uppercase text-center mb-0">{{ $labs->first()->campus->name ?? 'N/A' }}</h6> <!-- Campus name -->
+                                </div>
+                                <div class="card-body">
+                                    @php
+                                        // Group labs by owner
+                                        $labsGroupedByOwner = $labs->groupBy('pemilik_id');
+                                    @endphp
+
+                                    <div class="owner-list">
+                                        @foreach($labsGroupedByOwner as $ownerId => $ownerLabs)
+                                            <div class="owner-item mb-3">
+                                                <strong class="d-block text-secondary">{{ $loop->iteration }}. {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</strong> <!-- Owner number and name -->
+                                                <ul class="list-unstyled ms-3"> <!-- Lab list for the owner -->
+                                                    @foreach($ownerLabs as $lab)
+                                                        <li class="d-flex align-items-center py-1"> <!-- Lab item with bullet -->
+                                                            <span class="me-2">•</span> <!-- Bullet -->
+                                                            {{ $lab->name }}
+                                                            <span class="badge bg-info text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $lab->pc_count }}</span> <!-- PC count badge -->
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div> <!-- End of campus grid -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="row row-cols-xl">
     <div class="col">
         <div class="card radius-10 border-danger border-start border-0 border-4">
@@ -92,18 +138,18 @@
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Belum Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
                     @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
-                        <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
-                            <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                            @if ($unmaintainedLabs->isEmpty())
-                                <p class="text-success">Semua makmal telah diselenggara</p>
-                            @else
-                                <ul>
-                                    @foreach ($unmaintainedLabs as $lab)
-                                        <li>{{ $lab->name }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($unmaintainedLabs->isEmpty())
+                        <p class="text-success">Semua makmal telah diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($unmaintainedLabs as $lab)
+                            <li>{{ $lab->name }}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -118,18 +164,18 @@
                 <h5 class="mb-0 text-uppercase">Senarai Makmal Komputer Telah Diselenggara {{ $currentYear }}</h5>
                 <div class="row mt-3">
                     @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
-                        <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
-                            <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                            @if ($maintainedLabs->isEmpty())
-                                <p class="text-danger">Semua makmal belum diselenggara</p>
-                            @else
-                                <ul>
-                                    @foreach ($maintainedLabs as $lab)
-                                        <li>{{ $lab->name }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
+                    <div class="col-md-6 col-lg-4 mb-3"> <!-- Adjust the column width here -->
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($maintainedLabs->isEmpty())
+                        <p class="text-danger">Semua makmal belum diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($maintainedLabs as $lab)
+                            <li>{{ $lab->name }}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -137,37 +183,6 @@
     </div>
 </div>
 
-
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
-    <div class="col">
-        <div class="card radius-10 border-primary border-start border-0 border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Makmal Komputer</span></p>
-                        <h4 class="text-primary my-1">{{ $totalLab > 0 ? $totalLab : 0 }}</h4>
-                    </div>
-                    <div class="text-primary ms-auto font-35"><i class="bx bxs-building"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card radius-10 border-primary border-start border-0 border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                        <h4 class="text-primary my-1">{{ $totalPC > 0 ? $totalPC : 0 }}</h4>
-                    </div>
-                    <div class="text-primary ms-auto font-35"><i class="bx bx-desktop computer-icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
     <div class="col">
         <div class="card radius-10 border-primary border-start border-0 border-4">
@@ -220,33 +235,33 @@
     <div class="card-body">
         <h5>MAKLUMAN</h5>
         @if ($announcements->isNotEmpty())
-            @foreach ($announcements as $announcement)
-                <div class="card mb-3">
-                    <div class="card-body bg-white">
-                        <div class="float-end text-dark"><i>{{ $announcement->created_at->format('j F Y') }}</i></div>
-                        <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
-                        <ul>
-                            <li>
-                                <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <div class="card-body bg-white" role="alert">
-                Tiada makluman
+        @foreach ($announcements as $announcement)
+        <div class="card mb-3">
+            <div class="card-body bg-white">
+                <div class="float-end text-dark"><i>{{ $announcement->created_at->format('j F Y') }}</i></div>
+                <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
+                <ul>
+                    <li>
+                        <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
+                    </li>
+                </ul>
             </div>
+        </div>
+        @endforeach
+        @else
+        <div class="card-body bg-white" role="alert">
+            Tiada makluman
+        </div>
         @endif
     </div>
 </div>
 
 <script>
-    document.getElementById('homeFilter').addEventListener('change', function () {
+    document.getElementById('homeFilter').addEventListener('change', function() {
         this.submit();
     });
 
-    document.getElementById('resetButton').addEventListener('click', function (e) {
+    document.getElementById('resetButton').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default reset behavior
         const url = new URL(window.location.href);
         url.searchParams.delete('campus_id');
