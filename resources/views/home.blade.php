@@ -88,44 +88,44 @@
 <div class="accordion mb-3" id="mainAccordion">
 
     <!-- Section 1: Senarai Makmal Komputer mengikut Pemilik -->
-    <div class="accordion-item mb-3">
+    <div class="accordion-item mb-2">
         <h2 class="accordion-header" id="headingSection1">
-            <button class="accordion-button text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection1" aria-expanded="true" aria-controls="collapseSection1">
+            <button class="accordion-button text-uppercase collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection1" aria-expanded="false" aria-controls="collapseSection1">
                 Senarai Makmal Komputer mengikut Pemilik
             </button>
         </h2>
-        <div id="collapseSection1" class="accordion-collapse collapse show" aria-labelledby="headingSection1" data-bs-parent="#mainAccordion">
+        <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1" data-bs-parent="#mainAccordion">
             <div class="accordion-body">
                 <div class="row row-cols-1 g-4"> <!-- Three-column responsive grid for campuses -->
                     @foreach($ownersWithLabs as $campusId => $labs)
-                        <div class="col">
-                            <div class="card border-secondary h-100"> <!-- Campus Card -->
-                                <div class="card-header bg-light">
-                                    <h6 class="text-uppercase text-center mb-0">{{ $labs->first()->campus->name ?? 'N/A' }}</h6> <!-- Campus name -->
-                                </div>
-                                <div class="card-body">
-                                    @php
-                                        $labsGroupedByOwner = $labs->groupBy('pemilik_id');
-                                    @endphp
-                                    <div class="owner-list">
-                                        @foreach($labsGroupedByOwner as $ownerId => $ownerLabs)
-                                            <div class="owner-item mb-3">
-                                                <strong class="d-block text-secondary">{{ $loop->iteration }}. {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</strong>
-                                                <ul class="list-unstyled ms-3">
-                                                    @foreach($ownerLabs as $lab)
-                                                        <li class="d-flex align-items-center py-1">
-                                                            <span class="me-2">•</span>
-                                                            {{ $lab->name }}
-                                                            <span class="badge bg-info text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $lab->pc_count }}</span>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endforeach
+                    <div class="col">
+                        <div class="card border-secondary h-100"> <!-- Campus Card -->
+                            <div class="card-header bg-light">
+                                <h6 class="text-uppercase text-center mb-0">{{ $labs->first()->campus->name ?? 'N/A' }}</h6> <!-- Campus name -->
+                            </div>
+                            <div class="card-body">
+                                @php
+                                $labsGroupedByOwner = $labs->groupBy('pemilik_id');
+                                @endphp
+                                <div class="owner-list">
+                                    @foreach($labsGroupedByOwner as $ownerId => $ownerLabs)
+                                    <div class="owner-item mb-3">
+                                        <strong class="d-block text-secondary">{{ $loop->iteration }}. {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</strong>
+                                        <ul class="list-unstyled ms-3">
+                                            @foreach($ownerLabs as $lab)
+                                            <li class="d-flex align-items-center py-1">
+                                                <span class="me-2">•</span>
+                                                {{ $lab->name }}
+                                                <span class="badge bg-info text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $lab->pc_count }}</span>
+                                            </li>
+                                            @endforeach
+                                        </ul>
                                     </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -133,7 +133,7 @@
     </div>
 
     <!-- Section 2: Senarai Makmal Komputer Belum Diselenggara -->
-    <div class="accordion-item mb-3">
+    <div class="accordion-item mb-2">
         <h2 class="accordion-header" id="headingSection2">
             <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection2" aria-expanded="false" aria-controls="collapseSection2">
                 Senarai Makmal Komputer Belum Diselenggara {{ $currentYear }}
@@ -143,18 +143,18 @@
             <div class="accordion-body">
                 <div class="row mt-3">
                     @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                            @if ($unmaintainedLabs->isEmpty())
-                                <p class="text-success">Semua makmal telah diselenggara</p>
-                            @else
-                                <ul>
-                                    @foreach ($unmaintainedLabs as $lab)
-                                        <li>{{ $lab->name }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($unmaintainedLabs->isEmpty())
+                        <p class="text-success">Semua makmal telah diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($unmaintainedLabs as $lab)
+                            <li>{{ $lab->name }}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -162,7 +162,7 @@
     </div>
 
     <!-- Section 3: Senarai Makmal Komputer Telah Diselenggara -->
-    <div class="accordion-item mb-3">
+    <div class="accordion-item mb-2">
         <h2 class="accordion-header" id="headingSection3">
             <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection3" aria-expanded="false" aria-controls="collapseSection3">
                 Senarai Makmal Komputer Telah Diselenggara {{ $currentYear }}
@@ -172,26 +172,24 @@
             <div class="accordion-body">
                 <div class="row mt-3">
                     @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                            @if ($maintainedLabs->isEmpty())
-                                <p class="text-danger">Semua makmal belum diselenggara</p>
-                            @else
-                                <ul>
-                                    @foreach ($maintainedLabs as $lab)
-                                        <li>{{ $lab->name }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($maintainedLabs->isEmpty())
+                        <p class="text-danger">Semua makmal belum diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($maintainedLabs as $lab)
+                            <li>{{ $lab->name }}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
     <div class="col">
@@ -239,7 +237,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="card alert alert-info">
     <div class="card-body">

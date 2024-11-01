@@ -161,7 +161,6 @@ class HomeController extends Controller
                 $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
             }
         }
-        
 
         // Fetch lists for the view
         $campusList = Campus::all();
