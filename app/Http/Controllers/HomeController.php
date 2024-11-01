@@ -31,7 +31,12 @@ class HomeController extends Controller
         $currentYear = $request->input('year', date('Y')); // Get the selected year
         $currentMonth = $request->input('month', date('n')); // Get the selected month
 
-        // Initialize LabManagement query
+        // OwnersWithLabsQuery
+        $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus'])
+            ->select('id', 'name', 'pemilik_id', 'campus_id')
+            ->where('publish_status', 1);
+
+        // LabManagement query
         $labManagementQuery = LabManagement::query()
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear);
@@ -48,6 +53,8 @@ class HomeController extends Controller
             $computerLabList = ComputerLab::where('publish_status', 1)
                 ->where('campus_id', $user->campus_id)
                 ->get();
+            // Owner with lab
+            $ownersWithLabsQuery->where('campus_id', $user->campus_id);
         } else {
             // Regular Pemilik only sees lab management data for their own labs
             $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
@@ -56,21 +63,25 @@ class HomeController extends Controller
             $computerLabList = ComputerLab::where('publish_status', 1)
                 ->where('pemilik_id', $user->id)
                 ->get();
+            //Owners with lab
+            $ownersWithLabsQuery->where('pemilik_id', $user->id);
         }
 
-        // Apply additional filters based on request inputs
+        // Filters
         if ($request->filled('campus_id')) {
             $labManagementQuery->whereHas('computerLab', function ($query) use ($request) {
                 $query->where('campus_id', $request->input('campus_id'));
             });
             // Also filter computer labs by campus
             $computerLabList = $computerLabList->where('campus_id', $request->input('campus_id'));
+            $ownersWithLabsQuery->where('campus_id', $request->input('campus_id'));
         }
 
         if ($request->filled('computer_lab_id')) {
             $labManagementQuery->where('computer_lab_id', $request->input('computer_lab_id'));
             // Also filter computer labs by lab ID
             $computerLabList = $computerLabList->where('id', $request->input('computer_lab_id'));
+            $ownersWithLabsQuery->where('id', $request->input('computer_lab_id'));
         }
 
         if ($request->filled('status')) {
@@ -82,6 +93,9 @@ class HomeController extends Controller
 
         // Fetch filtered computer labs based on the previously applied filters
         $filteredComputerLabs = $computerLabList;
+
+        // Get the results and group by campus_id
+        $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id');
 
         $totalLab = $filteredComputerLabs->count();
 
@@ -140,22 +154,7 @@ class HomeController extends Controller
             });
         }
 
-        // Fetch lists for the view
-        $campusList = Campus::all();
-
-        // Format lab management data for the view
-        foreach ($labManagementData as $labManagement) {
-            $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
-            $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
-        }
-
-        // New logic to get owner data with computer labs and PC count
-        $ownersWithLabs = ComputerLab::with(['pemilik', 'campus'])
-            ->select('id', 'name', 'pemilik_id', 'campus_id')
-            ->where('publish_status', 1)
-            ->get()
-            ->groupBy('campus_id');
-
+        // Calculate PC count for each lab
         foreach ($ownersWithLabs as $campusId => $labs) {
             foreach ($labs as $lab) {
                 $lab->pc_count = ComputerLabHistory::where('computer_lab_id', $lab->id)
@@ -163,6 +162,15 @@ class HomeController extends Controller
                     ->whereYear('month_year', $currentYear)
                     ->sum('pc_no');
             }
+        }
+
+        // Fetch lists for the view
+        $campusList = Campus::all();
+
+        // Format lab management data for the view
+        foreach ($labManagementData as $labManagement) {
+            $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
+            $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
         }
 
         // Return view with data
