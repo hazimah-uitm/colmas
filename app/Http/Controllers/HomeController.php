@@ -154,15 +154,14 @@ class HomeController extends Controller
             });
         }
 
-        // Calculate PC count for each lab
+        // Calculate PC count for each lab using the getTotalPC method
         foreach ($ownersWithLabs as $campusId => $labs) {
             foreach ($labs as $lab) {
-                $lab->pc_count = ComputerLabHistory::where('computer_lab_id', $lab->id)
-                    ->whereMonth('month_year', $currentMonth)
-                    ->whereYear('month_year', $currentYear)
-                    ->sum('pc_no');
+                // Calculate the PC count for each lab by calling the getTotalPC method
+                $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
             }
         }
+        
 
         // Fetch lists for the view
         $campusList = Campus::all();
@@ -198,20 +197,29 @@ class HomeController extends Controller
         $totalPC = 0;
         foreach ($filteredComputerLabs as $computerLab) {
             $query = ComputerLabHistory::where('computer_lab_id', $computerLab->id);
-
+    
+            // Apply filters for the specified month and year if provided
             if ($selectedMonth) {
                 $query->whereMonth('month_year', $selectedMonth);
             }
-
             if ($selectedYear) {
                 $query->whereYear('month_year', $selectedYear);
             }
-
+    
+            // Get the latest record if no data is found for the specified month/year
             $latestHistory = $query->orderBy('month_year', 'desc')->first();
-            if ($latestHistory) {
-                $totalPC += $latestHistory->pc_no;
+            
+            // Check if a record was found; if not, fetch the latest record regardless of filters
+            if (!$latestHistory) {
+                $latestHistory = ComputerLabHistory::where('computer_lab_id', $computerLab->id)
+                    ->orderBy('month_year', 'desc')
+                    ->first();
             }
+    
+            // Add PC count if a record exists, or 0 if none
+            $totalPC += $latestHistory ? $latestHistory->pc_no : 0;
         }
+    
         return $totalPC;
-    }
+    }    
 }
