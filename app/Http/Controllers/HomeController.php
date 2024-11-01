@@ -198,28 +198,25 @@ class HomeController extends Controller
         foreach ($filteredComputerLabs as $computerLab) {
             $query = ComputerLabHistory::where('computer_lab_id', $computerLab->id);
     
-            // Apply filters for the specified month and year if provided
             if ($selectedMonth) {
-                $query->whereMonth('month_year', $selectedMonth);
-            }
-            if ($selectedYear) {
-                $query->whereYear('month_year', $selectedYear);
+                // Get the latest history entry before or in the selected month
+                $query->where(function ($q) use ($selectedMonth, $selectedYear) {
+                    $q->whereYear('month_year', '<', $selectedYear)
+                      ->orWhere(function ($query) use ($selectedMonth, $selectedYear) {
+                          $query->whereYear('month_year', $selectedYear)
+                                ->whereMonth('month_year', '<=', $selectedMonth);
+                      });
+                });
             }
     
-            // Get the latest record if no data is found for the specified month/year
             $latestHistory = $query->orderBy('month_year', 'desc')->first();
             
-            // Check if a record was found; if not, fetch the latest record regardless of filters
-            if (!$latestHistory) {
-                $latestHistory = ComputerLabHistory::where('computer_lab_id', $computerLab->id)
-                    ->orderBy('month_year', 'desc')
-                    ->first();
+            if ($latestHistory) {
+                // Add the latest pc_no to totalPC, defaulting to 0 if it's null
+                $totalPC += $latestHistory->pc_no ?? 0;
             }
-    
-            // Add PC count if a record exists, or 0 if none
-            $totalPC += $latestHistory ? $latestHistory->pc_no : 0;
         }
-    
         return $totalPC;
-    }    
+    }
+    
 }
