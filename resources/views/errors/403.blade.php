@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-md-6 col-xl-5">
                             <div class="p-4">
-                                <img src="/public/assets/images/errors-images/403-error.jpeg" class="img-fluid mx-auto d-block" alt="403 Error">
+                                <img src="{{ asset('public/assets/images/errors-images/403-error.jpeg') }}" class="img-fluid mx-auto d-block" alt="403 Error">
                             </div>
                         </div>
                     </div>
