@@ -33,9 +33,10 @@ class SoftwareController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:software,title',
             'publish_status' => 'required|in:1,0'
         ],[
+            'title.unique'     => 'Nama perisian telah wujud atau masih dalam rekod dipadam',
             'title.required'     => 'Sila isi nama perisian',
             'publish_status.required'     => 'Sila pilih status',
         ]);
@@ -70,9 +71,10 @@ class SoftwareController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:software,title,' . $id,
             'publish_status' => 'required|in:1,0'
         ],[
+            'title.unique'       => 'Nama perisian telah wujud atau masih dalam rekod dipadam',
             'title.required'     => 'Sila isi nama perisian',
             'publish_status.required'     => 'Sila pilih status',
         ]);

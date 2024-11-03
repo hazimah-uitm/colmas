@@ -33,9 +33,10 @@ class WorkChecklistController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:work_checklists,title',
             'publish_status' => 'required|in:1,0'
         ],[
+            'title.unique'     => 'Nama proses kerja telah wujud atau masih dalam rekod dipadam',
             'title.required'     => 'Sila isi nama proses kerja',
             'publish_status.required'     => 'Sila pilih status',
         ]);
@@ -70,9 +71,10 @@ class WorkChecklistController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:work_checklists,title,' . $id,
             'publish_status' => 'required|in:1,0'
         ],[
+            'title.unique'       => 'Nama proses kerja telah wujud atau masih dalam rekod dipadam',
             'title.required'     => 'Sila isi nama proses kerja',
             'publish_status.required'     => 'Sila pilih status',
         ]);
