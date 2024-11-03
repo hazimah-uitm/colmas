@@ -30,10 +30,11 @@ class PositionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:positions,title',
             'grade' => 'required|unique:positions,grade',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
+            'title.unique'     => 'Nama jawatan telah wujud atau masih dalam rekod dipadam',
             'title.required'     => 'Sila isi nama jawatan',
             'grade.unique'     => 'Gred jawatan telah wujud atau masih dalam rekod dipadam',
             'grade.required'     => 'Sila isi gred jawatan',
@@ -69,25 +70,23 @@ class PositionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',  
-            'grade' => 'required|unique:positions,grade,' . $id, 
+            'title' => 'required|unique:positions,title,' . $id,
+            'grade' => 'required|unique:positions,grade,' . $id,
             'publish_status' => 'required|in:1,0',
         ], [
             'title.required'     => 'Sila isi nama jawatan',
+            'title.unique'       => 'Nama jawatan telah wujud atau masih dalam rekod dipadam',
             'grade.required'     => 'Sila isi gred jawatan',
             'grade.unique'       => 'Gred jawatan telah wujud atau masih dalam rekod dipadam',
             'publish_status.required' => 'Sila isi status jawatan',
         ]);
-    
+
         $position = Position::findOrFail($id);
         $position->fill($request->all());
         $position->save();
-    
+
         return redirect()->route('position')->with('success', 'Maklumat berjaya dikemaskini');
     }
-    
-    
-
     public function search(Request $request)
     {
         $search = $request->input('search');

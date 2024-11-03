@@ -136,7 +136,7 @@
     <div class="accordion-item mb-2">
         <h2 class="accordion-header" id="headingSection2">
             <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection2" aria-expanded="false" aria-controls="collapseSection2">
-                Senarai Makmal Komputer &nbsp;<strong>Belum</strong>&nbsp; Diselenggara {{ $currentYear }}
+                Senarai Makmal Komputer&nbsp;<strong>Belum</strong>&nbsp;Diselenggara {{ $currentYear }}
             </button>
         </h2>
         <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2" data-bs-parent="#mainAccordion">
@@ -165,7 +165,7 @@
     <div class="accordion-item mb-2">
         <h2 class="accordion-header" id="headingSection3">
             <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection3" aria-expanded="false" aria-controls="collapseSection3">
-                Senarai Makmal Komputer &nbsp;<strong>Telah</strong>&nbsp; Diselenggara {{ $currentYear }}
+                Senarai Makmal Komputer&nbsp;<strong>Telah</strong>&nbsp;Diselenggara {{ $currentYear }}
             </button>
         </h2>
         <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3" data-bs-parent="#mainAccordion">
