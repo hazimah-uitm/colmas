@@ -162,6 +162,31 @@ class HomeController extends Controller
             }
         }
 
+        // Prepare arrays to hold PC counts for each lab
+    $pcCounts = [];
+
+    // Iterate through each lab
+    foreach ($filteredComputerLabs as $lab) {
+        // Get the total PCs in the lab
+        $totalPCbyReport = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
+        
+        // Fetch lab management data related to this lab
+        $labManagementDataForLab = $labManagementData->where('computer_lab_id', $lab->id);
+        
+        // Calculate maintained and unmaintained PCs
+        $totalMaintenancePCbyReport = $labManagementDataForLab->sum('pc_maintenance_no') + $labManagementDataForLab->sum('pc_damage_no');
+        
+        // Calculate the number of unmaintained PCs
+        $totalUnmaintenancePCbyReport = $totalPCbyReport - $totalMaintenancePCbyReport;
+
+        // Store the counts in the pcCounts array
+        $pcCounts[$lab->id] = [
+            'lab_name' => $lab->name,
+            'total_maintenance' => $totalMaintenancePCbyReport,
+            'total_unmaintenance' => $totalUnmaintenancePCbyReport,
+        ];
+    }
+
         // Fetch lists for the view
         $campusList = Campus::all();
 
@@ -187,7 +212,8 @@ class HomeController extends Controller
             'unmaintainedLabsPerMonth' => $unmaintainedLabsPerMonth,
             'maintainedLabsPerMonth' => $maintainedLabsPerMonth,
             'currentYear' =>  $currentYear,
-            'ownersWithLabs' => $ownersWithLabs
+            'ownersWithLabs' => $ownersWithLabs,
+            'pcCounts' => $pcCounts
         ]);
     }
 
