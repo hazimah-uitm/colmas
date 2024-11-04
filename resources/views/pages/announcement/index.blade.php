@@ -46,7 +46,7 @@
                     </div>
                 </form>
             </div>
-            @hasanyrole('Superadmin|Admin')
+            @hasanyrole('Superadmin|Admin|Pegawai Penyemak')
             <div class="ms-auto">
                 <a href="{{ route('announcement.create') }}" class="btn btn-primary radius-30 mt-2 mt-lg-0">
                     <i class="bx bxs-plus-square"></i> Tambah Makluman
