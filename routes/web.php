@@ -192,6 +192,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/computer-lab/trash', 'ComputerLabController@trashList')->name('computer-lab.trash');
         Route::get('/computer-lab/{id}/restore', 'ComputerLabController@restore')->name('computer-lab.restore');
         Route::delete('/computer-lab/{id}/force-delete', 'ComputerLabController@forceDelete')->name('computer-lab.forceDelete');
+        Route::get('/computer-lab/pemilik/{campusId}', 'ComputerLabController@getPemilikByCampus')->name('computer-lab.getPemilikByCampus');
 
         // Software
         Route::get('software/create', 'SoftwareController@create')->name('software.create');

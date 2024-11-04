@@ -28,7 +28,7 @@ class ComputerLabController extends Controller
 
     public function create()
     {
-        $pemilikList = User::role('Pemilik')->get();
+        $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
 
         return view('pages.computer-lab.create', [
@@ -38,6 +38,16 @@ class ComputerLabController extends Controller
             'str_mode' => 'Tambah',
         ]);
     }
+
+    public function getPemilikByCampus($campusId)
+    {
+        $pemilikList = User::role('Pemilik')
+            ->where('publish_status', 1)
+            ->where('campus_id', $campusId)
+            ->get();
+    
+        return response()->json($pemilikList);
+    } 
 
     public function store(Request $request)
     {
@@ -119,7 +129,7 @@ class ComputerLabController extends Controller
             'password' => 'required',
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required' => 'Sila isi nama makmal komputer',
             'name.unique' => 'Nama makmal komputer telah wujud',
             'campus_id.required' => 'Sila pilih kampus',
@@ -201,11 +211,11 @@ class ComputerLabController extends Controller
             'Aktif' => 1,
             'Tidak Aktif' => 0,
         ];
-    
+
         $publishStatus = isset($publishStatusMapping[$computerLab->publish_status])
             ? $publishStatusMapping[$computerLab->publish_status]
             : $computerLab->publish_status;
-    
+
         ComputerLabHistory::create([
             'computer_lab_id' => $computerLab->id,
             'code' => $computerLab->code,
@@ -216,13 +226,13 @@ class ComputerLabController extends Controller
             'action' => $action,
             'publish_status' => $publishStatus,
         ]);
-    }    
+    }
 
     public function history($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
         $historyList = $computerLab->histories()->latest()->paginate(10);
-    
+
         return view('pages.computer-lab.history', [
             'computerLab' => $computerLab,
             'historyList' => $historyList,
