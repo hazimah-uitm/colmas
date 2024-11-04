@@ -58,46 +58,40 @@
             </div>
 
             <div class="mb-3">
-                <label for="campus_id" class="form-label">Kampus</label>
-                <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id" name="campus_id">
-                    @foreach ($campusList as $campus)
-                    <option value="{{ $campus->id }}"
-                        {{ old('campus_id', $computerLab->campus_id) == $campus->id ? 'selected' : '' }}>
-                        {{ $campus->name }}
-                    </option>
-                    @endforeach
-                </select>
-                @if ($errors->has('campus_id'))
-                <div class="invalid-feedback">
-                    @foreach ($errors->get('campus_id') as $error)
-                    {{ $error }}
-                    @endforeach
-                </div>
-                @endif
-            </div>
+    <label for="campus_id" class="form-label">Kampus</label>
+    <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id" name="campus_id">
+        <option value="" disabled>--- Pilih Kampus ---</option>
+        @foreach ($campusList as $campus)
+            <option value="{{ $campus->id }}" 
+                {{ old('campus_id', $computerLab->campus_id ?? '') == $campus->id ? 'selected' : '' }}>
+                {{ $campus->name }}
+            </option>
+        @endforeach
+    </select>
+    @if ($errors->has('campus_id'))
+        <div class="invalid-feedback">
+            @foreach ($errors->get('campus_id') as $error)
+                {{ $error }}
+            @endforeach
+        </div>
+    @endif
+</div>
 
-            <div class="mb-3">
-                <label for="pemilik_id" class="form-label">Pemilik</label>
-                <select class="form-select {{ $errors->has('pemilik_id') ? 'is-invalid' : '' }}" id="pemilik_id" name="pemilik_id">
-                    @if ($pemilikList->isEmpty())
-                    <option value="" disabled>Tiada rekod</option>
-                    @else
-                    @foreach ($pemilikList as $pemilik)
-                    <option value="{{ $pemilik->id }}"
-                        {{ old('pemilik_id', $computerLab->pemilik_id) == $pemilik->id ? 'selected' : '' }}>
-                        {{ $pemilik->name }}
-                    </option>
-                    @endforeach
-                    @endif
-                </select>
-                @if ($errors->has('pemilik_id'))
-                <div class="invalid-feedback">
-                    @foreach ($errors->get('pemilik_id') as $error)
-                    {{ $error }}
-                    @endforeach
-                </div>
-                @endif
-            </div>
+
+<div class="mb-3">
+    <label for="pemilik_id" class="form-label">Pemilik</label>
+    <select class="form-select {{ $errors->has('pemilik_id') ? 'is-invalid' : '' }}" id="pemilik_id" name="pemilik_id">
+        <option value="" disabled {{ is_null($computerLab->pemilik_id) ? 'selected' : '' }}>--- Pilih Pemilik ---</option>
+    </select>
+    @if ($errors->has('pemilik_id'))
+        <div class="invalid-feedback">
+            @foreach ($errors->get('pemilik_id') as $error)
+                {{ $error }}
+            @endforeach
+        </div>
+    @endif
+</div>
+
 
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
@@ -167,4 +161,51 @@
     </div>
 </div>
 <!-- End Page Wrapper -->
+<script>
+    const pemilikUrl = "{{ route('computer-lab.getPemilikByCampus', ['campusId' => '']) }}";
+
+    document.getElementById('campus_id').addEventListener('change', function() {
+        const campusId = this.value;
+        const pemilikSelect = document.getElementById('pemilik_id');
+
+        // Clear current options
+        pemilikSelect.innerHTML = '<option value="" disabled selected>--- Pilih Pemilik ---</option>';
+
+        if (campusId) {
+            fetch(`${pemilikUrl}/${campusId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Pemilik data:', data);
+                    if (data.length > 0) {
+                        data.forEach(pemilik => {
+                            const option = document.createElement('option');
+                            option.value = pemilik.id;
+                            option.textContent = pemilik.name;
+
+                            // Set the current pemilik as selected if editing
+                            if (pemilik.id == "{{ old('pemilik_id') ?? ($computerLab->pemilik_id ?? '') }}") {
+                                option.selected = true;
+                            }
+                            pemilikSelect.appendChild(option);
+                        });
+                    } else {
+                        const noRecordOption = document.createElement('option');
+                        noRecordOption.value = "";
+                        noRecordOption.textContent = "Tiada rekod";
+                        noRecordOption.disabled = true;
+                        pemilikSelect.appendChild(noRecordOption);
+                    }
+                })
+                .catch(error => console.error('Error fetching pemilik:', error));
+        }
+    });
+
+    // Trigger the change event to load the current pemilik when the page loads
+    document.getElementById('campus_id').dispatchEvent(new Event('change'));
+</script>
 @endsection

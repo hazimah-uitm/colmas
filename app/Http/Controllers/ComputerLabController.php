@@ -97,20 +97,20 @@ class ComputerLabController extends Controller
         ]);
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
-        $pemilikList = User::role('Pemilik')->get();
+        $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
-
+    
         return view('pages.computer-lab.edit', [
-            'save_route' => route('computer-lab.update', $id),
-            'str_mode' => 'Kemas Kini',
+            'save_route' => route('computer-lab.update', $computerLab->id),
             'campusList' => $campusList,
             'pemilikList' => $pemilikList,
             'computerLab' => $computerLab,
+            'str_mode' => 'Kemaskini',
         ]);
-    }
+    }    
 
     public function update(Request $request, $id)
     {
