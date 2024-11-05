@@ -151,7 +151,7 @@
                     <ul>
                         @foreach ($unmaintainedLabs as $lab)
                         <li>
-                            {{ $lab->name }} <span class="badge bg-warning text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;"> {{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span>
+                            {{ $lab->name }}<span class="badge bg-warning text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span>
                         </li>
                         @endforeach
                     </ul>
@@ -182,7 +182,7 @@
                     <ul>
                         @foreach ($maintainedLabs as $lab)
                         <li>
-                            {{ $lab->name }} <span class="badge bg-success text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;"> {{ $pcCounts[$lab->id]['total_maintenance'] }}</span>
+                            {{ $lab->name }}<span class="badge bg-success text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_maintenance'] }}</span>
                         </li>
                         @endforeach
                     </ul>
