@@ -116,7 +116,7 @@
                                             <li class="d-flex align-items-center py-1">
                                                 <span class="me-2">•</span>
                                                 {{ $lab->name }}
-                                                <span class="badge bg-info text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $lab->pc_count }}</span>
+                                                <span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $lab->pc_count }}</span>
                                             </li>
                                             @endforeach
                                         </ul>
@@ -133,159 +133,163 @@
     </div>
 
     <!-- Section 2: Senarai Makmal Komputer Belum Diselenggara -->
-<div class="accordion-item mb-2">
-    <h2 class="accordion-header" id="headingSection2">
-        <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection2" aria-expanded="false" aria-controls="collapseSection2">
-            Senarai Makmal Komputer&nbsp;<strong>Belum</strong>&nbsp;Diselenggara {{ $currentYear }}
-        </button>
-    </h2>
-    <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2" data-bs-parent="#mainAccordion">
-        <div class="accordion-body">
-            <div class="row mt-3">
-                @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                    @if ($unmaintainedLabs->isEmpty())
-                    <p class="text-success">Semua makmal telah diselenggara</p>
-                    @else
-                    <ul>
-                        @foreach ($unmaintainedLabs as $lab)
-                        <li>
-                            {{ $lab->name }}<span class="badge bg-warning text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                    @endif
+    <div class="accordion-item mb-2">
+        <h2 class="accordion-header" id="headingSection2">
+            <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection2" aria-expanded="false" aria-controls="collapseSection2">
+                Senarai Makmal Komputer&nbsp;<strong>Belum</strong>&nbsp;Diselenggara {{ $currentYear }}
+            </button>
+        </h2>
+        <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2" data-bs-parent="#mainAccordion">
+            <div class="accordion-body">
+                <div class="row mt-3">
+                    @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($unmaintainedLabs->isEmpty())
+                        <p class="text-success">Semua makmal telah diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($unmaintainedLabs as $lab)
+                            <li class="d-flex align-items-center py-1">
+                                <span class="me-2">•</span>
+                                {{ $lab->name }}<span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
             </div>
         </div>
     </div>
-</div>
 
-<!-- Section 3: Senarai Makmal Komputer Telah Diselenggara -->
-<div class="accordion-item mb-2">
-    <h2 class="accordion-header" id="headingSection3">
-        <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection3" aria-expanded="false" aria-controls="collapseSection3">
-            Senarai Makmal Komputer&nbsp;<strong>Telah</strong>&nbsp;Diselenggara {{ $currentYear }}
-        </button>
-    </h2>
-    <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3" data-bs-parent="#mainAccordion">
-        <div class="accordion-body">
-            <div class="row mt-3">
-                @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                    @if ($maintainedLabs->isEmpty())
-                    <p class="text-danger">Semua makmal belum diselenggara</p>
-                    @else
-                    <ul>
-                        @foreach ($maintainedLabs as $lab)
-                        <li>
-                            {{ $lab->name }}<span class="badge bg-success text-dark ms-2" style="font-size: 0.75rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_maintenance'] }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                    @endif
+    <!-- Section 3: Senarai Makmal Komputer Telah Diselenggara -->
+    <div class="accordion-item mb-2">
+        <h2 class="accordion-header" id="headingSection3">
+            <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSection3" aria-expanded="false" aria-controls="collapseSection3">
+                Senarai Makmal Komputer&nbsp;<strong>Telah</strong>&nbsp;Diselenggara {{ $currentYear }}
+            </button>
+        </h2>
+        <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3" data-bs-parent="#mainAccordion">
+            <div class="accordion-body">
+                <div class="row mt-3">
+                    @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
+                        @if ($maintainedLabs->isEmpty())
+                        <p class="text-danger">Semua makmal belum diselenggara</p>
+                        @else
+                        <ul>
+                            @foreach ($maintainedLabs as $lab)
+                            <li class="d-flex align-items-center py-1">
+                                <span class="me-2">•</span>
+                                {{ $lab->name }}<span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_maintenance'] }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
             </div>
         </div>
     </div>
-</div>
 
 
-@php
+    @php
     $monthName = DateTime::createFromFormat('!m', $month)->format('F');
-@endphp
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
-    <div class="col">
-        <div class="card radius-10 border-primary border-start border-0 border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                        <p class="mb-0 text-uppercase">Selesai Diselenggara <b class="text-uppercase">({{ $monthName }}, {{ $currentYear }})</b></p>
-                        <h4 class="my-1 text-primary">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
+    @endphp
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
+        <div class="col">
+            <div class="card radius-10 border-primary border-start border-0 border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                            <p class="mb-0 text-uppercase">Selesai Diselenggara <b class="text-uppercase">({{ $monthName }}, {{ $currentYear }})</b></p>
+                            <h4 class="my-1 text-primary">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
+                        </div>
+                        <div class="text-primary ms-auto font-35"><i class='bx bx-check-square'></i></div>
                     </div>
-                    <div class="text-primary ms-auto font-35"><i class='bx bx-check-square'></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card radius-10 border-primary border-start border-0 border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                            <p class="mb-0 text-uppercase">Rosak
+                                <b class="text-uppercase">({{ $monthName }}, {{ $currentYear }})</b>
+                            </p>
+                            <h4 class="my-1 text-primary">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
+                        </div>
+                        <div class="text-primary ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card radius-10 border-primary border-start border-0 border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                            <p class="mb-0 text-uppercase">Belum Diselenggara
+                                <b class="text-uppercase">({{ $monthName }}, {{ $currentYear }})</b>
+                            </p>
+                            <h4 class="my-1 text-primary">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
+                        </div>
+                        <div class="text-primary ms-auto font-35"><i class='bx bx-time-five'></i></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col">
-        <div class="card radius-10 border-primary border-start border-0 border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                        <p class="mb-0 text-uppercase">Rosak 
-                        <b class="text-uppercase">({{ $monthName }}, {{ $currentYear }})</b></p>
-                        <h4 class="my-1 text-primary">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
-                    </div>
-                    <div class="text-primary ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
+    <div class="card alert alert-info">
+        <div class="card-body">
+            <h5>MAKLUMAN</h5>
+            @if ($announcements->isNotEmpty())
+            @foreach ($announcements as $announcement)
+            <div class="card mb-3">
+                <div class="card-body bg-white">
+                    <div class="float-end text-dark"><i>{{ $announcement->created_at->format('j F Y') }}</i></div>
+                    <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
+                    <ul>
+                        <li>
+                            <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="col">
-        <div class="card radius-10 border-primary border-start border-0 border-4">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                        <p class="mb-0 text-uppercase">Belum Diselenggara 
-                        <b class="text-uppercase">({{ $monthName }}, {{ $currentYear }})</b></p>
-                        <h4 class="my-1 text-primary">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
-                    </div>
-                    <div class="text-primary ms-auto font-35"><i class='bx bx-time-five'></i></div>
-                </div>
+            @endforeach
+            @else
+            <div class="card-body bg-white" role="alert">
+                Tiada makluman
             </div>
+            @endif
         </div>
     </div>
-</div>
 
-<div class="card alert alert-info">
-    <div class="card-body">
-        <h5>MAKLUMAN</h5>
-        @if ($announcements->isNotEmpty())
-        @foreach ($announcements as $announcement)
-        <div class="card mb-3">
-            <div class="card-body bg-white">
-                <div class="float-end text-dark"><i>{{ $announcement->created_at->format('j F Y') }}</i></div>
-                <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
-                <ul>
-                    <li>
-                        <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        @endforeach
-        @else
-        <div class="card-body bg-white" role="alert">
-            Tiada makluman
-        </div>
-        @endif
-    </div>
-</div>
+    <script>
+        document.getElementById('homeFilter').addEventListener('change', function() {
+            this.submit();
+        });
 
-<script>
-    document.getElementById('homeFilter').addEventListener('change', function() {
-        this.submit();
-    });
-
-    document.getElementById('resetButton').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default reset behavior
-        const url = new URL(window.location.href);
-        url.searchParams.delete('campus_id');
-        url.searchParams.delete('computer_lab_id');
-        url.searchParams.delete('status');
-        url.searchParams.delete('month');
-        url.searchParams.delete('year');
-        window.location.href = url.toString(); // Redirect to the URL with reset filters
-    });
-</script>
-@endsection
+        document.getElementById('resetButton').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default reset behavior
+            const url = new URL(window.location.href);
+            url.searchParams.delete('campus_id');
+            url.searchParams.delete('computer_lab_id');
+            url.searchParams.delete('status');
+            url.searchParams.delete('month');
+            url.searchParams.delete('year');
+            window.location.href = url.toString(); // Redirect to the URL with reset filters
+        });
+    </script>
+    @endsection

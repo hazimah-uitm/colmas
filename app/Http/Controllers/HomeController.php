@@ -106,8 +106,8 @@ class HomeController extends Controller
         $totalPC = $this->getTotalPC($filteredComputerLabs, $request->input('month'), $request->input('year'));
 
         // Only sum maintenance and damage PCs from the filtered lab management data
-        $totalMaintenancePC = $labManagementData->sum('pc_maintenance_no');
-        $totalDamagePC = $labManagementData->sum('pc_damage_no');
+        $totalMaintenancePC = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])->sum('pc_maintenance_no');
+        $totalDamagePC = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])->sum('pc_damage_no');
         $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
 
         // Calculate unmaintained labs including drafts
@@ -129,6 +129,7 @@ class HomeController extends Controller
             // Fetch maintained labs for the specified month and year
             $maintainedLabsThisMonth = LabManagement::whereMonth('created_at', $month)
                 ->whereYear('created_at', $currentYear)
+                ->whereIn('status', ['dihantar', 'telah_disemak'])
                 ->pluck('computer_lab_id')
                 ->unique();
 
@@ -163,29 +164,29 @@ class HomeController extends Controller
         }
 
         // Prepare arrays to hold PC counts for each lab
-    $pcCounts = [];
+        $pcCounts = [];
 
-    // Iterate through each lab
-    foreach ($filteredComputerLabs as $lab) {
-        // Get the total PCs in the lab
-        $totalPCbyReport = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
-        
-        // Fetch lab management data related to this lab
-        $labManagementDataForLab = $labManagementData->where('computer_lab_id', $lab->id);
-        
-        // Calculate maintained and unmaintained PCs
-        $totalMaintenancePCbyReport = $labManagementDataForLab->sum('pc_maintenance_no') + $labManagementDataForLab->sum('pc_damage_no');
-        
-        // Calculate the number of unmaintained PCs
-        $totalUnmaintenancePCbyReport = $totalPCbyReport - $totalMaintenancePCbyReport;
+        // Iterate through each lab
+        foreach ($filteredComputerLabs as $lab) {
+            // Get the total PCs in the lab
+            $totalPCbyReport = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
 
-        // Store the counts in the pcCounts array
-        $pcCounts[$lab->id] = [
-            'lab_name' => $lab->name,
-            'total_maintenance' => $totalMaintenancePCbyReport,
-            'total_unmaintenance' => $totalUnmaintenancePCbyReport,
-        ];
-    }
+            // Fetch lab management data related to this lab
+            $labManagementDataForLab = $labManagementData->where('computer_lab_id', $lab->id)->whereIn('status', ['dihantar', 'telah_disemak']);
+
+            // Calculate maintained and unmaintained PCs
+            $totalMaintenancePCbyReport = $labManagementDataForLab->sum('pc_maintenance_no') + $labManagementDataForLab->sum('pc_damage_no');
+
+            // Calculate the number of unmaintained PCs
+            $totalUnmaintenancePCbyReport = $totalPCbyReport - $totalMaintenancePCbyReport;
+
+            // Store the counts in the pcCounts array
+            $pcCounts[$lab->id] = [
+                'lab_name' => $lab->name,
+                'total_maintenance' => $totalMaintenancePCbyReport,
+                'total_unmaintenance' => $totalUnmaintenancePCbyReport,
+            ];
+        }
 
         // Fetch lists for the view
         $campusList = Campus::all();
@@ -222,20 +223,20 @@ class HomeController extends Controller
         $totalPC = 0;
         foreach ($filteredComputerLabs as $computerLab) {
             $query = ComputerLabHistory::where('computer_lab_id', $computerLab->id);
-    
+
             if ($selectedMonth) {
                 // Get the latest history entry before or in the selected month
                 $query->where(function ($q) use ($selectedMonth, $selectedYear) {
                     $q->whereYear('month_year', '<', $selectedYear)
-                      ->orWhere(function ($query) use ($selectedMonth, $selectedYear) {
-                          $query->whereYear('month_year', $selectedYear)
+                        ->orWhere(function ($query) use ($selectedMonth, $selectedYear) {
+                            $query->whereYear('month_year', $selectedYear)
                                 ->whereMonth('month_year', '<=', $selectedMonth);
-                      });
+                        });
                 });
             }
-    
+
             $latestHistory = $query->orderBy('month_year', 'desc')->first();
-            
+
             if ($latestHistory) {
                 // Add the latest pc_no to totalPC, defaulting to 0 if it's null
                 $totalPC += $latestHistory->pc_no ?? 0;
@@ -243,5 +244,4 @@ class HomeController extends Controller
         }
         return $totalPC;
     }
-    
 }
