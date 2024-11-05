@@ -195,99 +195,100 @@
             </div>
         </div>
     </div>
+</div>
 
 
-    @php
-    $monthName = DateTime::createFromFormat('!m', $month)->format('F');
-    @endphp
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
-        <div class="col">
-            <div class="card radius-10 border-success border-start border-0 border-4">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                            <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Selesai Diselenggara</span> ({{ $monthName }}, {{ $currentYear }})</p>
-                            <h4 class="my-1 text-success">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
-                        </div>
-                        <div class="text-success ms-auto font-35"><i class='bx bx-check-square'></i></div>
+@php
+$monthName = DateTime::createFromFormat('!m', $month)->format('F');
+@endphp
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
+    <div class="col">
+        <div class="card radius-10 border-success border-start border-0 border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                        <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Selesai Diselenggara</span> ({{ $monthName }}, {{ $currentYear }})</p>
+                        <h4 class="my-1 text-success">{{ $totalMaintenancePC > 0 ? $totalMaintenancePC : 0 }}</h4>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card radius-10 border-danger border-start border-0 border-4">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                            <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Rosak</span> ({{ $monthName }}, {{ $currentYear }})</b>
-                            </p>
-                            <h4 class="my-1 text-danger">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
-                        </div>
-                        <div class="text-danger ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card radius-10 border-start border-0 border-4" style="border-color: #FFBF00 !important;">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                            <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Belum Diselenggara</span> ({{ $monthName }}, {{ $currentYear }})
-                            </p>
-                            <h4 class="my-1" style="color: #FFBF00;">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
-                        </div>
-                        <div class="ms-auto font-35" style="color: #FFBF00;"><i class='bx bx-time-five'></i></div>
-                    </div>
+                    <div class="text-success ms-auto font-35"><i class='bx bx-check-square'></i></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card alert alert-info">
-        <div class="card-body">
-            <h5>MAKLUMAN</h5>
-            @if ($announcements->isNotEmpty())
-            @foreach ($announcements as $announcement)
-            <div class="card mb-3">
-                <div class="card-body bg-white">
-                    <div class="float-end text-dark"><i>{{ $announcement->created_at->format('j F Y') }}</i></div>
-                    <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
-                    <ul>
-                        <li>
-                            <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
-                        </li>
-                    </ul>
+    <div class="col">
+        <div class="card radius-10 border-danger border-start border-0 border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                        <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Rosak</span> ({{ $monthName }}, {{ $currentYear }})</b>
+                        </p>
+                        <h4 class="my-1 text-danger">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>
+                    </div>
+                    <div class="text-danger ms-auto font-35"><i class="bx bx-error broken-computer-icon"></i></div>
                 </div>
             </div>
-            @endforeach
-            @else
-            <div class="card-body bg-white" role="alert">
-                Tiada makluman
-            </div>
-            @endif
         </div>
     </div>
 
-    <script>
-        document.getElementById('homeFilter').addEventListener('change', function() {
-            this.submit();
-        });
+    <div class="col">
+        <div class="card radius-10 border-start border-0 border-4" style="border-color: #FFBF00 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
+                        <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Belum Diselenggara</span> ({{ $monthName }}, {{ $currentYear }})
+                        </p>
+                        <h4 class="my-1" style="color: #FFBF00;">{{ $totalUnmaintenancePC > 0 ? $totalUnmaintenancePC : 0 }}</h4>
+                    </div>
+                    <div class="ms-auto font-35" style="color: #FFBF00;"><i class='bx bx-time-five'></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        document.getElementById('resetButton').addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent default reset behavior
-            const url = new URL(window.location.href);
-            url.searchParams.delete('campus_id');
-            url.searchParams.delete('computer_lab_id');
-            url.searchParams.delete('status');
-            url.searchParams.delete('month');
-            url.searchParams.delete('year');
-            window.location.href = url.toString(); // Redirect to the URL with reset filters
-        });
-    </script>
-    @endsection
+<div class="card alert alert-info">
+    <div class="card-body">
+        <h5>MAKLUMAN</h5>
+        @if ($announcements->isNotEmpty())
+        @foreach ($announcements as $announcement)
+        <div class="card mb-3">
+            <div class="card-body bg-white">
+                <div class="float-end text-dark"><i>{{ $announcement->created_at->format('j F Y') }}</i></div>
+                <p class="card-title text-primary text-uppercase fw-bold">{{ $announcement->title }}</p>
+                <ul>
+                    <li>
+                        <p class="card-text">{!! nl2br(e($announcement->desc ?? '-')) !!}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        @endforeach
+        @else
+        <div class="card-body bg-white" role="alert">
+            Tiada makluman
+        </div>
+        @endif
+    </div>
+</div>
+
+<script>
+    document.getElementById('homeFilter').addEventListener('change', function() {
+        this.submit();
+    });
+
+    document.getElementById('resetButton').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default reset behavior
+        const url = new URL(window.location.href);
+        url.searchParams.delete('campus_id');
+        url.searchParams.delete('computer_lab_id');
+        url.searchParams.delete('status');
+        url.searchParams.delete('month');
+        url.searchParams.delete('year');
+        window.location.href = url.toString(); // Redirect to the URL with reset filters
+    });
+</script>
+@endsection
