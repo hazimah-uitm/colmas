@@ -39,7 +39,7 @@
                     </div>
                     <div class="mb-2 ms-2 col-12 col-md-auto">
                         <select name="year" id="year" class="form-select">
-                            <option value="">Semua Tahun</option>
+                            <option value="" disabled>Pilih Tahun</option>
                             @for ($i = date('Y'); $i >= date('Y') - 10; $i--)
                             <option value="{{ $i }}" {{ Request::get('year', date('Y')) == $i ? 'selected' : '' }}>
                                 {{ $i }}
