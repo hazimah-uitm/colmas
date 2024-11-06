@@ -119,13 +119,15 @@
                                                     <th style="width: 5%; background-color: #ddd; text-align: center">#</th>
                                                     <th style="width: 25%; background-color: #ddd;">Pemilik</th>
                                                     <th style="background-color: #ddd;">Makmal Komputer</th>
-                                                    <th style="width: 10%; background-color: #ddd; text-align: center">Bil. PC</th>
+                                                    <th style="width: 10%; background-color: #ddd; text-align: center">Bil.
+                                                        PC</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
                                                     <tr>
-                                                        <td style="text-align: center" rowspan="{{ $ownerLabs->count() }}">{{ $loop->iteration }}
+                                                        <td style="text-align: center" rowspan="{{ $ownerLabs->count() }}">
+                                                            {{ $loop->iteration }}
                                                         </td>
                                                         <td rowspan="{{ $ownerLabs->count() }}">
                                                             {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</td>
@@ -161,67 +163,48 @@
             </div>
         </div>
 
-        <!-- Section 2: Senarai Makmal Komputer Belum Diselenggara -->
-        <div class="accordion-item mb-2">
-            <h2 class="accordion-header" id="headingSection2">
-                <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseSection2" aria-expanded="false" aria-controls="collapseSection2">
-                    Senarai Makmal Komputer&nbsp;<strong>Belum</strong>&nbsp;Diselenggara {{ $currentYear }}
-                </button>
-            </h2>
-            <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2">
-                <div class="accordion-body">
-                    <div class="row mt-3">
-                        @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
-                            <div class="col-md-6 col-lg-4 mb-3">
-                                <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                                @if ($unmaintainedLabs->isEmpty())
-                                    <p class="text-success">Semua makmal telah diselenggara</p>
-                                @else
-                                    <ul>
-                                        @foreach ($unmaintainedLabs as $lab)
-                                            <li class="d-flex align-items-center py-1">
-                                                <span class="me-2">•</span>
-                                                {{ $lab->name }}<span class="badge bg-info text-dark ms-2"
-                                                    style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Section 3: Senarai Makmal Komputer Telah Diselenggara -->
         <div class="accordion-item mb-2">
             <h2 class="accordion-header" id="headingSection3">
                 <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseSection3" aria-expanded="false" aria-controls="collapseSection3">
-                    Senarai Makmal Komputer&nbsp;<strong>Telah</strong>&nbsp;Diselenggara {{ $currentYear }}
+                    Status Selenggara Makmal Komputer {{ $currentYear }}
                 </button>
             </h2>
             <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3">
                 <div class="accordion-body">
                     <div class="row mt-3">
-                        @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
-                            <div class="col-md-6 col-lg-4 mb-3">
-                                <strong>{{ date('F', mktime(0, 0, 0, $month, 1)) }}:</strong>
-                                @if ($maintainedLabs->isEmpty())
-                                    <p class="text-danger">Semua makmal belum diselenggara</p>
-                                @else
-                                    <ul>
-                                        @foreach ($maintainedLabs as $lab)
-                                            <li class="d-flex align-items-center py-1">
-                                                <span class="me-2">•</span>
-                                                {{ $lab->name }}<span class="badge bg-info text-dark ms-2"
-                                                    style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_maintenance'] }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
+                        @foreach ($campusData as $campusItem)
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body text-uppercase">
+                                    <h4>{{ $campusItem['campus']->name }}</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Makmal Komputer</th>
+                                                    @foreach ($months as $month)
+                                                        <th>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($campusItem['computerLabList'] as $lab)
+                                                    <tr>
+                                                        <td>{{ $lab->name }}</td>
+                                                        @foreach ($months as $month)
+                                                            <td class="text-center">
+                                                                <span style="font-size: 12px;">
+                                                                    {{ $campusItem['maintainedLabsPerMonth'][$month]->get($lab->id) ? '✔️' : '❌' }}
+                                                                </span>
+                                                            </td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -232,7 +215,7 @@
 
 
     @php
-        $monthName = DateTime::createFromFormat('!m', $month)->format('F');
+        $monthName = DateTime::createFromFormat('!m', $currentMonth)->format('F');
     @endphp
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
         <div class="col">

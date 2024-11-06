@@ -45,6 +45,7 @@ class HomeController extends Controller
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             // Admin and Superadmin see all lab management data
             $computerLabList = ComputerLab::where('publish_status', 1)->get();
+            $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             // Pegawai Penyemak only sees lab management data for labs in their campus
             $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
@@ -55,6 +56,7 @@ class HomeController extends Controller
                 ->get();
             // Owner with lab
             $ownersWithLabsQuery->where('campus_id', $user->campus_id);
+            $campusList = Campus::with('computerLab')->where('id', $user->campus_id)->get();
         } else {
             // Regular Pemilik only sees lab management data for their own labs
             $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
@@ -65,6 +67,9 @@ class HomeController extends Controller
                 ->get();
             //Owners with lab
             $ownersWithLabsQuery->where('pemilik_id', $user->id);
+            $assignedComputerLabs = $user->assignedComputerLabs;
+            $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
+            $campusList = Campus::with('computerLab')->whereIn('id', $campusIds)->get();
         }
 
         // Filters
@@ -110,76 +115,6 @@ class HomeController extends Controller
         $totalDamagePC = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])->sum('pc_damage_no');
         $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
 
-        // Calculate unmaintained labs including drafts
-        $maintainedLabIds = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])
-            ->pluck('computer_lab_id')
-            ->unique();
-        $totalUnmaintainedLabs = $totalLab - $maintainedLabIds->count();
-
-        $months = range(1, 12); // Get months from January to December
-        $unmaintainedLabsPerMonth = [];
-        $maintainedLabsPerMonth = [];
-
-        // If a specific month is selected, focus only on that month
-        if ($currentMonth) {
-            $months = [$currentMonth]; // Limit to the selected month
-        }
-
-        foreach ($months as $month) {
-            // Fetch maintained labs for the specified month and year
-            $maintainedLabsThisMonth = LabManagement::whereMonth('created_at', $month)
-                ->whereYear('created_at', $currentYear)
-                ->whereIn('status', ['dihantar', 'telah_disemak'])
-                ->pluck('computer_lab_id')
-                ->unique();
-
-            // Filter unmaintained labs
-            $unmaintainedLabsThisMonth = $computerLabList->filter(function ($lab) use ($maintainedLabsThisMonth) {
-                return !$maintainedLabsThisMonth->contains($lab->id);
-            });
-
-            $unmaintainedLabsPerMonth[$month] = $unmaintainedLabsThisMonth;
-        }
-
-        foreach ($months as $month) {
-            // Fetch maintained labs for the specified month and year
-            $maintainedLabsThisMonth = LabManagement::whereMonth('created_at', $month)
-                ->whereYear('created_at', $currentYear)
-                ->whereIn('status', ['dihantar', 'telah_disemak'])
-                ->pluck('computer_lab_id')
-                ->unique(); // Get unique computer lab IDs that were maintained this month
-
-            // Get the list of maintained labs for this month, filtered by $computerLabList
-            $maintainedLabsPerMonth[$month] = $computerLabList->filter(function ($lab) use ($maintainedLabsThisMonth) {
-                return $maintainedLabsThisMonth->contains($lab->id); // Check if the lab is maintained this month
-            });
-        }
-
-        // Prepare arrays to hold PC counts for each lab
-        $pcCounts = [];
-
-        // Iterate through each lab
-        foreach ($filteredComputerLabs as $lab) {
-            // Get the total PCs in the lab
-            $totalPCbyReport = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
-
-            // Fetch lab management data related to this lab
-            $labManagementDataForLab = $labManagementData->where('computer_lab_id', $lab->id)->whereIn('status', ['dihantar', 'telah_disemak']);
-
-            // Calculate maintained and unmaintained PCs
-            $totalMaintenancePCbyReport = $labManagementDataForLab->sum('pc_maintenance_no') + $labManagementDataForLab->sum('pc_damage_no');
-
-            // Calculate the number of unmaintained PCs
-            $totalUnmaintenancePCbyReport = $totalPCbyReport - $totalMaintenancePCbyReport;
-
-            // Store the counts in the pcCounts array
-            $pcCounts[$lab->id] = [
-                'lab_name' => $lab->name,
-                'total_maintenance' => $totalMaintenancePCbyReport,
-                'total_unmaintenance' => $totalUnmaintenancePCbyReport,
-            ];
-        }
-
         // Calculate PC count for each lab using the getTotalPC method
         foreach ($ownersWithLabs as $campusId => $labs) {
             foreach ($labs as $lab) {
@@ -187,6 +122,40 @@ class HomeController extends Controller
                 $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
             }
         }
+
+        $months = range(1, 12);
+        $campusData = [];
+    
+        foreach ($campusList as $campus) {
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->where('campus_id', $campus->id)
+                ->get();
+        
+            $maintainedLabsPerMonth = [];
+            foreach ($months as $month) {
+                $maintainedLabsThisMonth = LabManagement::query()  
+                    ->whereMonth('end_time', $month)  
+                    ->whereYear('end_time', $currentYear)  
+                    ->whereHas('computerLab', function ($query) use ($campus) {
+                        $query->where('campus_id', $campus->id);
+                    })
+                    ->whereIn('status', ['dihantar', 'telah_disemak'])
+                    ->pluck('computer_lab_id')
+                    ->unique();
+        
+                // Check if the lab was maintained
+                $maintainedLabsPerMonth[$month] = $computerLabList->mapWithKeys(function ($lab) use ($maintainedLabsThisMonth) {
+                    return [$lab->id => $maintainedLabsThisMonth->contains($lab->id)];
+                });
+            }
+        
+            $campusData[] = [
+                'campus' => $campus,
+                'computerLabList' => $computerLabList,
+                'maintainedLabsPerMonth' => $maintainedLabsPerMonth
+            ];
+        }
+        
 
         // Fetch lists for the view
         $campusList = Campus::all();
@@ -209,12 +178,11 @@ class HomeController extends Controller
             'campusList' => $campusList,
             'announcements' => $announcements,
             'totalLab' => $totalLab,
-            'totalUnmaintainedLabs' => $totalUnmaintainedLabs,
-            'unmaintainedLabsPerMonth' => $unmaintainedLabsPerMonth,
-            'maintainedLabsPerMonth' => $maintainedLabsPerMonth,
             'currentYear' =>  $currentYear,
+            'currentMonth' =>  $currentMonth,
             'ownersWithLabs' => $ownersWithLabs,
-            'pcCounts' => $pcCounts
+            'months' => $months,
+            'campusData' => $campusData
         ]);
     }
 
