@@ -99,8 +99,7 @@
                     Senarai Makmal Komputer mengikut Pemilik
                 </button>
             </h2>
-            <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1"
-                data-bs-parent="#mainAccordion">
+            <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1">
                 <div class="accordion-body">
                     <div class="row row-cols-1 g-4"> <!-- Three-column responsive grid for campuses -->
                         @foreach ($ownersWithLabs as $campusId => $labs)
@@ -114,26 +113,46 @@
                                         @php
                                             $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                                         @endphp
-                                        <div class="row">
-                                            @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
-                                                <div class="col-md-4 owner-item mb-3">
-                                                    <!-- Adjusted to col-md-4 for 3 columns -->
-                                                    <strong class="d-block text-secondary">{{ $loop->iteration }}.
-                                                        {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</strong>
-                                                    <ul class="list-unstyled ms-3">
-                                                        @foreach ($ownerLabs as $lab)
-                                                            <li class="d-flex align-items-center py-1">
-                                                                <span class="me-2">•</span>
-                                                                {{ $lab->name }}
-                                                                <span class="badge bg-info text-dark ms-2"
-                                                                    style="font-size: 0.80rem; font-weight: 500;">{{ $lab->pc_count }}</span>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 5%; background-color: #ddd; text-align: center">#</th>
+                                                    <th style="width: 25%; background-color: #ddd;">Pemilik</th>
+                                                    <th style="background-color: #ddd;">Makmal Komputer</th>
+                                                    <th style="width: 10%; background-color: #ddd; text-align: center">Bil. PC</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+                                                    <tr>
+                                                        <td style="text-align: center" rowspan="{{ $ownerLabs->count() }}">{{ $loop->iteration }}
+                                                        </td>
+                                                        <td rowspan="{{ $ownerLabs->count() }}">
+                                                            {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</td>
+                                                        <td>{{ $ownerLabs->first()->name }}</td>
+                                                        <td style="text-align: center">
+                                                            <span class="badge bg-info text-dark"
+                                                                style="font-size: 0.80rem; font-weight: 500;">
+                                                                {{ $ownerLabs->first()->pc_count }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    @foreach ($ownerLabs->slice(1) as $lab)
+                                                        <tr>
+                                                            <td>{{ $lab->name }}</td>
+                                                            <td style="text-align: center">
+                                                                <span class="badge bg-info text-dark"
+                                                                    style="font-size: 0.80rem; font-weight: 500;">
+                                                                    {{ $lab->pc_count }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
+
                                 </div>
                             </div>
                         @endforeach
@@ -150,8 +169,7 @@
                     Senarai Makmal Komputer&nbsp;<strong>Belum</strong>&nbsp;Diselenggara {{ $currentYear }}
                 </button>
             </h2>
-            <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2"
-                data-bs-parent="#mainAccordion">
+            <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2">
                 <div class="accordion-body">
                     <div class="row mt-3">
                         @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
@@ -185,8 +203,7 @@
                     Senarai Makmal Komputer&nbsp;<strong>Telah</strong>&nbsp;Diselenggara {{ $currentYear }}
                 </button>
             </h2>
-            <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3"
-                data-bs-parent="#mainAccordion">
+            <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3">
                 <div class="accordion-body">
                     <div class="row mt-3">
                         @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
