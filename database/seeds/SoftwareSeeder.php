@@ -14,11 +14,11 @@ class SoftwareSeeder extends Seeder
     {
         Software::insert([
             [
-                'title' => 'Adobe Photoshop',
+                'title' => 'Adobe Animate CC 2023',
                 'publish_status' => true
             ],
             [
-                'title' => 'AutoCAD',
+                'title' => 'Adobe Photoshop CC 2023',
                 'publish_status' => true
             ],
         ]);
