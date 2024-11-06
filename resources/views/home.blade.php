@@ -94,7 +94,7 @@
                 Senarai Makmal Komputer mengikut Pemilik
             </button>
         </h2>
-        <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1" data-bs-parent="#mainAccordion">
+        <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1" >
             <div class="accordion-body">
                 <div class="row row-cols-1 g-4"> <!-- Three-column responsive grid for campuses -->
                     @foreach($ownersWithLabs as $campusId => $labs)
@@ -139,7 +139,7 @@
                 Senarai Makmal Komputer&nbsp;<strong>Belum</strong>&nbsp;Diselenggara {{ $currentYear }}
             </button>
         </h2>
-        <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2" data-bs-parent="#mainAccordion">
+        <div id="collapseSection2" class="accordion-collapse collapse" aria-labelledby="headingSection2" >
             <div class="accordion-body">
                 <div class="row mt-3">
                     @foreach ($unmaintainedLabsPerMonth as $month => $unmaintainedLabs)
@@ -152,7 +152,8 @@
                             @foreach ($unmaintainedLabs as $lab)
                             <li class="d-flex align-items-center py-1">
                                 <span class="me-2">•</span>
-                                {{ $lab->name }}<span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span>
+                                {{ $lab->name }}
+                                <!-- <span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_unmaintenance'] }}</span> -->
                             </li>
                             @endforeach
                         </ul>
@@ -171,7 +172,7 @@
                 Senarai Makmal Komputer&nbsp;<strong>Telah</strong>&nbsp;Diselenggara {{ $currentYear }}
             </button>
         </h2>
-        <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3" data-bs-parent="#mainAccordion">
+        <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3" >
             <div class="accordion-body">
                 <div class="row mt-3">
                     @foreach ($maintainedLabsPerMonth as $month => $maintainedLabs)
@@ -184,7 +185,8 @@
                             @foreach ($maintainedLabs as $lab)
                             <li class="d-flex align-items-center py-1">
                                 <span class="me-2">•</span>
-                                {{ $lab->name }}<span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_maintenance'] }}</span>
+                                {{ $lab->name }}
+                                <!-- <span class="badge bg-info text-dark ms-2" style="font-size: 0.80rem; font-weight: 500;">{{ $pcCounts[$lab->id]['total_maintenance'] }}</span> -->
                             </li>
                             @endforeach
                         </ul>
