@@ -90,17 +90,19 @@ class LabChecklistController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
     
         if ($search) {
             $labChecklistList = LabChecklist::where('title', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $labChecklistList = LabChecklist::latest()->paginate(10);
+            $labChecklistList = LabChecklist::latest()->paginate($perPage);
         }
     
         return view('pages.lab-checklist.index', [
             'labChecklistList' => $labChecklistList,
+            'perPage' => $perPage,
         ]);
     }
 

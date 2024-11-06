@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CampusSeeder::class);
         $this->call(ComputerLabSeeder::class);
         $this->call(ComputerLabHistorySeeder::class);
-        $this->call(SoftwareSeeder::class);
         $this->call(WorkChecklistSeeder::class);
         $this->call(LabChecklistSeeder::class);
     }

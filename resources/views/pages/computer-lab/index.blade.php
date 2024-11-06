@@ -84,7 +84,7 @@
                     @if (count($computerLabList) > 0)
                     @foreach ($computerLabList as $computerLab)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
                         <td>{{ $computerLab->code }}</td>
                         <td>{{ $computerLab->name }}</td>
                         <td>{{ $computerLab->campus->name }}</td>
@@ -132,12 +132,15 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-3 d-flex justify-content-between">
+        <div class="mt-3 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <span class="mr-2 mx-1">Jumlah rekod per halaman</span>
                 <form action="{{ route('computer-lab.search') }}" method="GET" id="perPageForm"
                     class="d-flex align-items-center">
                     <input type="hidden" name="search" value="{{ request('search') }}">
+                    <input type="hidden" name="type" value="{{ request('type') }}">
+                    <input type="hidden" name="attendance" value="{{ request('attendance') }}">
+                    <input type="hidden" name="status" value="{{ request('status') }}">
                     <select name="perPage" id="perPage" class="form-select form-select-sm"
                         onchange="document.getElementById('perPageForm').submit()">
                         <option value="10" {{ Request::get('perPage') == '10' ? 'selected' : '' }}>10</option>
@@ -147,7 +150,7 @@
                 </form>
             </div>
 
-            <div class="mt-3 d-flex justify-content-end">
+            <div class="d-flex justify-content-end align-items-center">
                 <span class="mx-2 mt-2 small text-muted">
                     Menunjukkan {{ $computerLabList->firstItem() }} hingga {{ $computerLabList->lastItem() }} daripada
                     {{ $computerLabList->total() }} rekod
@@ -155,6 +158,7 @@
                 <div class="pagination-wrapper">
                     {{ $computerLabList->appends([
                                 'search' => request('search'),
+                                'perPage' => request('perPage'),
                             ])->links('pagination::bootstrap-4') }}
                 </div>
             </div>
@@ -176,7 +180,7 @@
                 Adakah anda pasti ingin memadam rekod <span style="font-weight: 600;">Makmal Komputer
                     {{ $computerLab->name }}</span>?
                 @else
-                Error: Campus data not available.
+                Error: Data not available.
                 @endisset
             </div>
             <div class="modal-footer">
@@ -220,7 +224,7 @@
         // Reset form
         document.getElementById('resetButton').addEventListener('click', function() {
             // Redirect to the base route to clear query parameters
-            window.location.href = "{{ route('campus') }}";
+            window.location.href = "{{ route('computer-lab') }}";
         });
     });
 </script>

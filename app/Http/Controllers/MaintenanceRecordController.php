@@ -395,7 +395,7 @@ class MaintenanceRecordController extends Controller
     public function search(Request $request, $labManagementId)
     {
         $search = $request->input('search');
-
+        $perPage = $request->input('perPage', 10);
         $labManagement = LabManagement::findOrFail($labManagementId);
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
 
@@ -404,12 +404,12 @@ class MaintenanceRecordController extends Controller
             $maintenanceRecordList = MaintenanceRecord::where('computer_name', 'LIKE', "%$search%")
                 ->where('lab_management_id', $labManagementId)
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
             // Fetch records without applying any search filters
             $maintenanceRecordList = MaintenanceRecord::where('lab_management_id', $labManagementId)
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         }
 
         // Pass additional data to the view
@@ -419,6 +419,7 @@ class MaintenanceRecordController extends Controller
             'month' => $labManagement->start_time ? Carbon::parse($labManagement->start_time)->format('F') : '-',
             'year' => $labManagement->start_time ? Carbon::parse($labManagement->start_time)->format('Y') : '-',
             'search' => $search,
+            'perPage' => $perPage,
             'workChecklists' => $workChecklists,
         ]);
     }

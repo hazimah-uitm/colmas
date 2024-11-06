@@ -39,7 +39,7 @@
                     @if (count($activities) > 0)
                     @foreach ($activities as $activityLog)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ ($activities->currentPage() - 1) * $activities->perPage() + $loop->iteration }}</td>
                         <td>{{ $activityLog->description }}</td>
                         <td>
                             @if ($activityLog->subject)

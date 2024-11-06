@@ -153,18 +153,20 @@ class ComputerLabController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $computerLabList = ComputerLab::where('name', 'LIKE', "%$search%")
                 ->orWhere('code', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $computerLabList = ComputerLab::latest()->paginate(10);
+            $computerLabList = ComputerLab::latest()->paginate($perPage);
         }
 
         return view('pages.computer-lab.index', [
             'computerLabList' => $computerLabList,
+            'perPage' => $perPage,
         ]);
     }
 

@@ -145,17 +145,19 @@ class UserRoleController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $userRoleList = Role::where('name', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $userRoleList = Role::latest()->paginate(10);
+            $userRoleList = Role::latest()->paginate($perPage);
         }
 
         return view('pages.user-role.index', [
             'userRoleList' => $userRoleList,
+            'perPage' => $perPage,
         ]);
     }
 }

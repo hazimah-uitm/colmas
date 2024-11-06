@@ -114,17 +114,19 @@ class SoftwareController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $softwareList = Software::where('title', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $softwareList = Software::latest()->paginate(10);
+            $softwareList = Software::latest()->paginate($perPage);
         }
 
         return view('pages.software.index', [
             'softwareList' => $softwareList,
+            'perPage' => $perPage,
         ]);
     }
 

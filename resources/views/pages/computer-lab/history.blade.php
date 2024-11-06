@@ -42,7 +42,7 @@
                     @if (count($historyList) > 0)
                     @foreach ($historyList as $history)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ ($historyList->currentPage() - 1) * $historyList->perPage() + $loop->iteration }}</td>
                         <td>{{ $history->month_year->format('F Y') }}</td>
                         <td>{{ $history->code }}</td>
                         <td>{{ $history->name }}</td>

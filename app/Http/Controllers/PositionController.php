@@ -90,18 +90,20 @@ class PositionController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $positionList = Position::where('title', 'LIKE', "%$search%")
                 ->orWhere('grade', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $positionList = Position::latest()->paginate(10);
+            $positionList = Position::latest()->paginate($perPage);
         }
 
         return view('pages.position.index', [
             'positionList' => $positionList,
+            'perPage' => $perPage,
         ]);
     }
 

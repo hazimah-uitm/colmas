@@ -86,17 +86,19 @@ class AnnouncementController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $announcementList = Announcement::where('title', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $announcementList = Announcement::latest()->paginate(10);
+            $announcementList = Announcement::latest()->paginate($perPage);
         }
 
         return view('pages.announcement.index', [
             'announcementList' => $announcementList,
+            'perPage' => $perPage,
         ]);
     }
 
