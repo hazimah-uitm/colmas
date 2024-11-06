@@ -180,14 +180,11 @@ class HomeController extends Controller
             ];
         }
 
-        // Maklumat makmal with owner
-        $latestMonth = Carbon::now()->month;
-        $latestYear = Carbon::now()->year;
         // Calculate PC count for each lab using the getTotalPC method
         foreach ($ownersWithLabs as $campusId => $labs) {
             foreach ($labs as $lab) {
                 // Calculate the PC count for each lab by calling the getTotalPC method
-                $lab->pc_count = $this->getTotalPC(collect([$lab]), $latestMonth, $latestYear);
+                $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
             }
         }
 
