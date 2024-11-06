@@ -18,8 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RefreshSuperAdminPermissionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CampusSeeder::class);
-        $this->call(ComputerLabSeeder::class);
-        $this->call(ComputerLabHistorySeeder::class);
         $this->call(WorkChecklistSeeder::class);
         $this->call(LabChecklistSeeder::class);
     }
