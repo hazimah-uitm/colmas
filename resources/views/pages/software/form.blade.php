@@ -43,6 +43,19 @@
             </div>
 
             <div class="mb-3">
+                <label for="version" class="form-label">Versi</label>
+                <input type="text" class="form-control {{ $errors->has('version') ? 'is-invalid' : '' }}" id="version"
+                    name="version" value="{{ old('version') ?? ($software->version ?? '') }}">
+                @if ($errors->has('version'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('version') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3">
                 <label for="publish_status" class="form-label">Status</label>
                 <div class="form-check">
                     <input type="radio" id="aktif" name="publish_status" value="1"

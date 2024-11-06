@@ -17,6 +17,7 @@ class Software extends Model
 
     protected $fillable = [
         'title',
+        'version',
         'publish_status',
     ];
 

@@ -13,12 +13,12 @@ class SoftwareController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 10);
-    
+
         $softwareList = Software::latest()->paginate($perPage);
-    
+
         return view('pages.software.index', [
             'softwareList' => $softwareList,
-            'perPage' => $perPage, 
+            'perPage' => $perPage,
         ]);
     }
 
@@ -33,22 +33,33 @@ class SoftwareController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:software,title',
-            'publish_status' => 'required|in:1,0'
-        ],[
-            'title.unique'     => 'Nama perisian telah wujud atau masih dalam rekod dipadam',
+            'title' => 'required|string',
+            'version' => 'nullable|string',
+            'publish_status' => 'required|in:1,0',
+        ], [
             'title.required'     => 'Sila isi nama perisian',
-            'publish_status.required'     => 'Sila pilih status',
+            'publish_status.required' => 'Sila pilih status',
         ]);
 
-        $software = new Software();
+        // Ensure the combination of title and version is unique
+        $existingSoftware = Software::where('title', $request->title)
+            ->where('version', $request->version)
+            ->first();
 
+        if ($existingSoftware) {
+            return back()->withErrors([
+                'title' => 'Nama perisian dan versi telah wujud atau masih dalam rekod dipadam.',
+            ]);
+        }
+
+        $software = new Software();
         $software->fill($request->all());
         $software->save();
 
         return redirect()->route('software')
             ->with('success', 'Maklumat berjaya disimpan');
     }
+
 
     public function show($id)
     {
@@ -71,26 +82,39 @@ class SoftwareController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|unique:software,title,' . $id,
+            'title' => 'required|string',
+            'version' => 'nullable|string',
             'publish_status' => 'required|in:1,0'
-        ],[
-            'title.unique'       => 'Nama perisian telah wujud atau masih dalam rekod dipadam',
-            'title.required'     => 'Sila isi nama perisian',
-            'publish_status.required'     => 'Sila pilih status',
+        ], [
+            'title.required' => 'Sila isi nama perisian',
+            'publish_status.required' => 'Sila pilih status',
         ]);
-
+    
+        // Ensure the combination of title and version is unique, excluding the current record
+        $existingSoftware = Software::where('title', $request->title)
+            ->where('version', $request->version)
+            ->where('id', '!=', $id)  // Exclude current record by ID
+            ->first();
+    
+        if ($existingSoftware) {
+            return back()->withErrors([
+                'title' => 'Nama perisian dan versi telah wujud atau masih dalam rekod dipadam.',
+            ]);
+        }
+    
         $software = Software::findOrFail($id);
-
+    
         $software->fill($request->all());
         $software->save();
-
+    
         return redirect()->route('software')->with('success', 'Maklumat berjaya dikemaskini');
     }
+    
 
     public function search(Request $request)
     {
         $search = $request->input('search');
-    
+
         if ($search) {
             $softwareList = Software::where('title', 'LIKE', "%$search%")
                 ->latest()
@@ -98,7 +122,7 @@ class SoftwareController extends Controller
         } else {
             $softwareList = Software::latest()->paginate(10);
         }
-    
+
         return view('pages.software.index', [
             'softwareList' => $softwareList,
         ]);
