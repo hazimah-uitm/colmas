@@ -88,17 +88,19 @@ class CampusController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $campusList = Campus::where('name', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $campusList = Campus::latest()->paginate(10);
+            $campusList = Campus::latest()->paginate($perPage);
         }
 
         return view('pages.campus.index', [
             'campusList' => $campusList,
+            'perPage' => $perPage,
         ]);
     }
 

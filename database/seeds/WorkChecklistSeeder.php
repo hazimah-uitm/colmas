@@ -30,7 +30,7 @@ class WorkChecklistSeeder extends Seeder
                 'publish_status' => true,
             ],
             [
-                'title' => 'Disk Defragment',
+                'title' => 'Disk Defragmenter',
                 'publish_status' => true,
             ],
             [

@@ -39,6 +39,10 @@
                         <td>{{ $software->title }}</td>
                     </tr>
                     <tr>
+                        <th>Versi</th>
+                        <td>{{ $software->version }}</td>
+                    </tr>
+                    <tr>
                         <th>Status</th>
                         <td>{{ $software->publish_status }}</td>
                     </tr>

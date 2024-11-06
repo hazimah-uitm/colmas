@@ -214,18 +214,20 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
 
         if ($search) {
             $userList = User::where('name', 'LIKE', "%$search%")
                 ->orWhere('position_id', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $userList = User::latest()->paginate(10);
+            $userList = User::latest()->paginate($perPage);
         }
 
         return view('pages.user.index', [
             'userList' => $userList,
+            'perPage' => $perPage,
         ]);
     }
 }

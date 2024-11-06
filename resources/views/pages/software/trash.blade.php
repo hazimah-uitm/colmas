@@ -30,6 +30,7 @@
                 <thead>
                     <tr>
                         <th>Perisian</th>
+                        <th>Versi</th>
                         <th>Status</th>
                         <th>Tindakan</th>
                     </tr>
@@ -39,6 +40,7 @@
                     @foreach ($trashList as $software)
                     <tr>
                         <td>{{ $software->title }}</td>
+                        <td>{{ $software->version }}</td>
                         <td>
                             @if ($software->publish_status == 'Aktif')
                             <span class="badge bg-success">Aktif</span>
@@ -62,7 +64,7 @@
                     </tr>
                     @endforeach
                     @else
-                    <td colspan="4">Tiada rekod</td>
+                    <td colspan="5">Tiada rekod</td>
                     @endif
                 </tbody>
             </table>

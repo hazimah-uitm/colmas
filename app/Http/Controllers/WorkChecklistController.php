@@ -90,17 +90,19 @@ class WorkChecklistController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+        $perPage = $request->input('perPage', 10);
     
         if ($search) {
             $workChecklists = WorkChecklist::where('title', 'LIKE', "%$search%")
                 ->latest()
-                ->paginate(10);
+                ->paginate($perPage);
         } else {
-            $workChecklists = WorkChecklist::latest()->paginate(10);
+            $workChecklists = WorkChecklist::latest()->paginate($perPage);
         }
     
         return view('pages.work-checklist.index', [
             'workChecklists' => $workChecklists,
+            'perPage' => $perPage,
         ]);
     }
 
