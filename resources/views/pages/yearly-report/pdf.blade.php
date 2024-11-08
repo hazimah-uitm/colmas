@@ -118,7 +118,6 @@
         <h1>LAPORAN TAHUNAN SELENGGARA MAKMAL KOMPUTER {{ $currentYear }}</h1>
     </div>
 
-
     @foreach ($campusData as $data)
     <div class="campus-section">
         <h2>{{ $data['campus']->name }}</h2>

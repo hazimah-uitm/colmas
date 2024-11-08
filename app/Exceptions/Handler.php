@@ -67,10 +67,6 @@ class Handler extends ExceptionHandler
         return response()->view('errors.404', [], 404);
     }
 
-    if ($request->is('colmas/public/assets/images/*')) {
-        return response()->view('errors.403', [], 403);
-    }
-
         return parent::render($request, $exception);
     }
 }
