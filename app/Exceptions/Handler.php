@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -64,6 +65,10 @@ class Handler extends ExceptionHandler
     // Handle method not allowed exception
     if ($exception instanceof MethodNotAllowedHttpException) {
         return response()->view('errors.404', [], 404);
+    }
+
+    if ($request->is('colmas/public/assets/images/*')) {
+        return response()->view('errors.403', [], 403);
     }
 
         return parent::render($request, $exception);
