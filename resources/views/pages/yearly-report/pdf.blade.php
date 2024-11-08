@@ -121,7 +121,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>Laporan Tahunan Selenggara Makmal Komputer {{ $currentYear }}</h1>
+        <h1>LAPORAN TAHUNAN SELENGGARA MAKMAL KOMPUTER {{ $currentYear }}</h1>
     </div>
 
     <!-- Campus Tables -->
