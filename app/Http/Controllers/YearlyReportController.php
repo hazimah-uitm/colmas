@@ -181,7 +181,7 @@ class YearlyReportController extends Controller
         // Create the Dompdf instance and load the HTML
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
     
         // Stream the generated PDF
