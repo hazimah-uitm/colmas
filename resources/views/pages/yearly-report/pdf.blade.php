@@ -43,12 +43,11 @@
         }
 
         .campus-section h2 {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
             color: #333;
             background-color: #f4f4f4;
             padding: 10px 20px;
-            border-radius: 5px;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
@@ -87,10 +86,6 @@
             font-weight: bold;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
         /* Monthly columns */
         .month-column {
             width: 8%;
@@ -119,18 +114,15 @@
 </head>
 
 <body>
-    <!-- Header -->
     <div class="header">
         <h1>LAPORAN TAHUNAN SELENGGARA MAKMAL KOMPUTER {{ $currentYear }}</h1>
     </div>
 
-    <!-- Campus Tables -->
+
     @foreach ($campusData as $data)
     <div class="campus-section">
-        <!-- Beautified Campus Title -->
         <h2>{{ $data['campus']->name }}</h2>
 
-        <!-- Campus Table -->
         <table>
             <thead>
                 <tr>
