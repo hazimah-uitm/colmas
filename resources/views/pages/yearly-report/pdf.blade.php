@@ -143,7 +143,7 @@
             <tbody>
                 @foreach ($data['computerLabList'] as $lab)
                 <tr>
-                    <td>{{ $lab->name }}</td>
+                    <td style="text-align: left;">{{ $lab->name }}</td>
                     @foreach ($months as $month)
                     <td>
                         @if ($data['maintainedLabsPerMonth'][$month][$lab->id])
