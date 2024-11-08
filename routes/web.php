@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
 
     // Yearly Report
     Route::get('yearly-report', 'YearlyReportController@index')->name('yearly-report');
+    Route::get('/yearly-report/download-pdf', 'YearlyReportController@downloadPdf')->name('yearly-report.download-pdf');
 
     //Announcement
     Route::get('announcement/create', 'AnnouncementController@create')->name('announcement.create');

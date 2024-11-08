@@ -40,6 +40,7 @@
                     <div class="mb-2 ms-2 col-12 col-md-auto">
                         <button id="resetButton" class="btn btn-primary">Reset</button>
                     </div>
+                    &nbsp; <a href="{{ route('yearly-report.download-pdf', ['year' => $currentYear]) }}" class="btn btn-secondary mb-3">Muat Turun PDF</a>
                 </div>
             </form>
         </div>
