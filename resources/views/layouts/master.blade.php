@@ -68,6 +68,8 @@
 
     <!-- Bootstrap JS -->
     <script src="{{ asset('public/assets/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <!--plugins-->
     <script src="{{ asset('public/assets/js/jquery.min.js') }}"></script>
 
@@ -76,6 +78,8 @@
     <script src="{{ asset('public/assets/js/index.js') }}"></script>
     <!--app JS-->
     <script src="{{ asset('public/assets/js/app.js') }}"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get the toggle icon element
