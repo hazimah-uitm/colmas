@@ -68,10 +68,10 @@ class UserController extends Controller
             'email'    => 'required|email|unique:users,email',
             'position_id' => 'required',
             'roles'    => 'required|array|exists:roles,name',
-            'campus_id' => 'required|exists:campuses,id',
+            'campus_id' => 'required|array|exists:campuses,id',
             'office_phone_no' => 'nullable|string',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama pengguna',
             'staff_id.required' => 'Sila isi no. pekerja pengguna',
             'staff_id.unique' => 'No. pekerja telah wujud',
@@ -82,24 +82,27 @@ class UserController extends Controller
             'campus_id.required' => 'Sila isi kampus pengguna',
             'publish_status.required' => 'Sila isi status pengguna',
         ]);
-    
+
         $user = new User();
-        $user->fill($request->except('roles'));
+        $user->fill($request->except('roles', 'campus_id'));
         $user->password = null; // Password will be set later via email link
         $user->email_verified_at = null; // Email verification pending
         $user->save();
-    
+
         // Assign roles to the user
         $user->assignRole($request->input('roles'));
-    
+
+        // Attach campus to the user
+        $user->campus()->attach($request->input('campus_id'));
+
         // Send password reset link to the new user with the isNewAccount flag set to true
         $token = Password::broker()->createToken($user);
         $user->notify(new ResetPasswordNotification($token, true));
-    
+
         return redirect()->route('user')
             ->with('success', 'Maklumat berjaya disimpan');
     }
-    
+
 
 
 
@@ -149,10 +152,10 @@ class UserController extends Controller
             'email'      => 'required|email|unique:users,email,' . $id,
             'position_id' => 'required|exists:positions,id',
             'roles'      => 'required|array|exists:roles,name',
-            'campus_id'  => 'required|exists:campuses,id',
+            'campus_id'  => 'required|array|exists:campuses,id',
             'office_phone_number' => 'nullable|string',
             'publish_status' => 'required|in:1,0',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama pengguna',
             'staff_id.required' => 'Sila isi no. pekerja pengguna',
             'staff_id.unique' => 'No. pekerja telah wujud',
@@ -165,7 +168,7 @@ class UserController extends Controller
         ]);
 
         $user = User::findOrFail($id);
-        $user->fill($request->except('roles', 'password'));
+        $user->fill($request->except('roles', 'password', 'campus_id'));
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->input('password'));
@@ -174,6 +177,8 @@ class UserController extends Controller
         $user->save();
 
         $user->syncRoles($request->input('roles'));
+
+        $user->campus()->sync($request->input('campus_id'));
 
         return redirect()->route('user')
             ->with('success', 'Maklumat berjaya dikemaskini');

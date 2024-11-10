@@ -27,7 +27,7 @@ class Campus extends Model
     
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'campus_user');
     }
 
     public function computerLab()

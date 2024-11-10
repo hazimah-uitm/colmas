@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->unsignedBigInteger('position_id');
-            $table->unsignedBigInteger('campus_id');
             $table->string('office_phone_no')->nullable();
             $table->boolean('publish_status');
             $table->rememberToken();

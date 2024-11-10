@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function campus()
     {
-        return $this->belongsTo(Campus::class);
+        return $this->belongsToMany(Campus::class, 'campus_user');
     }
 
     public function position()
