@@ -142,7 +142,8 @@
         $(document).ready(function() {
             $('#software-select').select2({
                 placeholder: 'Pilih Perisian',
-                allowClear: true
+                allowClear: true,
+                closeOnSelect: false
             });
         });
     </script>

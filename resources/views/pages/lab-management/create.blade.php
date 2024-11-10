@@ -148,7 +148,8 @@
         $(document).ready(function() {
             $('#software-select').select2({
                 placeholder: 'Select Software', // Customize the placeholder text here
-                allowClear: true
+                allowClear: true,
+                closeOnSelect: false
             });
         });
     </script>
