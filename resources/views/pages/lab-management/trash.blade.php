@@ -30,13 +30,13 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>No.</th>
+                        <th>#</th>
+                        <th>Kampus</th>
                         <th>Makmal Komputer</th>
-                        <th>Masa Mula</th>
-                        <th>Masa Tamat</th>
-                        <th>Senarai Semak Makmal</th>
-                        <th>Senarai Perisian</th>
-                        <th>Bil. Komputer</th>
+                        <th>Pemilik</th>
+                        <th>Bil. PC</th>
+                        <th>Bulan</th>
+                        <th>Tahun</th>
                         <th>Status</th>
                         <th>Tindakan</th>
                     </tr>
@@ -47,53 +47,13 @@
                     <tr>
                         <td>{{ ($trashList->currentPage() - 1) * $trashList->perPage() + $loop->iteration }}
                         </td>
+                        <td>{{ $trash->computerLab->campus->name }}</td>
                         <td>{{ $trash->computerLab->name }}</td>
-                        <td>{{ $trash->start_time }}</td>
-                        <td>{{ $trash->end_time }}</td>
-                        <td>
-                            @if (!empty($trash->lab_checklist_id))
-                            <ul style="list-style-type: none; padding: 0;">
-                                @foreach ($labCheckList as $labCheck)
-                                @php
-                                $isSelected = in_array($labCheck->id, $trash->lab_checklist_id);
-                                @endphp
-                                <li style="list-style-type: none; margin-bottom: 5px;">
-                                    @if ($isSelected)
-                                    <span class="tick-icon">&#10004;</span>
-                                    @else
-                                    <span class="empty-icon" style="color: red">&#9744;</span>
-                                    @endif
-                                    {{ $labCheck->title }}
-                                </li>
-                                @endforeach
-                            </ul>
-                            @else
-                            <p>-</p>
-                            @endif
-                        </td>
-                        <td>
-                            @if (!empty($trash->software_id))
-                            <ul style="list-style-type: none; padding: 0;">
-                                @foreach ($softwareList as $software)
-                                @php
-                                $isSelected = in_array($software->id, $trash->software_id);
-                                @endphp
-                                <li style="list-style-type: none; margin-bottom: 5px;">
-                                    @if ($isSelected)
-                                    <span class="tick-icon">&#10004;</span>
-                                    @else
-                                    <span class="empty-icon" style="color: red">&#9744;</span>
-                                    @endif
-                                    {{ $software->title }}
-                                </li>
-                                @endforeach
-                            </ul>
-                            @else
-                            <p>-</p>
-                            @endif
-                        </td>
+                        <td>{{ $trash->computerLab->pemilik->name }}</td>
                         <td>{{ $trash->computer_no }}</td>
-                        <td>{{ $trash->status }}</td>
+                        <td>{{ $trash->month }}</td>
+                        <td>{{ $trash->year }}</td>
+                        <td>{{ str_replace('_', ' ', ucwords(strtolower($trash->status))) ?? '-'}}</td>
                         <td>
                             <a href="{{ route('lab-management.restore', $trash->id) }}"
                                 class="btn btn-success btn-sm">
@@ -110,7 +70,7 @@
                     </tr>
                     @endforeach
                     @else
-                    <td colspan="4">Tiada rekod</td>
+                    <td colspan="9">Tiada rekod</td>
                     @endif
                 </tbody>
             </table>
