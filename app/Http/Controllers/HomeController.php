@@ -47,16 +47,21 @@ class HomeController extends Controller
             $computerLabList = ComputerLab::where('publish_status', 1)->get();
             $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            // Pegawai Penyemak only sees lab management data for labs in their campus
-            $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
-                $query->where('campus_id', $user->campus_id);
+            $userCampusIds = $user->campus->pluck('id')->toArray();
+            
+            // Pegawai Penyemak only sees lab management data for labs in their campuses
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($userCampusIds) {
+                $query->whereIn('campus_id', $userCampusIds);
             });
+            
             $computerLabList = ComputerLab::where('publish_status', 1)
-                ->where('campus_id', $user->campus_id)
+                ->whereIn('campus_id', $userCampusIds)
                 ->get();
+            
             // Owner with lab
-            $ownersWithLabsQuery->where('campus_id', $user->campus_id);
-            $campusList = Campus::with('computerLab')->where('id', $user->campus_id)->get();
+            $ownersWithLabsQuery->whereIn('campus_id', $userCampusIds);
+            
+            $campusList = Campus::with('computerLab')->whereIn('id', $userCampusIds)->get();        
         } else {
             // Regular Pemilik only sees lab management data for their own labs
             $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
