@@ -163,10 +163,11 @@
         const campusId = this.value;
         const pemilikSelect = document.getElementById('pemilik_id');
 
-        // Clear current options
+        // Clear current options and add the "Pilih Pemilik" placeholder
         pemilikSelect.innerHTML = '<option value="" disabled selected>--- Pilih Pemilik ---</option>';
 
         if (campusId) {
+            // Fetch Pemilik data based on campus
             fetch(`${pemilikUrl}/${campusId}`)
                 .then(response => {
                     if (!response.ok) {
@@ -175,7 +176,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Pemilik data:', data);
+                    // If we have data, populate the select field
                     if (data.length > 0) {
                         data.forEach(pemilik => {
                             const option = document.createElement('option');
@@ -184,6 +185,7 @@
                             pemilikSelect.appendChild(option);
                         });
                     } else {
+                        // If no data is found, show "Tiada rekod" option
                         const noRecordOption = document.createElement('option');
                         noRecordOption.value = "";
                         noRecordOption.textContent = "Tiada rekod";

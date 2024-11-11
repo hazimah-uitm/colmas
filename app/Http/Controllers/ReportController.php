@@ -40,7 +40,8 @@ class ReportController extends Controller
             // Admin or superadmin can access all labs
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                $query->where('campus_id', $user->campus_id);
+                // Filter labs based on the campuses associated with the user
+                $query->whereIn('campus_id', $user->campus->pluck('id'));
             });
         } else {
             $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));

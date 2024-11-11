@@ -46,7 +46,8 @@ class LabManagementController extends Controller
             // Admin or superadmin can access all labs
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                $query->where('campus_id', $user->campus_id);
+                // Filter labs based on the campuses associated with the user
+                $query->whereIn('campus_id', $user->campus->pluck('id'));
             });
         } else {
             $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
@@ -350,20 +351,26 @@ class LabManagementController extends Controller
     protected function sendNotificationEmail(LabManagement $labManagement, $submitterName)
     {
         $pemilik = $labManagement->submittedBy;
-
-        $campus = $pemilik->campus;
-
+    
+        $campuses = $pemilik->campus;
+    
+        // Retrieve all Pegawai Penyemak associated with the pemilik's campuses
         $pegawaiPenyemak = User::role('Pegawai Penyemak')
-            ->where('campus_id', $campus->id)
-            ->first();
-
-        if ($pegawaiPenyemak) {
-            $pegawaiPenyemak->notify(new ReportNotification($labManagement, $pegawaiPenyemak->name, $submitterName));
+            ->whereHas('campus', function ($query) use ($campuses) {
+                $query->whereIn('campuses.id', $campuses->pluck('id')); 
+            })
+            ->get();
+    
+        if ($pegawaiPenyemak->isNotEmpty()) {
+            // Notify each Pegawai Penyemak
+            foreach ($pegawaiPenyemak as $penyemak) {
+                $penyemak->notify(new ReportNotification($labManagement, $penyemak->name, $submitterName));
+            }
         } else {
-            Log::error('No Pegawai Penyemak found for the campus with ID: ' . $campus->id);
+            Log::error('No Pegawai Penyemak found for the campuses with IDs: ' . implode(',', $campuses->pluck('id')->toArray()));
         }
-    }
-
+    }    
+    
     public function check(Request $request, $id)
     {
         $user = User::find(auth()->id());
@@ -428,7 +435,8 @@ class LabManagementController extends Controller
             // Admin or superadmin can access all labs
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                $query->where('campus_id', $user->campus_id);
+                // Filter labs based on the campuses associated with the user
+                $query->whereIn('campus_id', $user->campus->pluck('id'));
             });
         } else {
             $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));

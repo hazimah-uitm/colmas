@@ -28,7 +28,6 @@ class User extends Authenticatable
         'email', 
         'password',
         'position_id',
-        'campus_id',
         'office_phone_no',
         'publish_status'
     ];

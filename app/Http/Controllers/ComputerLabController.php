@@ -28,9 +28,10 @@ class ComputerLabController extends Controller
 
     public function create()
     {
+        // Get list of Pemilik and Kampus
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
-
+    
         return view('pages.computer-lab.create', [
             'save_route' => route('computer-lab.store'),
             'campusList' => $campusList,
@@ -38,17 +39,19 @@ class ComputerLabController extends Controller
             'str_mode' => 'Tambah',
         ]);
     }
-
+    
     public function getPemilikByCampus($campusId)
     {
         $pemilikList = User::role('Pemilik')
             ->where('publish_status', 1)
-            ->where('campus_id', $campusId)
+            ->whereHas('campus', function($query) use ($campusId) {
+                $query->where('campuses.id', $campusId);
+            })
             ->get();
     
         return response()->json($pemilikList);
-    } 
-
+    }    
+    
     public function store(Request $request)
     {
         $request->validate([

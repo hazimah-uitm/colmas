@@ -37,9 +37,9 @@ class YearlyReportController extends Controller
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             // Superadmin can see all labs
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            // Filter based on campus
             $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                $query->where('campus_id', $user->campus_id);
+                // Filter labs based on the campuses associated with the user
+                $query->whereIn('campus_id', $user->campus->pluck('id'));
             });
         } else {
             // Filter based on assigned labs
@@ -51,7 +51,8 @@ class YearlyReportController extends Controller
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            $campusList = Campus::with('computerLab')->where('id', $user->campus_id)->get();
+            // Get campuses associated with the user and eagerly load 'computerLab' relationship
+            $campusList = $user->campus()->with('computerLab')->get();        
         } else {
             $assignedComputerLabs = $user->assignedComputerLabs;
             $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
@@ -110,9 +111,9 @@ class YearlyReportController extends Controller
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             // Superadmin can see all labs
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            // Filter based on campus
             $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                $query->where('campus_id', $user->campus_id);
+                // Filter labs based on the campuses associated with the user
+                $query->whereIn('campus_id', $user->campus->pluck('id'));
             });
         } else {
             // Filter based on assigned labs
@@ -124,7 +125,8 @@ class YearlyReportController extends Controller
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            $campusList = Campus::with('computerLab')->where('id', $user->campus_id)->get();
+            // Get the campuses associated with the user
+            $campusList = $user->campus()->with('computerLab')->get();        
         } else {
             $assignedComputerLabs = $user->assignedComputerLabs;
             $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
