@@ -132,9 +132,29 @@ class HomeController extends Controller
         $campusData = [];
     
         foreach ($campusList as $campus) {
-            $computerLabList = ComputerLab::where('publish_status', 1)
-                ->where('campus_id', $campus->id)
-                ->get();
+            if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+                // Admin and Superadmin see all labs in each campus
+                $computerLabList = ComputerLab::where('publish_status', 1)
+                    ->where('campus_id', $campus->id)
+                    ->get();
+            } elseif ($user->hasRole('Pegawai Penyemak')) {
+                $userCampusIds = $user->campus->pluck('id')->toArray();
+                
+                // Pegawai Penyemak sees labs only in campuses they are associated with
+                if (in_array($campus->id, $userCampusIds)) {
+                    $computerLabList = ComputerLab::where('publish_status', 1)
+                        ->where('campus_id', $campus->id)
+                        ->get();
+                } else {
+                    $computerLabList = collect(); // Empty collection if they don’t have access
+                }
+            } else {
+                // Regular Pemilik only sees labs they own
+                $computerLabList = ComputerLab::where('publish_status', 1)
+                    ->where('campus_id', $campus->id)
+                    ->where('pemilik_id', $user->id)
+                    ->get();
+            }
         
             $maintainedLabsPerMonth = [];
             foreach ($months as $month) {
@@ -148,7 +168,6 @@ class HomeController extends Controller
                     ->pluck('computer_lab_id')
                     ->unique();
         
-                // Check if the lab was maintained
                 $maintainedLabsPerMonth[$month] = $computerLabList->mapWithKeys(function ($lab) use ($maintainedLabsThisMonth) {
                     return [$lab->id => $maintainedLabsThisMonth->contains($lab->id)];
                 });
@@ -161,11 +180,8 @@ class HomeController extends Controller
             ];
         }
         
-
-        // Fetch lists for the view
         $campusList = Campus::all();
 
-        // Format lab management data for the view
         foreach ($labManagementData as $labManagement) {
             $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
             $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
