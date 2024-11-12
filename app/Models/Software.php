@@ -30,4 +30,9 @@ class Software extends Model
     {
         return $this->hasMany(LabManagement::class);
     }
+
+    public function computerLab()
+    {
+        return $this->hasMany(ComputerLab::class);
+    }
 }

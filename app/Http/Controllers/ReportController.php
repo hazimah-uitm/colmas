@@ -136,7 +136,6 @@ class ReportController extends Controller
             'computerLabList' => $computerLabList,
             'workChecklists' => $workChecklists,
             'selectedlabChecks' => $labManagement->lab_checklist_id,
-            'selectedWorkChecklists' => $labManagement->software_id,
         ]);
     }
 

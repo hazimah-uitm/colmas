@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Campus;
 use App\Models\ComputerLab;
 use App\Models\ComputerLabHistory;
+use App\Models\Software;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -31,11 +32,13 @@ class ComputerLabController extends Controller
         // Get list of Pemilik and Kampus
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
-    
+        $softwareList = Software::where('publish_status', 1)->get();
+
         return view('pages.computer-lab.create', [
             'save_route' => route('computer-lab.store'),
             'campusList' => $campusList,
             'pemilikList' => $pemilikList,
+            'softwareList' => $softwareList,
             'str_mode' => 'Tambah',
         ]);
     }
@@ -65,6 +68,7 @@ class ComputerLabController extends Controller
             ],
             'campus_id' => 'required|exists:campuses,id',
             'pemilik_id' => 'required',
+            'software_id' => 'nullable|array',
             'username' => 'required',
             'password' => 'required',
             'no_of_computer' => 'required',
@@ -83,6 +87,7 @@ class ComputerLabController extends Controller
 
         $computerLab = new ComputerLab();
         $computerLab->fill($request->all());
+        $computerLab->software_id = $request->input('software_id', []);
         $computerLab->save();
 
         $this->logHistory($computerLab, 'Tambah');
@@ -94,9 +99,11 @@ class ComputerLabController extends Controller
     public function show($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
+        $softwareList = Software::where('publish_status', 1)->get();
 
         return view('pages.computer-lab.view', [
             'computerLab' => $computerLab,
+            'softwareList' => $softwareList,
         ]);
     }
 
@@ -105,10 +112,12 @@ class ComputerLabController extends Controller
         $computerLab = ComputerLab::findOrFail($id);
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
+        $softwareList = Software::where('publish_status', 1)->get();
     
         return view('pages.computer-lab.edit', [
             'save_route' => route('computer-lab.update', $computerLab->id),
             'campusList' => $campusList,
+            'softwareList' => $softwareList,
             'pemilikList' => $pemilikList,
             'computerLab' => $computerLab,
             'str_mode' => 'Kemaskini',
@@ -128,6 +137,7 @@ class ComputerLabController extends Controller
             ],
             'campus_id' => 'required|exists:campuses,id',
             'pemilik_id' => 'required',
+            'software_id' => 'nullable|array',
             'username' => 'required',
             'password' => 'required',
             'no_of_computer' => 'required',
@@ -146,6 +156,7 @@ class ComputerLabController extends Controller
 
         $computerLab = ComputerLab::findOrFail($id);
         $computerLab->fill($request->all());
+        $computerLab->software_id = $request->input('software_id', []); 
         $computerLab->save();
 
         $this->logHistory($computerLab, 'Kemaskini');

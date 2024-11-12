@@ -22,8 +22,13 @@ class ComputerLab extends Model
         'pemilik_id',
         'username',
         'password',
+        'software_id',
         'no_of_computer',
         'publish_status'
+    ];
+
+    protected $casts = [
+        'software_id' => 'array',
     ];
 
     public function getPublishStatusAttribute()
@@ -34,6 +39,11 @@ class ComputerLab extends Model
     public function pemilik()
     {
         return $this->belongsTo(User::class, 'pemilik_id');
+    }
+
+    public function software()
+    {
+        return $this->belongsTo(Software::class, 'software_id');
     }
 
     public function campus()
