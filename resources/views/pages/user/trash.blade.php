@@ -46,7 +46,11 @@
                         <td>{{ $user->staff_id }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->position->title }} ({{ $user->position->grade }})</td>
-                        <td>{{ $user->campus->name }}</td>
+                        <td>
+                            @foreach ($user->campus as $campus)
+                            {{ $campus->name }}<br>
+                            @endforeach
+                        </td>
                         <td>
                             @if ($user->roles->count() === 1)
                             {{ ucwords(str_replace('-', ' ', $user->roles->first()->name)) }}
