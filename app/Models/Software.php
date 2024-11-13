@@ -33,6 +33,7 @@ class Software extends Model
 
     public function computerLab()
     {
-        return $this->hasMany(ComputerLab::class);
+        return $this->belongsToMany(ComputerLab::class, 'computer_lab_software');
     }
+
 }

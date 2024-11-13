@@ -99,12 +99,10 @@ class LabManagementController extends Controller
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
 
-        $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         return view('pages.lab-management.create', [
             'save_route' => route('lab-management.store'),
             'str_mode' => 'Tambah',
-            'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
             'computerLabList' => $computerLabList,
         ]);
@@ -115,7 +113,6 @@ class LabManagementController extends Controller
         $request->validate([
             'computer_lab_id' => 'required',
             'lab_checklist_id' => 'required|array',
-            'software_id' => 'nullable|array',
             'start_time' => 'nullable|date',
             'end_time' => 'nullable|date',
             'computer_no' => 'required',
@@ -163,7 +160,6 @@ class LabManagementController extends Controller
         }
 
         $labManagement->lab_checklist_id = $request->input('lab_checklist_id', []);
-        $labManagement->software_id = $request->input('software_id', []);
         $labManagement->pc_unmaintenance_no = $labManagement->computer_no - $labManagement->pc_maintenance_no - $labManagement->pc_damage_no;
         $labManagement->save();
 
@@ -177,26 +173,26 @@ class LabManagementController extends Controller
         $computerLabList = $user->hasRole('Pemilik')
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
-        $softwareList = Software::where('publish_status', 1)->get();
+        
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($id);
+    
         $labManagement->date = Carbon::parse($labManagement->start_time)->format('d-m-Y');
         $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
         $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
         $labManagement->startTime = Carbon::parse($labManagement->start_time)->format('H:i');
         $labManagement->endTime = $labManagement->end_time ? Carbon::parse($labManagement->end_time)->format('H:i') : null;
-
+    
         return view('pages.lab-management.view', [
             'labManagement' => $labManagement,
-            'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
             'computerLabList' => $computerLabList,
             'workChecklists' => $workChecklists,
             'selectedlabChecks' => $labManagement->lab_checklist_id,
-            'selectedWorkChecklists' => $labManagement->software_id,
         ]);
     }
+    
 
     public function edit(Request $request, $id)
     {
@@ -204,7 +200,6 @@ class LabManagementController extends Controller
         $computerLabList = $user->hasRole('Pemilik')
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
-        $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($id);
 
@@ -212,7 +207,6 @@ class LabManagementController extends Controller
             'save_route' => route('lab-management.update', $id),
             'str_mode' => 'Kemas Kini',
             'labManagement' => $labManagement,
-            'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
             'computerLabList' => $computerLabList,
             'selectedlabChecks' => $labManagement->lab_checklist_id,
@@ -226,7 +220,6 @@ class LabManagementController extends Controller
         $request->validate([
             'computer_lab_id' => 'required',
             'lab_checklist_id' => 'required|array',
-            'software_id' => 'nullable|array',
             'start_time' => 'nullable|date',
             'end_time' => 'nullable|date',
             'computer_no' => 'required',
@@ -278,8 +271,7 @@ class LabManagementController extends Controller
 
         // Update fields
         $labManagement->fill($request->all());
-        $labManagement->lab_checklist_id = $request->input('lab_checklist_id', []); // Store as JSON array
-        $labManagement->software_id = $request->input('software_id', []); // Store as JSON array
+        $labManagement->lab_checklist_id = $request->input('lab_checklist_id', []);
         $labManagement->pc_unmaintenance_no = $labManagement->computer_no - $labManagement->pc_maintenance_no - $labManagement->pc_damage_no;
         $labManagement->save();
 
@@ -324,7 +316,6 @@ class LabManagementController extends Controller
         $computerLabList = $user->hasRole('Pemilik')
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
-        $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($id);
@@ -337,7 +328,6 @@ class LabManagementController extends Controller
         return view('pages.lab-management.report-detail', [
             'save_route' => route('lab-management.submit', $id),
             'labManagement' => $labManagement,
-            'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
             'computerLabList' => $computerLabList,
             'workChecklists' => $workChecklists,
@@ -388,7 +378,6 @@ class LabManagementController extends Controller
         $computerLabList = $user->hasRole('Pemilik')
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
-        $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($id);
@@ -401,7 +390,6 @@ class LabManagementController extends Controller
         return view('pages.lab-management.check-detail', [
             'save_route' => route('lab-management.check', $id),
             'labManagement' => $labManagement,
-            'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
             'computerLabList' => $computerLabList,
             'workChecklists' => $workChecklists,
@@ -479,7 +467,6 @@ class LabManagementController extends Controller
         $labManagementList = $labManagementList->paginate($perPage);
 
         // Fetch additional lists
-        $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $computerLabList = ComputerLab::whereIn('id', $assignedComputerLabs->pluck('id'))->get();
         $pemilikList = User::role('Pemilik')
@@ -501,7 +488,6 @@ class LabManagementController extends Controller
         return view('pages.lab-management.index', [
             'labManagementList' => $labManagementList,
             'perPage' => $perPage,
-            'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
             'computerLabList' => $computerLabList,
             'pemilikList' => $pemilikList,

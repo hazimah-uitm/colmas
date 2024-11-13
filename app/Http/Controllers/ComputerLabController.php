@@ -86,9 +86,10 @@ class ComputerLabController extends Controller
         ]);
 
         $computerLab = new ComputerLab();
-        $computerLab->fill($request->all());
-        $computerLab->software_id = $request->input('software_id', []);
+        $computerLab->fill($request->except('software_id'));
         $computerLab->save();
+
+        $computerLab->software()->attach($request->input('software_id'));
 
         $this->logHistory($computerLab, 'Tambah');
 
@@ -155,9 +156,10 @@ class ComputerLabController extends Controller
         ]);
 
         $computerLab = ComputerLab::findOrFail($id);
-        $computerLab->fill($request->all());
-        $computerLab->software_id = $request->input('software_id', []); 
+        $computerLab->fill($request->except('software_id'));
         $computerLab->save();
+
+        $computerLab->software()->sync($request->input('software_id'));
 
         $this->logHistory($computerLab, 'Kemaskini');
 

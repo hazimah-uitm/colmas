@@ -105,25 +105,6 @@
                     @endif
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Senarai Perisian</label>
-                    <select class="form-select {{ $errors->has('software_id') ? 'is-invalid' : '' }}" name="software_id[]"
-                        multiple="multiple" id="software-select">
-                        @foreach ($softwareList as $software)
-                            <option value="{{ $software->id }}" @if (in_array($software->id, old('software_id', $labManagement->software_id ?? []))) selected @endif>
-                                {{ $software->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('software_id'))
-                        <div class="invalid-feedback">
-                            @foreach ($errors->get('software_id') as $error)
-                                {{ $error }}
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
                 <input type="hidden" name="status" value="draft">
                 <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>
             </form>

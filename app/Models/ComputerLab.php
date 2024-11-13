@@ -22,13 +22,8 @@ class ComputerLab extends Model
         'pemilik_id',
         'username',
         'password',
-        'software_id',
         'no_of_computer',
         'publish_status'
-    ];
-
-    protected $casts = [
-        'software_id' => 'array',
     ];
 
     public function getPublishStatusAttribute()
@@ -43,7 +38,12 @@ class ComputerLab extends Model
 
     public function software()
     {
-        return $this->belongsTo(Software::class, 'software_id');
+        return $this->belongsToMany(Software::class, 'computer_lab_software');
+    }
+    
+    public function labManagement()
+    {
+        return $this->hasMany(LabManagement::class, 'computer_lab_id');
     }
 
     public function campus()
@@ -54,11 +54,6 @@ class ComputerLab extends Model
     public function maintenanceRecord()
     {
         return $this->hasMany(MaintenanceRecord::class);
-    }
-
-    public function labManagement()
-    {
-        return $this->hasMany(LabManagement::class, 'computer_lab_id');
     }
 
     public function histories()

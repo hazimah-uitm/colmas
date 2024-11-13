@@ -112,25 +112,6 @@
                     @endif
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Senarai Perisian</label>
-                    <select class="form-select {{ $errors->has('software_id') ? 'is-invalid' : '' }}" name="software_id[]"
-                        multiple="multiple" id="software-select">
-                        @foreach ($softwareList as $software)
-                            <option value="{{ $software->id }}" @if (in_array($software->id, old('software_id', $selectedWorkChecklist ?? []))) selected @endif>
-                                {{ $software->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('software_id'))
-                        <div class="invalid-feedback">
-                            @foreach ($errors->get('software_id') as $error)
-                                {{ $error }}
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
                 <input type="hidden" name="status" value="draft">
                 <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>
             </form>
@@ -143,14 +124,6 @@
             var numberOfComputers = selectedOption.getAttribute('data-computers');
             document.getElementById('computer_no').value = numberOfComputers;
             document.getElementById('hidden_computer_no').value = numberOfComputers;
-        });
-
-        $(document).ready(function() {
-            $('#software-select').select2({
-                placeholder: 'Select Software', 
-                allowClear: true,
-                closeOnSelect: false
-            });
         });
     </script>
 @endsection

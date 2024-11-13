@@ -41,7 +41,7 @@
                     @if (count($trashList) > 0)
                     @foreach ($trashList as $computerLab)
                     <tr>
-                        <td>{{ ($trashLabList->currentPage() - 1) * $trashLabList->perPage() + $loop->iteration }}</td>
+                        <td>{{ ($trashList->currentPage() - 1) * $trashList->perPage() + $loop->iteration }}</td>
                         <td>{{ $computerLab->code }}</td>
                         <td>{{ $computerLab->name }}</td>
                         <td>{{ $computerLab->campus->name }}</td>

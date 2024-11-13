@@ -52,10 +52,10 @@
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
-                            <th>Bulan</th>
-                            <th>Tahun</th>
-                            <th>Tarikh/Masa Mula</th>
-                            <th>Tarikh/Masa Tamat</th>
+                            <th style="width: 25%">Bulan</th>
+                            <th style="width: 25%">Tahun</th>
+                            <th style="width: 25%">Tarikh/Masa Mula</th>
+                            <th style="width: 25%">Tarikh/Masa Tamat</th>
                         </tr>
                         <tr>
                             <td>{{ $labManagement->month }}</td>
@@ -69,10 +69,10 @@
                     <table class="table table-bordered">
                         <thead class="bg-light">
                             <tr>
-                                <th class="text-center">Bil. Keseluruhan Komputer</th>
-                                <th class="text-center">Bil. Komputer Telah Diselenggara</th>
-                                <th class="text-center">Bil. Komputer Rosak</th>
-                                <th class="text-center">Bil. Komputer Belum Diselenggara</th>
+                                <th class="text-center" style="width: 25%">Bil. Keseluruhan Komputer</th>
+                                <th class="text-center" style="width: 25%">Bil. Komputer Telah Diselenggara</th>
+                                <th class="text-center" style="width: 25%">Bil. Komputer Rosak</th>
+                                <th class="text-center" style="width: 25%">Bil. Komputer Belum Diselenggara</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -179,49 +179,46 @@
                     <div class="card-body">
                         <h6 class="mb-3 text-uppercase">Senarai Perisian</h6>
                         <div class="row">
-                            @foreach ($softwareList as $software)
-                            @if (!empty($labManagement->software_id) && in_array($software->id, $labManagement->software_id))
+                            @foreach ($labManagement->computerLab->software as $software)
                             <div class="col-md-6 mb-2">
                                 <div class="d-flex align-items-center">
-                                    <span class="me-2">&#10004;</span> <!-- Tick icon -->
-                                    {{ $software->title }}
+                                    <span class="me-2">&#10004;</span>
+                                    {{ $software->title }} {{ $software->version }}
                                 </div>
                             </div>
-                            @endif
                             @endforeach
                         </div>
                     </div>
                 </div>
-
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
-                            <th>Catatan/Ulasan Pemilik</th>
-                            <td>{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
+                            <th style="width: 50%">Catatan/Ulasan Pemilik</th>
+                            <td style="width: 50%">{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
                         </tr>
                         <tr>
-                            <th>Catatan/Ulasan Pegawai Penyemak</th>
-                            <td>{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
+                            <th style="width: 50%">Catatan/Ulasan Pegawai Penyemak</th>
+                            <td style="width: 50%">{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
                         </tr>
                         <tr>
-                            <th>Status</th>
-                            <td>{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
+                            <th style="width: 50%">Status</th>
+                            <td style="width: 50%">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
                         </tr>
                     </table>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
-                            <th>Dihantar oleh</th>
-                            <td>{{ $labManagement->submittedBy->name ?? '-' }}</td>
-                            <th>Dihantar pada</th>
-                            <td>{{ $labManagement->submitted_at ?? '-' }}</td>
+                            <th style="width: 25%">Dihantar oleh</th>
+                            <td style="width: 25%">{{ $labManagement->submittedBy->name ?? '-' }}</td>
+                            <th style="width: 25%">Dihantar pada</th>
+                            <td style="width: 25%">{{ $labManagement->submitted_at ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <th>Disemak oleh</th>
-                            <td>{{ $labManagement->checkedBy->name ?? '-' }}</td>
-                            <th>Disemak pada</th>
-                            <td>{{ $labManagement->checked_at ?? '-' }}</td>
+                            <th style="width: 25%">Disemak oleh</th>
+                            <td style="width: 25%">{{ $labManagement->checkedBy->name ?? '-' }}</td>
+                            <th style="width: 25%">Disemak pada</th>
+                            <td style="width: 25%">{{ $labManagement->checked_at ?? '-' }}</td>
                         </tr>
                     </table>
                 </div>

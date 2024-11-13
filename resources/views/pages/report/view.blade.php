@@ -175,32 +175,29 @@
                         </table>
                     </div>
                 </div>
-                <div class="card shadow">
+                <div class="card">
                     <div class="card-body">
                         <h6 class="mb-3 text-uppercase">Senarai Perisian</h6>
-                        <hr />
                         <div class="row">
-                            @foreach ($softwareList as $software)
-                            @if (!empty($labManagement->software_id) && in_array($software->id, $labManagement->software_id))
+                            @foreach ($labManagement->computerLab->software as $software)
                             <div class="col-md-6 mb-2">
                                 <div class="d-flex align-items-center">
                                     <span class="me-2">&#10004;</span>
-                                    {{ $software->title }}
+                                    {{ $software->title }} {{ $software->version }}
                                 </div>
                             </div>
-                            @endif
                             @endforeach
                         </div>
                     </div>
                 </div>
                 <table class="table table-borderless">
                     <tr>
-                        <th>Catatan/Ulasan Pemilik</th>
-                        <td>{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
+                        <th style="width: 50%">Catatan/Ulasan Pemilik</th>
+                        <td style="width: 50%">{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
                     </tr>
                     <tr>
-                        <th>Catatan/Ulasan Pegawai Penyemak</th>
-                        <td>{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
+                        <th style="width: 50%">Catatan/Ulasan Pegawai Penyemak</th>
+                        <td style="width: 50%">{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
                     </tr>
                     <tr>
                         <th>Status</th>

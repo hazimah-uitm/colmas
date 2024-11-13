@@ -171,20 +171,17 @@
                             </table>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body">
                             <h6 class="mb-3 text-uppercase">Senarai Perisian</h6>
                             <div class="row">
-                                @foreach ($softwareList as $software)
-                                @if (!empty($labManagement->software_id) && in_array($software->id, $labManagement->software_id))
+                                @foreach ($labManagement->computerLab->software as $software)
                                 <div class="col-md-6 mb-2">
                                     <div class="d-flex align-items-center">
                                         <span class="me-2">&#10004;</span>
-                                        {{ $software->title }}
+                                        {{ $software->title }} {{ $software->version }}
                                     </div>
                                 </div>
-                                @endif
                                 @endforeach
                             </div>
                         </div>
