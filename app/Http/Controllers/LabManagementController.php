@@ -134,10 +134,8 @@ class LabManagementController extends Controller
             'lab_checklist_id.required' => 'Sila isi senarai semak makmal sebelum hantar.',
         ]);
 
-        // Normalize the start date to Year-Month format
         $startDateMonthYear = Carbon::parse($request->start_time)->timezone('Asia/Kuching')->format('Y-m');
 
-        // Check for existing record with the same computer_lab_id and start_date (month and year)
         $existingRecord = LabManagement::where('computer_lab_id', $request->computer_lab_id)
             ->withTrashed()
             ->whereRaw("DATE_FORMAT(start_time, '%Y-%m') = ?", [$startDateMonthYear])

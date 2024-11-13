@@ -147,7 +147,7 @@
 
         $(document).ready(function() {
             $('#software-select').select2({
-                placeholder: 'Select Software', // Customize the placeholder text here
+                placeholder: 'Select Software', 
                 allowClear: true,
                 closeOnSelect: false
             });

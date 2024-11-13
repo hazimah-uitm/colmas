@@ -24,7 +24,6 @@ class CreateComputerLabsTable extends Migration
             $table->integer('no_of_computer');
             $table->string('username');
             $table->string('password');
-            $table->text('software_id')->nullable();
             $table->boolean('publish_status');
             $table->softDeletes();
             $table->timestamps();
