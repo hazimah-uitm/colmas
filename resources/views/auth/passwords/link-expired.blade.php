@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <div class="border p-4 rounded">
                                 <div class="text-center mb-4">
-                                    <h3 class="">Link Tamat Tempoh</h3>
+                                    <h3 class="">Pautan Tamat Tempoh</h3>
                                 </div>
                                 <div class="text-center mb-4">
                                     <p>Maaf, pautan reset kata laluan anda telah tamat tempoh.</p>
