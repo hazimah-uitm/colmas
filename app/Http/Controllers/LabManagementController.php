@@ -96,8 +96,8 @@ class LabManagementController extends Controller
         $user = User::find(auth()->id());
         // Only retrieve assigned computer labs for Pemilik
         $computerLabList = $user->hasRole('Pemilik')
-            ? $user->assignedComputerLabs
-            : ComputerLab::where('publish_status', 1)->get();
+        ? $user->assignedComputerLabs()->with('software')->get()
+        : ComputerLab::where('publish_status', 1)->with('software')->get();
 
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         return view('pages.lab-management.create', [
