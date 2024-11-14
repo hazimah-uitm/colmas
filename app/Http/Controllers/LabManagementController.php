@@ -177,6 +177,8 @@ class LabManagementController extends Controller
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($id);
+        $maintenanceRecord = MaintenanceRecord::findOrFail($id);
+        $entryOption = $maintenanceRecord->entry_option;
     
         $labManagement->date = Carbon::parse($labManagement->start_time)->format('d-m-Y');
         $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
@@ -190,6 +192,7 @@ class LabManagementController extends Controller
             'computerLabList' => $computerLabList,
             'workChecklists' => $workChecklists,
             'selectedlabChecks' => $labManagement->lab_checklist_id,
+            'entryOption' => $entryOption,
         ]);
     }
     

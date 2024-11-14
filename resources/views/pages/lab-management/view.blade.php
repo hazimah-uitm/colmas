@@ -128,10 +128,11 @@
                             <table class="table table-bordered">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="text-center">No.</th>
-                                        <th class="text-center">Nama Komputer</th>
-                                        <th class="text-center" colspan="{{ count($workChecklists) }}">Kerja Selenggara</th>
-                                        <th class="text-center">Catatan</th>
+                                        <th style="width: 5%" class="text-center">No.</th>
+                                        <th style="width: 10%" class="text-center">Nama Komputer</th>
+                                        <th style="width: 30%" class="text-center" colspan="{{ count($workChecklists) }}">Kerja Selenggara</th>
+                                        <th style="width: 15%" class="text-center">No. Aduan</th>
+                                        <th style="width: 40%" class="text-center">Catatan</th>
                                     </tr>
                                     <tr>
                                         <th></th>
@@ -140,10 +141,21 @@
                                         <th class="text-center">{{ $workChecklist->title }}</th>
                                         @endforeach
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
+                                    @php
+                                    $noAduan = '-';
+
+                                    // Check the entryOption for each maintenance record
+                                    if ($maintenanceRecord->entry_option == 'manual') {
+                                    $noAduan = $maintenanceRecord->aduan_unit_no ?? '-';
+                                    } elseif ($maintenanceRecord->entry_option == 'pc_rosak') {
+                                    $noAduan = $maintenanceRecord->vms_no ?? '-';
+                                    }
+                                    @endphp
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $maintenanceRecord->computer_name }} <br>
@@ -167,7 +179,10 @@
                                         @else
                                         <td class="text-center" colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
                                         @endif
-                                        <td class="text-center">{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                                        <td class="text-center">{{ $noAduan }}</td>
+                                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word; max-width: 200px;">
+                                            {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
