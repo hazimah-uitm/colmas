@@ -76,9 +76,14 @@
 
         th,
         td {
-            padding: 8px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            padding-left: 8px;
+            padding-right: 8px;
             text-align: center;
             border: 1px solid #ddd;
+            word-wrap: break-word;
+            /* Allow wrapping of long text */
         }
 
         th {
@@ -88,7 +93,7 @@
 
         /* Monthly columns */
         .month-column {
-            width: 8%;
+            width: 5%;
         }
 
         /* Campus and lab columns */
@@ -100,7 +105,7 @@
         .lab-column {
             width: 15%;
             text-align: left;
-            padding-left: 10px;
+            padding-left: 8px;
         }
 
         /* Footer styles */
