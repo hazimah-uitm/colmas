@@ -26,10 +26,10 @@
 <!-- Date Info -->
 <table class="table table-borderless mb-2">
     <tr>
-        <th>Bulan</th>
-        <th>Tahun</th>
-        <th>Tarikh/Masa Mula</th>
-        <th>Tarikh/Masa Tamat</th>
+        <th style="width:25%">Bulan</th>
+        <th style="width:25%">Tahun</th>
+        <th style="width:25%">Tarikh/Masa Mula</th>
+        <th style="width:25%">Tarikh/Masa Tamat</th>
     </tr>
     <tr>
         <td>{{ $month ?? '-' }}</td>
@@ -43,10 +43,10 @@
 <table class="table mb-5">
     <thead class="bg-light">
         <tr>
-            <th class="text-center">Bil. Keseluruhan Komputer</th>
-            <th class="text-center">Bil. Komputer Telah Diselenggara</th>
-            <th class="text-center">Bil. Komputer Rosak</th>
-            <th class="text-center">Bil. Komputer Belum Diselenggara</th>
+            <th style="width:25%" class="text-center">Bil. Keseluruhan Komputer</th>
+            <th style="width:25%" class="text-center">Bil. Komputer Telah Diselenggara</th>
+            <th style="width:25%" class="text-center">Bil. Komputer Rosak</th>
+            <th style="width:25%" class="text-center">Bil. Komputer Belum Diselenggara</th>
         </tr>
     </thead>
     <tbody>

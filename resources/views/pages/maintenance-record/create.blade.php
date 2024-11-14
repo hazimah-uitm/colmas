@@ -111,7 +111,7 @@
             </div>
 
             <div class="mb-3" id="aduanUnitNo">
-            <label for="aduan_unit_no" class="form-label">No. Rujukan Aduan (<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-0">UNITS</a> / Konsesi)</label>
+            <label for="aduan_unit_no" class="form-label">No. Rujukan Aduan (<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-0">UNITS</a> / GFM)</label>
                 <input type="text" class="form-control {{ $errors->has('aduan_unit_no') ? 'is-invalid' : '' }}" id="aduan_unit_no" name="aduan_unit_no" value="{{ old('aduan_unit_no') ?? ($maintenanceRecord->aduan_unit_no ?? '') }}">
                 @if ($errors->has('aduan_unit_no'))
                 <div class="invalid-feedback">

@@ -9,38 +9,27 @@
         body {
             font-family: Arial, sans-serif;
             font-size: 10pt;
-            /* Reduced font size */
-            margin: 10px;
-            /* Added margin */
-            padding: 0;
+            padding: 5px;
         }
 
         .card {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            /* Stronger shadow */
             padding: 10px;
-            /* Padding inside the card */
             background-color: white;
-            /* Card background */
             margin: 20px auto;
-            /* Center the card */
             max-width: 800px;
-            /* Set a maximum width for the card */
             border: 1px solid #d5d8dc;
-            /* Optional: add a subtle border */
         }
 
         .tick-icon,
         .empty-icon {
             font-size: 20pt;
             font-family: 'DejaVu Sans', sans-serif;
-            /* Increase icon size */
         }
 
         .container {
             width: 100%;
-            padding: 5px;
-            /* Reduced padding */
+            padding: 0px;
             box-sizing: border-box;
         }
 
@@ -48,36 +37,29 @@
         .footer {
             text-align: center;
             margin-bottom: 15px;
-            /* Reduced margin */
         }
 
         .header h1 {
             font-size: 16pt;
-            /* Reduced header font size */
             margin: 5px 0;
-            /* Reduced margin */
         }
 
         .content {
             margin-bottom: 15px;
-            /* Reduced margin */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
-            /* Reduced margin */
         }
 
         th,
         td {
             border: 1px solid #000;
             padding: 5px;
-            /* Reduced padding */
             text-align: left;
             font-size: 9pt;
-            /* Reduced font size for table cells */
         }
 
         th {
@@ -87,19 +69,16 @@
         .tick-icon,
         .empty-icon {
             font-size: 12px;
-            /* Adjusted icon size */
         }
 
         h3 {
-            font-size: 14pt;
-            /* Reduced font size */
-            margin: 10px 0 5px;
-            /* Reduced margin */
+            font-size: 12pt;
+            margin: 3px;
+            text-transform: uppercase;
         }
 
         hr {
             margin: 5px 0;
-            /* Reduced margin */
             border: none;
             border-top: 1px solid #ccc;
         }
@@ -109,18 +88,18 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Laporan Selenggara {{ $labManagement->computerLab->name }}</h1>
-            <h1>{{ $labManagement->month }}-{{ $labManagement->year }}</h1>
+            <h1 style="text-transform: uppercase";>Laporan Selenggara {{ $labManagement->computerLab->name }}</h1>
+            <h1 style="text-transform: uppercase";>{{ $labManagement->month }}-{{ $labManagement->year }}</h1>
         </div>
         <div class="content">
             <table>
                 <tr>
-                    <th style="border: 0px">Nama Pemilik</th>
-                    <td style="border: 0px">{{ $labManagement->computerLab->pemilik->name }}</td>
+                    <th style="width: 50%; border: 0px">Nama Pemilik</th>
+                    <td style="width: 50%; border: 0px">{{ $labManagement->computerLab->pemilik->name }}</td>
                 </tr>
                 <tr>
-                    <th style="border: 0px">Makmal Komputer</th>
-                    <td style="border: 0px">{{ $labManagement->computerLab->name }},
+                    <th style="width: 50%; border: 0px">Makmal Komputer</th>
+                    <td style="width: 50%; border: 0px">{{ $labManagement->computerLab->name }},
                         {{ $labManagement->computerLab->campus->name }}
                     </td>
                 </tr>
@@ -128,10 +107,10 @@
 
             <table>
                 <tr>
-                    <th style="border: 0px">Bulan</th>
-                    <th style="border: 0px">Tahun</th>
-                    <th style="border: 0px">Masa Mula</th>
-                    <th style="border: 0px">Masa Tamat</th>
+                    <th style="width: 25%; border: 0px">Bulan</th>
+                    <th style="width: 25%; border: 0px">Tahun</th>
+                    <th style="width: 25%; border: 0px">Masa Mula</th>
+                    <th style="width: 25%; border: 0px">Masa Tamat</th>
                 </tr>
                 <tr>
                     <td style="border: 0px">{{ $labManagement->month }}</td>
@@ -165,25 +144,25 @@
                     <thead>
                         <tr>
                             @foreach ($labCheckList as $labCheck)
-                                <th style="text-align: center; border-color: #cacfd2">{{ $labCheck->title }}</th>
+                            <th style="text-align: center; border-color: #cacfd2">{{ $labCheck->title }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             @foreach ($labCheckList as $labCheck)
-                                                        <td style="text-align: center; border-color: #cacfd2">
-                                                            @php
-                                                                $isSelected =
-                                                                    !empty($labManagement->lab_checklist_id) &&
-                                                                    in_array($labCheck->id, $labManagement->lab_checklist_id);
-                                                            @endphp
-                                                            @if ($isSelected)
-                                                                <span class="tick-icon">&#10004;</span>
-                                                            @else
-                                                                <span class="empty-icon" style="color: red">&#10006;</span>
-                                                            @endif
-                                                        </td>
+                            <td style="text-align: center; border-color: #cacfd2">
+                                @php
+                                $isSelected =
+                                !empty($labManagement->lab_checklist_id) &&
+                                in_array($labCheck->id, $labManagement->lab_checklist_id);
+                                @endphp
+                                @if ($isSelected)
+                                <span class="tick-icon">&#10004;</span>
+                                @else
+                                <span class="empty-icon" style="color: red">&#10006;</span>
+                                @endif
+                            </td>
                             @endforeach
                         </tr>
                     </tbody>
@@ -199,43 +178,44 @@
                             <th style="text-align: center; border-color: #cacfd2">Nama Komputer</th>
                             <th style="text-align: center; border-color: #cacfd2">IP Address</th>
                             @foreach ($workChecklists as $workChecklist)
-                                <th style="text-align: center; border-color: #cacfd2">{{ $workChecklist->title }}</th>
+                            <th style="text-align: center; border-color: #cacfd2">{{ $workChecklist->title }}</th>
                             @endforeach
                             <th style="text-align: center; border-color: #cacfd2">Catatan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
-                                        <tr>
-                                            <td style="text-align: center; border-color: #cacfd2">{{ $loop->iteration }}</td>
-                                            <td style="text-align: center; border-color: #cacfd2">
-                                                {{ $maintenanceRecord->computer_name }}</td>
-                                            <td style="text-align: center; border-color: #cacfd2">{{ $maintenanceRecord->ip_address }}
-                                            </td>
-                                            @if (!empty($maintenanceRecord->work_checklist_id))
-                                                                @foreach ($workChecklists as $workChecklist)
-                                                                                    <td style="text-align: center; border-color: #cacfd2">
-                                                                                        @php
-                                                                                            $isSelected = in_array(
-                                                                                                $workChecklist->id,
-                                                                                                $maintenanceRecord->work_checklist_id
-                                                                                            );
-                                                                                        @endphp
-                                                                                        @if ($isSelected)
-                                                                                            <span class="tick-icon">&#10004;</span>
-                                                                                        @else
-                                                                                            <span class="empty-icon" style="color: red">&#10006;</span>
-                                                                                        @endif
-                                                                                    </td>
-                                                                @endforeach
-                                            @else
-                                                <td style="text-align: center; border-color: #cacfd2"
-                                                    colspan="{{ count($workChecklists) }}">Komputer
-                                                    Bermasalah</td>
-                                            @endif
-                                            <td style="text-align: center; border-color: #cacfd2">
-                                                {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
-                                        </tr>
+                        <tr>
+                            <td style="text-align: center; border-color: #cacfd2">{{ $loop->iteration }}</td>
+                            <td style="text-align: center; border-color: #cacfd2">
+                                {{ $maintenanceRecord->computer_name }}
+                            </td>
+                            <td style="text-align: center; border-color: #cacfd2">{{ $maintenanceRecord->ip_address }}
+                            </td>
+                            @if (!empty($maintenanceRecord->work_checklist_id))
+                            @foreach ($workChecklists as $workChecklist)
+                            <td style="text-align: center; border-color: #cacfd2">
+                                @php
+                                $isSelected = in_array(
+                                $workChecklist->id,
+                                $maintenanceRecord->work_checklist_id
+                                );
+                                @endphp
+                                @if ($isSelected)
+                                <span class="tick-icon">&#10004;</span>
+                                @else
+                                <span class="empty-icon" style="color: red">&#10006;</span>
+                                @endif
+                            </td>
+                            @endforeach
+                            @else
+                            <td style="text-align: center; border-color: #cacfd2"
+                                colspan="{{ count($workChecklists) }}">Komputer
+                                Bermasalah</td>
+                            @endif
+                            <td style="text-align: center; border-color: #cacfd2">
+                                {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -244,36 +224,36 @@
             <div class="card">
                 <h3>Senarai Perisian</h3>
                 @php
-                    // Extract selected software titles
-                    $selectedSoftwareTitles = $softwareList
-                        ->filter(function ($software) use ($labManagement) {
-                            return !empty($labManagement->software_id) &&
-                                in_array($software->id, $labManagement->software_id);
-                        })
-                        ->pluck('title');
+                // Extract selected software titles
+                $selectedSoftwareTitles = $softwareList
+                ->filter(function ($software) use ($labManagement) {
+                return !empty($labManagement->software_id) &&
+                in_array($software->id, $labManagement->software_id);
+                })
+                ->pluck('title');
                 @endphp
 
                 <table>
                     <tbody>
                         @if ($selectedSoftwareTitles->count() == 1)
-                            <tr>
-                                <td style="border: 0px">
-                                    <span class="tick-icon">&#10004;</span> {{ $selectedSoftwareTitles->first() }}
-                                </td>
-                            </tr>
+                        <tr>
+                            <td style="border: 0px">
+                                <span class="tick-icon">&#10004;</span> {{ $selectedSoftwareTitles->first() }}
+                            </td>
+                        </tr>
                         @else
-                            @foreach ($selectedSoftwareTitles->chunk(2) as $chunk)
-                                <tr>
-                                    @foreach ($chunk as $title)
-                                        <td style="border: 0px">
-                                            <span class="tick-icon">&#10004;</span> {{ $title }}
-                                        </td>
-                                    @endforeach
-                                    @if (count($chunk) == 1)
-                                        <td style="border: 0px"></td> <!-- Empty cell if there's an odd number of titles -->
-                                    @endif
-                                </tr>
+                        @foreach ($selectedSoftwareTitles->chunk(2) as $chunk)
+                        <tr>
+                            @foreach ($chunk as $title)
+                            <td style="border: 0px">
+                                <span class="tick-icon">&#10004;</span> {{ $title }}
+                            </td>
                             @endforeach
+                            @if (count($chunk) == 1)
+                            <td style="border: 0px"></td> <!-- Empty cell if there's an odd number of titles -->
+                            @endif
+                        </tr>
+                        @endforeach
                         @endif
                     </tbody>
                 </table>
@@ -281,32 +261,32 @@
 
             <table>
                 <tr>
-                    <th style="border: 0px">Catatan/Ulasan Pemilik</th>
-                    <td style="border: 0px">{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
+                    <th style="width: 50%; border: 0px">Catatan/Ulasan Pemilik</th>
+                    <td style="width: 50%; border: 0px">{!! nl2br(e($labManagement->remarks_submitter ?? '-')) !!}</td>
                 </tr>
                 <tr>
-                    <th style="border: 0px">Catatan/Ulasan Pegawai Penyemak</th>
-                    <td style="border: 0px">{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
+                    <th style="width: 50%; border: 0px">Catatan/Ulasan Pegawai Penyemak</th>
+                    <td style="width: 50%; border: 0px">{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
                 </tr>
                 <tr>
-                    <th style="border: 0px">Status</th>
-                    <td style="border: 0px">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}
+                    <th style="width: 50%; border: 0px">Status</th>
+                    <td style="width: 50%; border: 0px">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}
                     </td>
                 </tr>
             </table>
 
             <table>
                 <tr>
-                    <th style="border: 0px">Dihantar oleh</th>
-                    <td style="border: 0px">{{ $labManagement->submittedBy->name ?? '-' }}</td>
-                    <th style="border: 0px">Dihantar pada</th>
-                    <td style="border: 0px">{{ $labManagement->submitted_at ?? '-' }}</td>
+                    <th style="width: 25%; border: 0px">Dihantar oleh</th>
+                    <td style="width: 25%; border: 0px">{{ $labManagement->submittedBy->name ?? '-' }}</td>
+                    <th style="width: 25%; border: 0px">Dihantar pada</th>
+                    <td style="width: 25%; border: 0px">{{ $labManagement->submitted_at ?? '-' }}</td>
                 </tr>
                 <tr>
-                    <th style="border: 0px">Disemak oleh</th>
-                    <td style="border: 0px">{{ $labManagement->checkedBy->name ?? '-' }}</td>
-                    <th style="border: 0px">Disemak pada</th>
-                    <td style="border: 0px">{{ $labManagement->checked_at ?? '-' }}</td>
+                    <th style="width: 25%; border: 0px">Disemak oleh</th>
+                    <td style="width: 25%; border: 0px">{{ $labManagement->checkedBy->name ?? '-' }}</td>
+                    <th style="width: 25%; border: 0px">Disemak pada</th>
+                    <td style="width: 25%; border: 0px">{{ $labManagement->checked_at ?? '-' }}</td>
                 </tr>
             </table>
         </div>

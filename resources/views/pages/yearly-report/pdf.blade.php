@@ -15,7 +15,7 @@
         }
 
         body {
-            margin: 20px;
+            padding: 60px;
             font-size: 12px;
             color: #333;
         }
@@ -54,12 +54,12 @@
 
         .cross-icon {
             color: red;
-            font-size: 18pt;
+            font-size: 16pt;
         }
 
         .tick-icon {
             color: green;
-            font-size: 20pt;
+            font-size: 16pt;
         }
 
         .tick-icon,

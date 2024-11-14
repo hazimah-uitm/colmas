@@ -65,7 +65,7 @@ class MaintenanceRecordController extends Controller
     public function store(Request $request, $labManagementId)
     {
         $request->validate([
-            'computer_name'     => 'nullable|required_if:entry_option,pc_rosak|required_if:entry_option,manual',
+            'computer_name'     => 'required',
             'ip_address'        => 'nullable',
             'lab_management_id' => 'required',
             'work_checklist_id' => 'nullable|array|required_if:entry_option,automatik|required_if:entry_option,manual',
@@ -74,7 +74,7 @@ class MaintenanceRecordController extends Controller
             'remarks'           => 'nullable|required_if:entry_option,pc_rosak|required_if:entry_option,manual',
             'entry_option'      => 'required',
         ], [
-            'computer_name.required_if'      => 'Sila isi nama komputer sebelum hantar',
+            'computer_name.required'         => 'Sila isi nama komputer sebelum hantar',
             'work_checklist_id.required_if'  => 'Sila semak proses kerja sebelum hantar',
             'vms_no.required_if'             => 'Sila isi VMS No. sebelum hantar',
             'aduan_unit_no.required_if'      => 'Sila isi No. Aduan Unit sebelum hantar',
@@ -259,7 +259,7 @@ class MaintenanceRecordController extends Controller
     public function update(Request $request, $labManagementId, $recordId)
     {
         $request->validate([
-            'computer_name'     => 'nullable|required_if:entry_option,pc_rosak|required_if:entry_option,manual',
+            'computer_name'     => 'required',
             'ip_address'        => 'nullable',
             'lab_management_id' => 'required',
             'work_checklist_id' => 'nullable|array|required_if:entry_option,automatik|required_if:entry_option,manual',
@@ -268,7 +268,7 @@ class MaintenanceRecordController extends Controller
             'remarks'           => 'nullable|required_if:entry_option,pc_rosak|required_if:entry_option,manual',
             'entry_option'      => 'required',
         ], [
-            'computer_name.required_if'      => 'Sila isi nama komputer sebelum hantar',
+            'computer_name.required'         => 'Sila isi nama komputer sebelum hantar',
             'work_checklist_id.required_if'  => 'Sila semak proses kerja sebelum hantar',
             'vms_no.required_if'             => 'Sila isi VMS No. sebelum hantar',
             'aduan_unit_no.required_if'      => 'Sila isi No. Aduan Unit sebelum hantar',

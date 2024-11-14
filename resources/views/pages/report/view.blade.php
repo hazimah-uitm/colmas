@@ -56,10 +56,10 @@
                 </table>
                 <table class="table table-borderless">
                     <tr>
-                        <th>Bulan</th>
-                        <th>Tahun</th>
-                        <th>Masa Mula</th>
-                        <th>Masa Tamat</th>
+                        <th style="width:25%">Bulan</th>
+                        <th style="width:25%">Tahun</th>
+                        <th style="width:25%">Masa Mula</th>
+                        <th style="width:25%">Masa Tamat</th>
                     </tr>
                     <tr>
                         <td>{{ $labManagement->month }}</td>
@@ -71,10 +71,10 @@
                 <table class="table">
                     <thead class="bg-light">
                         <tr>
-                            <th class="text-center">Bil. Keseluruhan Komputer</th>
-                            <th class="text-center">Bil. Komputer Telah Diselenggara</th>
-                            <th class="text-center">Bil. Komputer Rosak</th>
-                            <th class="text-center">Bil. Komputer Belum Diselenggara</th>
+                            <th style="width:25%" class="text-center">Bil. Keseluruhan Komputer</th>
+                            <th style="width:25%" class="text-center">Bil. Komputer Telah Diselenggara</th>
+                            <th style="width:25%" class="text-center">Bil. Komputer Rosak</th>
+                            <th style="width:25%" class="text-center">Bil. Komputer Belum Diselenggara</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,22 +200,22 @@
                         <td style="width: 50%">{!! nl2br(e($labManagement->remarks_checker ?? '-')) !!}</td>
                     </tr>
                     <tr>
-                        <th>Status</th>
-                        <td>{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
+                        <th style="width: 50%">Status</th>
+                        <td style="width: 50%">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
                     </tr>
                 </table>
                 <table class="table table-borderless">
                     <tr>
-                        <th>Dihantar oleh</th>
-                        <td>{{ $labManagement->submittedBy->name ?? '-' }}</td>
-                        <th>Dihantar pada</th>
-                        <td>{{ $labManagement->submitted_at ?? '-' }}</td>
+                        <th style="width: 25%">Dihantar oleh</th>
+                        <td style="width: 25%">{{ $labManagement->submittedBy->name ?? '-' }}</td>
+                        <th style="width: 25%">Dihantar pada</th>
+                        <td style="width: 25%">{{ $labManagement->submitted_at ?? '-' }}</td>
                     </tr>
                     <tr>
-                        <th>Disemak oleh</th>
-                        <td>{{ $labManagement->checkedBy->name ?? '-' }}</td>
-                        <th>Disemak pada</th>
-                        <td>{{ $labManagement->checked_at ?? '-' }}</td>
+                        <th style="width: 25%">Disemak oleh</th>
+                        <td style="width: 25%">{{ $labManagement->checkedBy->name ?? '-' }}</td>
+                        <th style="width: 25%">Disemak pada</th>
+                        <td style="width: 25%">{{ $labManagement->checked_at ?? '-' }}</td>
                     </tr>
                 </table>
             </div>
