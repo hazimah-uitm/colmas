@@ -122,6 +122,10 @@ Route::middleware('auth')->group(function () {
     Route::get('yearly-report', 'YearlyReportController@index')->name('yearly-report');
     Route::get('/yearly-report/download-pdf', 'YearlyReportController@downloadPdf')->name('yearly-report.download-pdf');
 
+    // ComputerLab Report
+    Route::get('computer-lab-report', 'ComputerLabReportController@index')->name('computer-lab-report');
+    Route::get('/computer-lab-report/download-pdf', 'ComputerLabReportController@downloadPdf')->name('computer-lab-report.download-pdf');
+
     //Announcement
     Route::get('announcement/create', 'AnnouncementController@create')->name('announcement.create');
     Route::post('announcement/store', 'AnnouncementController@store')->name('announcement.store');

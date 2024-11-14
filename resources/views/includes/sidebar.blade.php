@@ -72,6 +72,9 @@
             <li class="{{ request()->routeIs('yearly-report*') ? 'mm-active' : '' }}">
                 <a href="{{ route('yearly-report') }}"><i class="bx bx-right-arrow-alt"></i>Laporan Tahunan</a>
             </li>
+            <li class="{{ request()->routeIs('computer-lab-report*') ? 'mm-active' : '' }}">
+                <a href="{{ route('computer-lab-report') }}"><i class="bx bx-right-arrow-alt"></i>Laporan Makmal Komputer</a>
+            </li>
         </ul>
     </li>
 
