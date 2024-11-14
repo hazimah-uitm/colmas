@@ -36,14 +36,14 @@
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
-                            <th class="text-uppercase">Nama Pemilik</th>
-                            <td class="text-uppercase">
+                            <th style="width: 50%" class="text-uppercase">Nama Pemilik</th>
+                            <td style="width: 50%" class="text-uppercase">
                                 {{ $labManagement->computerLab->pemilik->name }}
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-uppercase">Makmal Komputer</th>
-                            <td class="mb-3 text-uppercase">{{ $labManagement->computerLab->name }},
+                            <th style="width: 50%" class="text-uppercase">Makmal Komputer</th>
+                            <td style="width: 50%" class="mb-3 text-uppercase">{{ $labManagement->computerLab->name }},
                                 {{ $labManagement->computerLab->campus->name }}
                             </td>
                         </tr>
