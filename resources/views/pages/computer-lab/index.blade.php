@@ -74,8 +74,8 @@
                         <th>Bil. Komputer</th>
                         <th>Username</th>
                         <th>Kata Laluan</th>
-                        @hasanyrole('Superadmin|Admin')
                         <th>Status</th>
+                        @hasanyrole('Superadmin|Admin')
                         <th>Tindakan</th>
                         @endhasanyrole
                     </tr>
@@ -99,7 +99,6 @@
                                 </button>
                             </div>
                         </td>
-                        @hasanyrole('Superadmin|Admin')
                         <td>
                             @if ($computerLab->publish_status == 'Aktif')
                             <span class="badge bg-success">Aktif</span>
@@ -107,6 +106,7 @@
                             <span class="badge bg-danger">Tidak Aktif</span>
                             @endif
                         </td>
+                        @hasanyrole('Superadmin|Admin')
                         <td>
                             <a href="{{ route('computer-lab.edit', $computerLab->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>

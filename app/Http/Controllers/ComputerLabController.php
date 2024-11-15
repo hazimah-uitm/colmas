@@ -19,7 +19,19 @@ class ComputerLabController extends Controller
     {
         $perPage = $request->input('perPage', 10);
 
-        $computerLabList = ComputerLab::latest()->paginate($perPage);
+        $user = User::find(auth()->id());
+
+        $computerLabQuery = ComputerLab::with(['pemilik', 'campus'])
+            ->where('publish_status', 1);
+
+        // Filter based on user role
+        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+        } else {
+            $userCampusIds = $user->campus->pluck('id')->toArray();
+            $computerLabQuery->whereIn('campus_id', $userCampusIds);
+        } 
+
+        $computerLabList = $computerLabQuery->latest()->paginate($perPage);
 
         return view('pages.computer-lab.index', [
             'computerLabList' => $computerLabList,
@@ -42,19 +54,19 @@ class ComputerLabController extends Controller
             'str_mode' => 'Tambah',
         ]);
     }
-    
+
     public function getPemilikByCampus($campusId)
     {
         $pemilikList = User::role('Pemilik')
             ->where('publish_status', 1)
-            ->whereHas('campus', function($query) use ($campusId) {
+            ->whereHas('campus', function ($query) use ($campusId) {
                 $query->where('campuses.id', $campusId);
             })
             ->get();
-    
+
         return response()->json($pemilikList);
-    }    
-    
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -114,7 +126,7 @@ class ComputerLabController extends Controller
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $softwareList = Software::where('publish_status', 1)->get();
-    
+
         return view('pages.computer-lab.edit', [
             'save_route' => route('computer-lab.update', $computerLab->id),
             'campusList' => $campusList,
@@ -123,7 +135,7 @@ class ComputerLabController extends Controller
             'computerLab' => $computerLab,
             'str_mode' => 'Kemaskini',
         ]);
-    }    
+    }
 
     public function update(Request $request, $id)
     {
