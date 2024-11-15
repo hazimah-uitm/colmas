@@ -94,6 +94,7 @@
         /* Monthly columns */
         .month-column {
             width: 5%;
+            text-align: center;
         }
 
         /* Campus and lab columns */

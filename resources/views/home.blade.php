@@ -182,10 +182,10 @@
                                         <table class="table table-bordered">
                                             <thead class="table-light">
                                                 <tr>
-                                                    <th>No.</th>
+                                                    <th class="text-center">No.</th>
                                                     <th>Makmal Komputer</th>
                                                     @foreach ($months as $month)
-                                                        <th>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</th>
+                                                        <th class="text-center">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
                                                     @endforeach
                                                 </tr>
                                             </thead>
