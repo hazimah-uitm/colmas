@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<div class="row row-cols-1 g-4"> <!-- Three-column responsive grid for campuses -->
+<div class="row row-cols-1 g-4">
     @foreach ($ownersWithLabs as $campusId => $labs)
     <div class="col">
         <div class="card border-secondary h-100">
@@ -74,36 +74,24 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th style="width: 5%; background-color: #ddd; text-align: center">#</th>
+                            <th style="width: 5%; background-color: #ddd; text-align: center">No.</th>
+                            <th style="background-color: #ddd;">Computer Lab</th>
                             <th style="width: 25%; background-color: #ddd;">Pemilik</th>
-                            <th style="background-color: #ddd;">Makmal Komputer</th>
-                            <th style="width: 10%; background-color: #ddd; text-align: center">Bil.
-                                PC</th>
+                            <th style="width: 10%; background-color: #ddd; text-align: center">Total PC</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $counter = 1; // Initialize counter for continuous numbering
+                        @endphp
                         @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+                        @foreach ($ownerLabs as $labIndex => $lab)
                         <tr>
-                            <td style="text-align: center" rowspan="{{ $ownerLabs->count() }}">
-                                {{ $loop->iteration }}
-                            </td>
-                            <td rowspan="{{ $ownerLabs->count() }}">
-                                {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}
-                            </td>
-                            <td>{{ $ownerLabs->first()->name }}</td>
-                            <td style="text-align: center">
-                                <span class="badge bg-info text-dark"
-                                    style="font-size: 0.80rem; font-weight: 500;">
-                                    {{ $ownerLabs->first()->pc_count }}
-                                </span>
-                            </td>
-                        </tr>
-                        @foreach ($ownerLabs->slice(1) as $lab)
-                        <tr>
+                            <td style="text-align: center">{{ $counter++ }}</td>
                             <td>{{ $lab->name }}</td>
+                            <td>{{ $lab->pemilik->name ?? 'N/A' }}</td>
                             <td style="text-align: center">
-                                <span class="badge bg-info text-dark"
-                                    style="font-size: 0.80rem; font-weight: 500;">
+                                <span class="badge bg-info text-dark" style="font-size: 0.80rem; font-weight: 500;">
                                     {{ $lab->pc_count }}
                                 </span>
                             </td>
@@ -113,11 +101,11 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
     @endforeach
 </div>
+
 
 <script>
     document.getElementById('homeFilter').addEventListener('change', function() {
@@ -127,8 +115,8 @@
     document.getElementById('resetButton').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default reset behavior
         const url = new URL(window.location.href);
-            url.searchParams.delete('month');
-            url.searchParams.delete('year');
+        url.searchParams.delete('month');
+        url.searchParams.delete('year');
         window.location.href = url.toString();
     });
 </script>

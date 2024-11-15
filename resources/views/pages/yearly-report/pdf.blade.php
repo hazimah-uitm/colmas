@@ -109,12 +109,29 @@
             padding-left: 8px;
         }
 
-        /* Footer styles */
-        .footer {
+        .footer p {
+            font-size: 10pt;
             margin-top: 30px;
             text-align: center;
-            font-size: 10px;
-            color: #777;
+        }
+
+        .dijana-oleh {
+            font-size: 10pt;
+            color: #555;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        hr {
+            margin: 10px 0;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+
+
+        /* Footer styles */
+        .footer hr {
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -158,6 +175,11 @@
         </table>
     </div>
     @endforeach
+    
+    <div class="footer">
+            <hr>
+            <p class="dijana-oleh">Dijana oleh: {{ $username }}</p>
+        </div>
 </body>
 
 </html>
