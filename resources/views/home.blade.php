@@ -113,13 +113,13 @@
                                         @php
                                             $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                                         @endphp
-                                        <table class="table">
+                                        <table class="table table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 5%; background-color: #ddd; text-align: center">No.</th>
-                                                    <th style="width: 25%; background-color: #ddd;">Pemilik</th>
+                                                    <th style="background-color: #ddd; text-align: center">No.</th>
+                                                    <th style="background-color: #ddd;">Pemilik</th>
                                                     <th style="background-color: #ddd;">Makmal Komputer</th>
-                                                    <th style="width: 10%; background-color: #ddd; text-align: center">Bil.
+                                                    <th style="background-color: #ddd; text-align: center">Bil.
                                                         PC</th>
                                                 </tr>
                                             </thead>
@@ -179,7 +179,7 @@
                                 <div class="card-body text-uppercase">
                                     <h4>{{ $campusItem['campus']->name }}</h4>
                                     <div class="table-responsive">
-                                        <table class="table table-bordered">
+                                        <table class="table table-condensed table-striped table-bordered table-hover">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th class="text-center">No.</th>

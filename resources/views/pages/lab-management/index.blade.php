@@ -113,18 +113,18 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-condensed table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Kampus</th>
-                        <th>Makmal Komputer</th>
-                        <th>Pemilik</th>
-                        <th>Bil. PC</th>
-                        <th>Bulan</th>
-                        <th>Tahun</th>
-                        <th>Status</th>
-                        <th>Tindakan</th>
+                        <th class="bg-dark text-white">#</th>
+                        <th class="bg-dark text-white">Kampus</th>
+                        <th class="bg-dark text-white">Makmal Komputer</th>
+                        <th class="bg-dark text-white">Pemilik</th>
+                        <th class="bg-dark text-white">Bil. PC</th>
+                        <th class="bg-dark text-white">Bulan</th>
+                        <th class="bg-dark text-white">Tahun</th>
+                        <th class="bg-dark text-white">Status</th>
+                        <th class="bg-dark text-white">Tindakan</th>
                     </tr>
                 </thead>
                 <tbody>

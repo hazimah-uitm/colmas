@@ -71,13 +71,14 @@
                 @php
                 $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                 @endphp
-                <table class="table">
+                <div class="table-responsive">
+                <table class="table table-condensed table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th style="width: 5%; background-color: #ddd; text-align: center">No.</th>
-                            <th style="background-color: #ddd;">Computer Lab</th>
-                            <th style="width: 25%; background-color: #ddd;">Pemilik</th>
-                            <th style="width: 10%; background-color: #ddd; text-align: center">Total PC</th>
+                            <th class="bg-dark text-white text-center">No.</th>
+                            <th class="bg-dark text-white">Makmal Komputer</th>
+                            <th class="bg-dark text-white text-center">Pemilik</th>
+                            <th class="bg-dark text-white text-center">Jumlah PC</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,7 +90,7 @@
                         <tr>
                             <td style="text-align: center">{{ $counter++ }}</td>
                             <td>{{ $lab->name }}</td>
-                            <td>{{ $lab->pemilik->name ?? 'N/A' }}</td>
+                            <td class="text-center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
                             <td style="text-align: center">
                                 <span class="badge bg-info text-dark" style="font-size: 0.80rem; font-weight: 500;">
                                     {{ $lab->pc_count }}
@@ -100,6 +101,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
