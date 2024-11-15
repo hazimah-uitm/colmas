@@ -110,7 +110,7 @@
                                             @if ($isSelected)
                                             <span class="tick-icon">&#10004;</span>
                                             @else
-                                            <span class="empty-icon" style="color: red">&#9744;</span>
+                                            <span class="empty-icon" style="color: red">&#10006;</span>
                                             @endif
                                         </td>
                                         @endforeach
@@ -172,7 +172,7 @@
                                             @if ($isSelected)
                                             <span class="tick-icon">&#10004;</span>
                                             @else
-                                            <span class="empty-icon" style="color: red;">&#10006;</span>
+                                            <span class="empty-icon" style="color: red">&#10006;</span>
                                             @endif
                                         </td>
                                         @endforeach
