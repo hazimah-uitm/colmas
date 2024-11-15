@@ -130,6 +130,7 @@
         <table>
             <thead>
                 <tr>
+                    <th style="width: 2%">No.</th>
                     <th class="lab-column">Makmal Komputer</th>
                     @foreach ($months as $month)
                     <th class="month-column">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
@@ -139,6 +140,7 @@
             <tbody>
                 @foreach ($data['computerLabList'] as $lab)
                 <tr>
+                <th style="width: 2%">{{ $loop->iteration }}</td>
                     <td style="text-align: left;">{{ $lab->name }}</td>
                     @foreach ($months as $month)
                     <td>

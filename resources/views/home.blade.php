@@ -116,7 +116,7 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 5%; background-color: #ddd; text-align: center">#</th>
+                                                    <th style="width: 5%; background-color: #ddd; text-align: center">No.</th>
                                                     <th style="width: 25%; background-color: #ddd;">Pemilik</th>
                                                     <th style="background-color: #ddd;">Makmal Komputer</th>
                                                     <th style="width: 10%; background-color: #ddd; text-align: center">Bil.
@@ -182,6 +182,7 @@
                                         <table class="table table-bordered">
                                             <thead class="table-light">
                                                 <tr>
+                                                    <th>No.</th>
                                                     <th>Makmal Komputer</th>
                                                     @foreach ($months as $month)
                                                         <th>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</th>
@@ -191,6 +192,7 @@
                                             <tbody>
                                                 @foreach ($campusItem['computerLabList'] as $lab)
                                                     <tr>
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
                                                         <td>{{ $lab->name }}</td>
                                                         @foreach ($months as $month)
                                                             <td class="text-center">
