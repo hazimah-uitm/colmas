@@ -127,7 +127,8 @@
     document.getElementById('resetButton').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default reset behavior
         const url = new URL(window.location.href);
-        url.searchParams.delete('year'); // Only reset the year filter
+            url.searchParams.delete('month');
+            url.searchParams.delete('year');
         window.location.href = url.toString();
     });
 </script>

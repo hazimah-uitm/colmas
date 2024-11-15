@@ -91,15 +91,15 @@
             </li>
         </ul>
     </li>
-    <li class="{{ Request::is('computer-lab*') ? 'mm-active' : '' }}">
+    @endhasanyrole
+
+    <li class="{{ Request::is('computer-lab*') && !Request::is('computer-lab-report') ? 'mm-active' : '' }}">
         <a href="{{ route('computer-lab') }}">
             <div class="parent-icon"><i class='bx bx-desktop'></i>
             </div>
             <div class="menu-title">Makmal Komputer</div>
         </a>
     </li>
-    @endhasanyrole
-
     <li class="{{ request()->routeIs('software*', 'work-checklist*', 'lab-checklist*') ? 'mm-active' : '' }}">
         <a class="has-arrow">
             <div class="parent-icon"><i class='bx bx-briefcase-alt'></i></div>
