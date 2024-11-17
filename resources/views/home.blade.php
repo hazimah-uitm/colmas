@@ -91,12 +91,12 @@
 
     <div class="accordion mb-3" id="mainAccordion">
 
-        <!-- Section 1: Senarai Makmal Komputer mengikut Pemilik -->
+        <!-- Section 1: Senarai Makmal Komputer -->
         <div class="accordion-item mb-2">
             <h2 class="accordion-header" id="headingSection1">
                 <button class="accordion-button text-uppercase collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseSection1" aria-expanded="false" aria-controls="collapseSection1">
-                    Senarai Makmal Komputer mengikut Pemilik
+                    Senarai Makmal Komputer
                 </button>
             </h2>
             <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1">
@@ -107,56 +107,47 @@
                                 <div class="card border-secondary h-100">
                                     <div class="card-header bg-light">
                                         <h6 class="text-uppercase text-center mb-0">
-                                            {{ $labs->first()->campus->name ?? 'N/A' }}</h6> <!-- Campus name -->
+                                            {{ $labs->first()->campus->name ?? 'N/A' }}
+                                        </h6> <!-- Campus name -->
                                     </div>
                                     <div class="card-body">
                                         @php
                                             $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                                         @endphp
                                         <div class="table-responsive">
-                                        <table class="table table-condensed table-striped table-bordered table-hover">
-                                            <thead style="background-color: #ddd;" class="text-center text-uppercase">
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th>Pemilik</th>
-                                                    <th>Makmal Komputer</th>
-                                                    <th>Bil.
-                                                        PC</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+                                            <table class="table table-condensed table-striped table-bordered table-hover">
+                                                <thead class="table-light text-center text-uppercase">
                                                     <tr>
-                                                        <td class="text-center" rowspan="{{ $ownerLabs->count() }}">
-                                                            {{ $loop->iteration }}
-                                                        </td>
-                                                        <td rowspan="{{ $ownerLabs->count() }}">
-                                                            {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</td>
-                                                        <td>{{ $ownerLabs->first()->name }}</td>
-                                                        <td class="text-center">
-                                                            <span class="badge bg-info text-dark"
-                                                                style="font-size: 0.80rem; font-weight: 500;">
-                                                                {{ $ownerLabs->first()->pc_count }}
-                                                            </span>
-                                                        </td>
+                                                        <th>No.</th>
+                                                        <th>Makmal Komputer</th>
+                                                        <th>Pemilik</th>
+                                                        <th>Jumlah PC</th>
                                                     </tr>
-                                                    @foreach ($ownerLabs->slice(1) as $lab)
-                                                        <tr>
-                                                            <td>{{ $lab->name }}</td>
-                                                            <td class="text-center">
-                                                                <span class="badge bg-info text-dark"
-                                                                    style="font-size: 0.80rem; font-weight: 500;">
-                                                                    {{ $lab->pc_count }}
-                                                                </span>
-                                                            </td>
-                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $counter = 1; // Initialize counter for continuous numbering
+                                                    @endphp
+                                                    @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+                                                        @foreach ($ownerLabs as $labIndex => $lab)
+                                                            <tr>
+                                                                <td class="text-center">{{ $counter++ }}</td>
+                                                                <td>{{ $lab->name }}</td>
+                                                                <td class="text-center">{{ $lab->pemilik->name ?? 'N/A' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <span class="badge bg-info text-dark"
+                                                                        style="font-size: 0.80rem; font-weight: 500;">
+                                                                        {{ $lab->pc_count }}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
                                                     @endforeach
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         @endforeach
@@ -194,7 +185,7 @@
                                             <tbody>
                                                 @foreach ($campusItem['computerLabList'] as $lab)
                                                     <tr>
-                                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                                        <td class="text-center">{{ $loop->iteration }}</td>
                                                         <td>{{ $lab->name }}</td>
                                                         @foreach ($months as $month)
                                                             <td class="text-center">

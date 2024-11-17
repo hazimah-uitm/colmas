@@ -105,7 +105,15 @@ class HomeController extends Controller
         $filteredComputerLabs = $computerLabList;
 
         // Get the results and group by campus_id
-        $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id');
+        $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id')->map(function ($labs) {
+            return $labs->sortBy('name'); // Sort labs by name for each campus
+        });
+
+        foreach ($ownersWithLabs as $campusId => $labs) {
+            foreach ($labs as $lab) {
+                $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
+            }
+        }
 
         $totalLab = $filteredComputerLabs->count();
 
@@ -119,14 +127,6 @@ class HomeController extends Controller
         $totalMaintenancePC = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])->sum('pc_maintenance_no');
         $totalDamagePC = $labManagementData->whereIn('status', ['dihantar', 'telah_disemak'])->sum('pc_damage_no');
         $totalUnmaintenancePC = $totalPC - $totalMaintenancePC - $totalDamagePC;
-
-        // Calculate PC count for each lab using the getTotalPC method
-        foreach ($ownersWithLabs as $campusId => $labs) {
-            foreach ($labs as $lab) {
-                // Calculate the PC count for each lab by calling the getTotalPC method
-                $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
-            }
-        }
 
         $months = range(1, 12);
         $campusData = [];
