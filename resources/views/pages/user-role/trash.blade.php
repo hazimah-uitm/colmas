@@ -26,8 +26,8 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table">
-                <thead>
+                <table class="table table-condensed table-striped table-bordered table-hover">
+                    <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>Nama Peranan Pengguna</th>
                         <th>Permission</th>
@@ -46,14 +46,14 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if ($campus->publish_status == 'Aktif')
                             <span class="badge bg-success">Aktif</span>
                             @else
                             <span class="badge bg-danger">Tidak Aktif</span>
                             @endif
                         </td>
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('user-role.restore', $role->id) }}" class="btn btn-success btn-sm"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kembalikan">
                                 <i class="bx bx-undo"></i>

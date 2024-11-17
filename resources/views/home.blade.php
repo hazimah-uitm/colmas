@@ -113,26 +113,27 @@
                                         @php
                                             $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                                         @endphp
-                                        <table class="table table-condensed">
-                                            <thead>
+                                        <div class="table-responsive">
+                                        <table class="table table-condensed table-striped table-bordered table-hover">
+                                            <thead style="background-color: #ddd;" class="text-center text-uppercase">
                                                 <tr>
-                                                    <th style="background-color: #ddd; text-align: center">No.</th>
-                                                    <th style="background-color: #ddd;">Pemilik</th>
-                                                    <th style="background-color: #ddd;">Makmal Komputer</th>
-                                                    <th style="background-color: #ddd; text-align: center">Bil.
+                                                    <th>No.</th>
+                                                    <th>Pemilik</th>
+                                                    <th>Makmal Komputer</th>
+                                                    <th>Bil.
                                                         PC</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
                                                     <tr>
-                                                        <td style="text-align: center" rowspan="{{ $ownerLabs->count() }}">
+                                                        <td class="text-center" rowspan="{{ $ownerLabs->count() }}">
                                                             {{ $loop->iteration }}
                                                         </td>
                                                         <td rowspan="{{ $ownerLabs->count() }}">
                                                             {{ $ownerLabs->first()->pemilik->name ?? 'N/A' }}</td>
                                                         <td>{{ $ownerLabs->first()->name }}</td>
-                                                        <td style="text-align: center">
+                                                        <td class="text-center">
                                                             <span class="badge bg-info text-dark"
                                                                 style="font-size: 0.80rem; font-weight: 500;">
                                                                 {{ $ownerLabs->first()->pc_count }}
@@ -142,7 +143,7 @@
                                                     @foreach ($ownerLabs->slice(1) as $lab)
                                                         <tr>
                                                             <td>{{ $lab->name }}</td>
-                                                            <td style="text-align: center">
+                                                            <td class="text-center">
                                                                 <span class="badge bg-info text-dark"
                                                                     style="font-size: 0.80rem; font-weight: 500;">
                                                                     {{ $lab->pc_count }}
@@ -153,6 +154,7 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -180,12 +182,12 @@
                                     <h4>{{ $campusItem['campus']->name }}</h4>
                                     <div class="table-responsive">
                                         <table class="table table-condensed table-striped table-bordered table-hover">
-                                            <thead class="table-light">
+                                            <thead style="background-color: #ddd;" class="text-center">
                                                 <tr>
-                                                    <th class="text-center">No.</th>
+                                                    <th>No.</th>
                                                     <th>Makmal Komputer</th>
                                                     @foreach ($months as $month)
-                                                        <th class="text-center">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
+                                                        <th>{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
                                                     @endforeach
                                                 </tr>
                                             </thead>

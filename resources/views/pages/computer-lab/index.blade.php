@@ -63,8 +63,8 @@
         <p class="text-danger mt-4 fst-italic">**Sebarang perubahan/pertambahan maklumat boleh maklum kepada moderator (Hazimah).</p>
 
         <div class="table-responsive">
-            <table class="table">
-                <thead>
+            <table class="table table-condensed table-striped table-bordered table-hover">
+                <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>#</th>
                         <th>Kod</th>
@@ -84,7 +84,7 @@
                     @if (count($computerLabList) > 0)
                     @foreach ($computerLabList as $computerLab)
                     <tr>
-                        <td>{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
+                        <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
                         <td>{{ $computerLab->code }}</td>
                         <td>{{ $computerLab->name }}</td>
                         <td>{{ $computerLab->campus->name }}</td>
@@ -99,7 +99,7 @@
                                 </button>
                             </div>
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if ($computerLab->publish_status == 'Aktif')
                             <span class="badge bg-success">Aktif</span>
                             @else
@@ -107,7 +107,7 @@
                             @endif
                         </td>
                         @hasanyrole('Superadmin|Admin')
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('computer-lab.edit', $computerLab->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>
                             </a>

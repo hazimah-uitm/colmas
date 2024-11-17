@@ -55,8 +55,8 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table">
-                <thead>
+                <table class="table table-condensed table-striped table-bordered table-hover">
+                    <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>#</th>
                         <th>Nama Peranan</th>
@@ -69,7 +69,7 @@
                     @if (count($userRoleList) > 0)
                     @foreach ($userRoleList as $role)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ ucfirst($role->name) }}</td>
                         <td>
                             <ul>
@@ -78,14 +78,14 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if ($role->publish_status == 1)
                             <span class="badge bg-success">Aktif</span>
                             @else
                             <span class="badge bg-danger">Tidak Aktif</span>
                             @endif
                         </td>
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('user-role.edit', $role->id) }}" class="btn btn-info btn-sm"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>

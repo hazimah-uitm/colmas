@@ -56,8 +56,8 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table">
-                    <thead>
+                <table class="table table-condensed table-striped table-bordered table-hover">
+                    <thead class="table-light text-center text-uppercase">
                         <tr>
                             <th>#</th>
                             <th>Nama</th>
@@ -72,15 +72,15 @@
                         @if (count($userList) > 0)
                             @foreach ($userList as $user)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ ucfirst($user->name) }}</td>
-                                    <td>{{ $user->staff_id }}</td>
-                                    <td>
+                                    <td class="text-center">{{ $user->staff_id }}</td>
+                                    <td class="text-center">
                                         @foreach ($user->campus as $campus)
                                             {{ $campus->name }}<br>
                                         @endforeach
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($user->roles->count() === 1)
                                             {{ ucwords(str_replace('-', ' ', $user->roles->first()->name)) }}
                                         @else
@@ -91,14 +91,14 @@
                                             </ul>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($user->publish_status == 'Aktif')
                                             <span class="badge bg-success">Aktif</span>
                                         @else
                                             <span class="badge bg-danger">Tidak Aktif</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info btn-sm"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                             <i class="bx bxs-edit"></i>
