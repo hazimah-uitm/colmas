@@ -96,7 +96,7 @@
             <h2 class="accordion-header" id="headingSection1">
                 <button class="accordion-button text-uppercase collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseSection1" aria-expanded="false" aria-controls="collapseSection1">
-                    Senarai Makmal Komputer
+                    Senarai Makmal Komputer {{ $currentMonthName }} {{ $currentYear }}
                 </button>
             </h2>
             <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1">

@@ -30,6 +30,7 @@ class HomeController extends Controller
 
         $currentYear = $request->input('year', date('Y')); // Get the selected year
         $currentMonth = $request->input('month', date('n')); // Get the selected month
+        $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
 
         // OwnersWithLabsQuery
         $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus'])
@@ -201,6 +202,7 @@ class HomeController extends Controller
             'totalLab' => $totalLab,
             'currentYear' =>  $currentYear,
             'currentMonth' =>  $currentMonth,
+            'currentMonthName' =>  $currentMonthName,
             'ownersWithLabs' => $ownersWithLabs,
             'months' => $months,
             'campusData' => $campusData
