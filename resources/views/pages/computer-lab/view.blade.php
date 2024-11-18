@@ -19,11 +19,13 @@
                 </nav>
             </div>
         </div>
+        @hasanyrole('Superadmin|Admin')
         <div class="col-12 col-md-3 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0">
             <a href="{{ route('computer-lab.edit', $computerLab->id) }}">
                 <button type="button" class="btn btn-primary mt-2 mt-lg-0">Kemaskini Maklumat</button>
             </a>
         </div>
+        @endhasanyrole
     </div>
 </div>
 <!--end breadcrumb-->

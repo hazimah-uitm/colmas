@@ -75,9 +75,7 @@
                         <th>Username</th>
                         <th>Kata Laluan</th>
                         <th>Status</th>
-                        @hasanyrole('Superadmin|Admin')
                         <th>Tindakan</th>
-                        @endhasanyrole
                     </tr>
                 </thead>
                 <tbody>
