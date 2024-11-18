@@ -57,6 +57,20 @@
                     @endif
                 </div>
 
+                
+                <div class="mb-3">
+                    <label for="location" class="form-label">Lokasi</label>
+                    <input type="text" class="form-control {{ $errors->has('location') ? 'is-invalid' : '' }}"
+                        id="location" name="location" value="{{ old('location') ?? $computerLab->location }}">
+                    @if ($errors->has('location'))
+                        <div class="invalid-feedback">
+                            @foreach ($errors->get('location') as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
                 <div class="mb-3">
                     <label for="campus_id" class="form-label">Kampus</label>
                     <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id"
@@ -94,7 +108,6 @@
                         </div>
                     @endif
                 </div>
-
 
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

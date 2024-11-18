@@ -85,13 +85,13 @@
                     @foreach ($computerLabList as $computerLab)
                     <tr>
                         <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
-                        <td>{{ $computerLab->code }}</td>
+                        <td class="text-center">{{ $computerLab->code }}</td>
                         <td>{{ $computerLab->name }}</td>
-                        <td>{{ $computerLab->campus->name }}</td>
-                        <td>{{ $computerLab->pemilik->name }}</td>
-                        <td>{{ $computerLab->no_of_computer }}</td>
-                        <td>{{ $computerLab->username }}</td>
-                        <td>
+                        <td class="text-center">{{ $computerLab->campus->name }}</td>
+                        <td class="text-center">{{ $computerLab->pemilik->name }}</td>
+                        <td class="text-center">{{ $computerLab->no_of_computer }}</td>
+                        <td class="text-center">{{ $computerLab->username }}</td>
+                        <td class="text-center">
                             <div class="password-container d-flex align-items-center">
                                 <span class="password me-3" data-password="{{ $computerLab->password }}">****</span>
                                 <button class="btn btn-sm btn-outline-info toggle-password" type="button">
@@ -106,11 +106,12 @@
                             <span class="badge bg-danger">Tidak Aktif</span>
                             @endif
                         </td>
-                        @hasanyrole('Superadmin|Admin')
                         <td class="text-center">
+                            @hasanyrole('Superadmin|Admin')
                             <a href="{{ route('computer-lab.edit', $computerLab->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>
                             </a>
+                            @endhasanyrole
                             <a href="{{ route('computer-lab.show', $computerLab->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                 <i class="bx bx-show"></i>
                             </a>
@@ -119,11 +120,12 @@
                                 data-bs-placement="bottom" title="Sejarah">
                                 <i class="bx bx-history"></i>
                             </a>
+                            @hasanyrole('Superadmin|Admin')
                             <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Padam">
                                 <span class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $computerLab->id }}"><i class="bx bx-trash"></i></span>
                             </a>
+                            @endhasanyrole
                         </td>
-                        @endhasanyrole
                     </tr>
                     @endforeach
                     @else

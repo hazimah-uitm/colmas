@@ -46,6 +46,10 @@
                         <td>{{ $computerLab->name }}</td>
                     </tr>
                     <tr>
+                        <th>Lokasi</th>
+                        <td>{{ $computerLab->location }}</td>
+                    </tr>
+                    <tr>
                         <th>Kampus</th>
                         <td>{{ $computerLab->campus->name }}</td>
                     </tr>

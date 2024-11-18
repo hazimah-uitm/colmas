@@ -21,6 +21,7 @@ class ComputerLab extends Model
         'campus_id',
         'pemilik_id',
         'username',
+        'location',
         'password',
         'no_of_computer',
         'publish_status'
