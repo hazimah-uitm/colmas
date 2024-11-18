@@ -42,7 +42,7 @@
                             <button id="resetButton" class="btn btn-primary">Reset</button>
                         </div>
                         &nbsp;
-                        <a href="{{ route('yearly-report.download-pdf', ['year' => $currentYear]) }}"
+                        <a href="{{ route('yearly-report.download-pdf', ['year' => $currentYear]) }}" target="_blank"
                             class="btn btn-info mb-3">Muat Turun PDF</a>
                     </div>
                 </form>

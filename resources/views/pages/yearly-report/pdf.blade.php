@@ -19,22 +19,27 @@
             font-size: 12px;
             color: #333;
         }
-
-        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            width: 135px;
+            margin-bottom: 0px;
         }
 
         .header h1 {
-            font-size: 18px;
+            font-size: 16pt;
             font-weight: bold;
-            margin-bottom: 5px;
+            color: #000 !important;
         }
 
-        .header .subtitle {
-            font-size: 14px;
-            color: #555;
+        .sub-header {
+            color: #212f3c;
+            font-size: 12pt;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         /* Campus Title Styles */
@@ -72,72 +77,44 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            color: #000 !important;
         }
+
 
         th,
         td {
-            padding-top: 4px;
-            padding-bottom: 4px;
-            padding-left: 8px;
-            padding-right: 8px;
             text-align: center;
+            font-size: 9pt;
             border: 1px solid #ddd;
             word-wrap: break-word;
             /* Allow wrapping of long text */
         }
 
         th {
-            background-color: #f4f4f4;
+            padding: 6px;
+            background-color: #d6dbdf;
             font-weight: bold;
-        }
-
-        /* Monthly columns */
-        .month-column {
-            width: 5%;
             text-align: center;
+            color: #333;
         }
 
-        /* Campus and lab columns */
-        .campus-column {
-            width: 20%;
-            font-weight: bold;
-        }
-
-        .lab-column {
-            width: 15%;
-            text-align: left;
-            padding-left: 8px;
-        }
-
-        .footer p {
-            font-size: 10pt;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .dijana-oleh {
-            font-size: 10pt;
-            color: #555;
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        hr {
-            margin: 10px 0;
-            border: none;
-            border-top: 1px solid #ccc;
-        }
-
-
-        /* Footer styles */
-        .footer hr {
-            margin-top: 30px;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 
 <body>
+    <!-- Header Section -->
     <div class="header">
+        <!-- UiTM Logo -->
+        <img src="{{ asset('public/assets/images/LogoUiTM.png') }}" alt="UiTM Logo">
+        <!-- Sub-header -->
+        <p class="sub-header">Bahagian Infostruktur<br>UiTM Cawangan Sarawak</p>
+        <!-- Report Title -->
         <h1>LAPORAN TAHUNAN SELENGGARA MAKMAL KOMPUTER {{ $currentYear }}</h1>
     </div>
 
@@ -148,18 +125,20 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 2%">No.</th>
-                    <th class="lab-column">Makmal Komputer</th>
+                    <th style="width:3%">No.</th>
+                    <th style="width:20%">Makmal Komputer</th>
                     @foreach ($months as $month)
-                    <th class="month-column">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
+                    <th>{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
                     @endforeach
                 </tr>
             </thead>
             <tbody>
                 @foreach ($data['computerLabList'] as $lab)
                 <tr>
-                <th style="width: 2%">{{ $loop->iteration }}</td>
-                    <td style="text-align: left;">{{ $lab->name }}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td style="text-align: left; 
+            padding-left: 6px;
+            padding-right: 6px;">{{ $lab->name }}</td>
                     @foreach ($months as $month)
                     <td>
                         @if ($data['maintainedLabsPerMonth'][$month][$lab->id])
@@ -175,11 +154,6 @@
         </table>
     </div>
     @endforeach
-    
-    <div class="footer">
-            <hr>
-            <p class="dijana-oleh">Dijana oleh: {{ $username }}</p>
-        </div>
 </body>
 
 </html>

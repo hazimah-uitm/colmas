@@ -6,7 +6,7 @@
     <style>
         @page {
             size: A4;
-            margin: 25mm 10mm 20mm 10mm;
+            margin: 20mm 10mm 20mm 10mm;
         }
 
         body {
@@ -34,6 +34,7 @@
         .header h1 {
             font-size: 16pt;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
         .sub-header {

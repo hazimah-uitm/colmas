@@ -143,6 +143,7 @@ class ReportController extends Controller
     {
         $user = Auth::user();
         $username = $user->name;
+        $currentDate = now()->format('d M Y');
 
         $labManagement = LabManagement::findOrFail($id);
         $softwareList = Software::where('publish_status', 1)->get();
@@ -168,6 +169,7 @@ class ReportController extends Controller
             'labCheckList' => $labCheckList,
             'workChecklists' => $workChecklists,
             'username' => $username,
+            'currentDate' => $currentDate,
         ])->render();
 
         // Create DomPDF instance
@@ -183,6 +185,25 @@ class ReportController extends Controller
 
         // Render the PDF
         $dompdf->render();
+
+        
+        // Add custom header and footer to each page
+        $canvas = $dompdf->getCanvas();
+        $canvasHeight = $canvas->get_height();
+        $canvasWidth = $canvas->get_width();  // Get the page width
+
+        // Header
+        $canvas->page_text(30, 30, "Computer Lab Management System (COLMAS)", 'arial', 8, array(0, 0, 0), 0, false, false, '');
+
+        // Footer: Left (Dijana oleh), Center (Tarikh), Right (Pagination)
+        $footerLeftText = "Dijana oleh: {$user->name} - {$currentDate}";
+        $footerRightText = "{PAGE_NUM}";
+
+        // Left: Positioning
+        $canvas->page_text(30, $canvasHeight - 40, $footerLeftText, null, 8, array(0, 0, 0));
+
+        // Right: Positioning
+        $canvas->page_text($canvasWidth - 40, $canvasHeight - 40, $footerRightText, null, 8, array(0, 0, 0));
 
         // Stream the PDF to the browser
         return $dompdf->stream($filename, ['Attachment' => false]);

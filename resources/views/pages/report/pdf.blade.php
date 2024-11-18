@@ -6,10 +6,38 @@
         {{ $labManagement->computerLab->name }}
     </title>
     <style>
+        @page {
+            size: A4;
+            margin: 20mm 10mm 20mm 10mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 10pt;
-            padding: 5px;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            width: 135px;
+            margin-bottom: 0px;
+        }
+
+        .header h1 {
+            font-size: 16pt;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .sub-header {
+            color: #212f3c;
+            font-size: 12pt;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .card {
@@ -88,8 +116,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 style="text-transform: uppercase" ;>Laporan Selenggara {{ $labManagement->computerLab->name }}</h1>
-            <h1 style="text-transform: uppercase" ;>{{ $labManagement->month }}-{{ $labManagement->year }}</h1>
+             <!-- UiTM Logo -->
+        <img src="{{ asset('public/assets/images/LogoUiTM.png') }}" alt="UiTM Logo">
+        <!-- Sub-header -->
+        <p class="sub-header">Bahagian Infostruktur<br>UiTM Cawangan Sarawak</p>
+        <!-- Report Title -->
+        <h1>Laporan Selenggara {{ $labManagement->computerLab->name }} {{ $labManagement->month }} {{ $labManagement->year }}</h1>
         </div>
         <div class="content">
             <table>
