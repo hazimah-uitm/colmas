@@ -25,8 +25,8 @@
         }
 
         .header img {
-            width: 135px;
-            margin-bottom: 0px;
+            width: 260px;
+            margin-bottom: 5px;
         }
 
         .header h1 {
@@ -111,9 +111,9 @@
     <!-- Header Section -->
     <div class="header">
         <!-- UiTM Logo -->
-        <img src="{{ asset('public/assets/images/LogoUiTM.png') }}" alt="UiTM Logo">
+        <img src="{{ $logoBase64 }}" alt="UiTM Logo">
         <!-- Sub-header -->
-        <p class="sub-header">Bahagian Infostruktur<br>UiTM Cawangan Sarawak</p>
+        <p class="sub-header">Bahagian Infostruktur</p>
         <!-- Report Title -->
         <h1>LAPORAN TAHUNAN SELENGGARA MAKMAL KOMPUTER {{ $currentYear }}</h1>
     </div>

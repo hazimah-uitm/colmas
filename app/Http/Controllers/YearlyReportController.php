@@ -205,6 +205,10 @@ class YearlyReportController extends Controller
             ];
         }
 
+        $path = public_path('assets/images/uitmcss.png');
+        $logoData = base64_encode(file_get_contents($path));
+        $logoMimeType = mime_content_type($path);
+
         // Render the view into HTML
         $html = view('pages.yearly-report.pdf', [
             'months' => $months,
@@ -212,6 +216,7 @@ class YearlyReportController extends Controller
             'currentYear' => $currentYear,
             'username' => $user->name,
             'currentDate' => $currentDate,
+            'logoBase64' => "data:{$logoMimeType};base64,{$logoData}",
         ])->render();
 
         // Set up the filename

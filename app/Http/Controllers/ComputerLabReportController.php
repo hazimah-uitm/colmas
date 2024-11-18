@@ -125,6 +125,10 @@ class ComputerLabReportController extends Controller
             }
         }
 
+        $path = public_path('assets/images/uitmcss.png');
+        $logoData = base64_encode(file_get_contents($path));
+        $logoMimeType = mime_content_type($path);
+
         // Render the view into HTML
         $html = view('pages.computer-lab-report.pdf', [
             'currentYear' =>  $currentYear,
@@ -133,6 +137,7 @@ class ComputerLabReportController extends Controller
             'username' => $user->name,
             'currentDate' => $currentDate,
             'currentMonthName' =>  $currentMonthName,
+            'logoBase64' => "data:{$logoMimeType};base64,{$logoData}",
         ])->render();
 
         // Set up the filename

@@ -162,6 +162,10 @@ class ReportController extends Controller
 
         $filename = $month . ' ' . $year . ' - ' . 'Laporan Selenggara ' . $labName . '.pdf';
 
+        $path = public_path('assets/images/uitmcss.png');
+        $logoData = base64_encode(file_get_contents($path));
+        $logoMimeType = mime_content_type($path);
+
         // Load the HTML view content as a string
         $html = view('pages.report.pdf', [
             'labManagement' => $labManagement,
@@ -170,6 +174,7 @@ class ReportController extends Controller
             'workChecklists' => $workChecklists,
             'username' => $username,
             'currentDate' => $currentDate,
+            'logoBase64' => "data:{$logoMimeType};base64,{$logoData}",
         ])->render();
 
         // Create DomPDF instance
