@@ -56,7 +56,7 @@
             <div class="card-body text-uppercase">
                 <h4>{{ $campusItem['campus']->name }}</h4>
                 <div class="table-responsive">
-                    <table class="table table-condensed table-striped table-bordered table-hover">
+                    <table class="table table-sm table-striped table-hover">
                         <thead class="table-light text-center text-uppercase">
                             <tr>
                                 <th>No.</th>

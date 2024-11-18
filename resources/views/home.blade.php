@@ -115,7 +115,7 @@
                                             $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                                         @endphp
                                         <div class="table-responsive">
-                                            <table class="table table-condensed table-striped table-bordered table-hover">
+                                            <table class="table table-condensed table-striped table-hover">
                                                 <thead class="table-light text-center text-uppercase">
                                                     <tr>
                                                         <th>No.</th>
@@ -172,7 +172,7 @@
                                 <div class="card-body text-uppercase">
                                     <h4>{{ $campusItem['campus']->name }}</h4>
                                     <div class="table-responsive">
-                                        <table class="table table-condensed table-striped table-bordered table-hover">
+                                        <table class="table table-condensed table-striped table-hover">
                                             <thead style="background-color: #ddd;" class="text-center">
                                                 <tr>
                                                     <th>No.</th>

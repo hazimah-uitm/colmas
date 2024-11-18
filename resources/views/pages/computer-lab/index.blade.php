@@ -63,7 +63,7 @@
         <p class="text-danger mt-4 fst-italic">**Sebarang perubahan/pertambahan maklumat boleh maklum kepada moderator (Hazimah).</p>
 
         <div class="table-responsive">
-            <table class="table table-condensed table-striped table-bordered table-hover">
+             <table class="table table-sm table-striped table-hover">
                 <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>#</th>
