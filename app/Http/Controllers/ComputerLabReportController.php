@@ -95,9 +95,10 @@ class ComputerLabReportController extends Controller
     public function downloadPdf(Request $request)
     {
         $user = User::find(auth()->id());
-
         $currentYear = $request->input('year', date('Y'));
         $currentMonth = $request->input('month', date('n'));
+        $currentDate = now()->format('d M Y');
+        $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
 
         // Query to get Computer Labs grouped by campus, pemilik, and total PC
         $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus'])
@@ -130,6 +131,8 @@ class ComputerLabReportController extends Controller
             'currentMonth' =>  $currentMonth,
             'ownersWithLabs' => $ownersWithLabs,
             'username' => $user->name,
+            'currentDate' => $currentDate,
+            'currentMonthName' =>  $currentMonthName,
         ])->render();
 
         // Set up the filename
@@ -143,10 +146,30 @@ class ComputerLabReportController extends Controller
         // Create the Dompdf instance and load the HTML
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'potrait');
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Add header and footer using DomPDF's callbacks
         $dompdf->render();
 
+        // Add custom header and footer to each page
+        $canvas = $dompdf->getCanvas();
+        $canvasHeight = $canvas->get_height();
+        $canvasWidth = $canvas->get_width();  // Get the page width
+
+        // Header
+        $canvas->page_text(30, 30, "Computer Lab Management System (COLMAS)", 'arial', 8, array(0, 0, 0), 0, false, false, '');
+
+        // Footer: Left (Dijana oleh), Center (Tarikh), Right (Pagination)
+        $footerLeftText = "Dijana oleh: {$user->name} - {$currentDate}";
+        $footerRightText = "{PAGE_NUM}";
+
+        // Left: Positioning
+        $canvas->page_text(30, $canvasHeight - 40, $footerLeftText, null, 8, array(0, 0, 0));
+
+        // Right: Positioning
+        $canvas->page_text($canvasWidth - 40, $canvasHeight - 40, $footerRightText, null, 8, array(0, 0, 0));
+
         // Stream the generated PDF
-        return $dompdf->stream($filename, ['Attachment' => true]);
+        return $dompdf->stream($filename, ['Attachment' => false]);
     }
 }
