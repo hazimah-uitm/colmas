@@ -56,8 +56,7 @@
                                                     @php
                                                         $isSelected = in_array(
                                                             $workChecklist->id,
-                                                            $trash->work_checklist_id,
-                                                        );
+                                                            $trash->work_checklist_id);
                                                     @endphp
                                                     <li style="list-style-type: none; margin-bottom: 5px;">
                                                         @if ($isSelected)
