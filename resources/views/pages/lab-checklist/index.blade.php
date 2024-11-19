@@ -77,7 +77,7 @@
                         @if (count($labChecklistList) > 0)
                             @foreach ($labChecklistList as $labChecklist)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ ($labChecklistList->currentPage() - 1) * $labChecklistList->perPage() + $loop->iteration }}</td>
                                     <td>{{ $labChecklist->title }}</td>
                                     <td class="text-center">
                                         @if ($labChecklist->publish_status == 'Aktif')

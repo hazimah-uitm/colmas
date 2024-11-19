@@ -69,7 +69,7 @@
                         @if (count($positionList) > 0)
                             @foreach ($positionList as $position)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ ($positionList->currentPage() - 1) * $positionList->perPage() + $loop->iteration }}</td>
                                     <td>{{ $position->title }}</td>
                                     <td class="text-center">{{ $position->grade }}</td>
                                     <td class="text-center">

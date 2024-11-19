@@ -78,7 +78,7 @@
                         @if (count($workChecklists) > 0)
                             @foreach ($workChecklists as $workChecklist)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ ($workChecklists->currentPage() - 1) * $workChecklists->perPage() + $loop->iteration }}</td>
                                     <td>{{ $workChecklist->title }}</td>
                                     <td class="text-center">
                                         @if ($workChecklist->publish_status == 'Aktif')

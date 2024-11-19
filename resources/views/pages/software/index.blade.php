@@ -78,7 +78,7 @@
                         @if (count($softwareList) > 0)
                             @foreach ($softwareList as $software)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ ($softwareList->currentPage() - 1) * $softwareList->perPage() + $loop->iteration }}</td>
                                     <td>{{ $software->title }}</td>
                                     <td class="text-center">{{ $software->version }}</td>
                                     <td class="text-center">

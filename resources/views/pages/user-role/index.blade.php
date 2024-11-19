@@ -69,7 +69,7 @@
                     @if (count($userRoleList) > 0)
                     @foreach ($userRoleList as $role)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center">{{ ($userRoleList->currentPage() - 1) * $userRoleList->perPage() + $loop->iteration }}</td>
                         <td>{{ ucfirst($role->name) }}</td>
                         <td>
                             <ul>

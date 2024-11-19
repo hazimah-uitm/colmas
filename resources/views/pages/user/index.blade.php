@@ -72,7 +72,7 @@
                         @if (count($userList) > 0)
                             @foreach ($userList as $user)
                                 <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ ($userList->currentPage() - 1) * $userList->perPage() + $loop->iteration }}</td>
                                     <td>{{ ucfirst($user->name) }}</td>
                                     <td class="text-center">{{ $user->staff_id }}</td>
                                     <td class="text-center">
