@@ -40,7 +40,19 @@ class LabChecklistSeeder extends Seeder
             [
                 'title' => 'Whiteboard',
                 'publish_status' => true
-            ]
+            ],
+            [
+                'title' => 'TV',
+                'publish_status' => true
+            ],
+            [
+                'title' => 'Printer',
+                'publish_status' => true
+            ],
+            [
+                'title' => 'Projektor',
+                'publish_status' => true
+            ],
         ]);
     }
 }
