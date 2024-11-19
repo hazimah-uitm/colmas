@@ -63,7 +63,7 @@
         <p class="text-danger mt-4 fst-italic">**Sebarang perubahan/pertambahan maklumat boleh maklum kepada moderator (Hazimah).</p>
 
         <div class="table-responsive">
-             <table class="table table-sm table-striped table-hover">
+            <table class="table table-sm table-striped table-hover">
                 <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>#</th>
@@ -83,14 +83,14 @@
                     @foreach ($computerLabList as $computerLab)
                     <tr>
                         <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
-                        <td class="text-center">{{ $computerLab->code }}</td>
+                        <td>{{ $computerLab->code }}</td>
                         <td>{{ $computerLab->name }}</td>
-                        <td class="text-center">{{ $computerLab->campus->name }}</td>
+                        <td>{{ $computerLab->campus->name }}</td>
                         <td class="text-center">{{ $computerLab->pemilik->name }}</td>
                         <td class="text-center">{{ $computerLab->no_of_computer }}</td>
                         <td class="text-center">{{ $computerLab->username }}</td>
-                        <td class="text-center">
-                            <div class="password-container d-flex align-items-center">
+                        <td class="text-center align-middle">
+                            <div class="password-container d-flex align-items-center justify-content-center">
                                 <span class="password me-3" data-password="{{ $computerLab->password }}">****</span>
                                 <button class="btn btn-sm btn-outline-info toggle-password" type="button">
                                     <i class="bx bx-show"></i>

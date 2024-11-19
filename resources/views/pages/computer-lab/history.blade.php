@@ -48,8 +48,8 @@
                                     <td>{{ $history->month_year->format('F Y') }}</td>
                                     <td>{{ $history->code }}</td>
                                     <td>{{ $history->name }}</td>
-                                    <td>{{ $history->pc_no }}</td>
-                                    <td>{{ $history->pemilik->name ?? 'Unknown' }}</td>
+                                    <td class="text-center">{{ $history->pc_no }}</td>
+                                    <td class="text-center">{{ $history->pemilik->name ?? 'Unknown' }}</td>
                                     <td class="text-center">
                                         @if ($history->publish_status)
                                             <span class="badge bg-success">Aktif</span>

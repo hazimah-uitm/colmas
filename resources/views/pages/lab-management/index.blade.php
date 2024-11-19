@@ -136,10 +136,10 @@
                                     </td>
                                     <td>{{ $labManagement->computerLab->campus->name ?? '-' }}</td>
                                     <td>{{ $labManagement->computerLab->name ?? '-' }}</td>
-                                    <td>{{ $labManagement->computerLab->pemilik->name ?? '-' }}</td>
-                                    <td>{{ $labManagement->computer_no ?? '-' }}</td>
-                                    <td>{{ $labManagement->month ?? '-' }}</td>
-                                    <td>{{ $labManagement->year ?? '-' }}</td>
+                                    <td class="text-center">{{ $labManagement->computerLab->pemilik->name ?? '-' }}</td>
+                                    <td class="text-center">{{ $labManagement->computer_no ?? '-' }}</td>
+                                    <td class="text-center">{{ $labManagement->month ?? '-' }}</td>
+                                    <td class="text-center">{{ $labManagement->year ?? '-' }}</td>
                                     <td class="text-center">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) ?? '-' }}
                                     </td>
                                     <td class="text-center">

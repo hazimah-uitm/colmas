@@ -50,10 +50,10 @@
                                     </td>
                                     <td>{{ $trash->computerLab->campus->name }}</td>
                                     <td>{{ $trash->computerLab->name }}</td>
-                                    <td>{{ $trash->computerLab->pemilik->name }}</td>
-                                    <td>{{ $trash->computer_no }}</td>
-                                    <td>{{ $trash->month }}</td>
-                                    <td>{{ $trash->year }}</td>
+                                    <td class="text-center">{{ $trash->computerLab->pemilik->name }}</td>
+                                    <td class="text-center">{{ $trash->computer_no }}</td>
+                                    <td class="text-center">{{ $trash->month }}</td>
+                                    <td class="text-center">{{ $trash->year }}</td>
                                     <td class="text-center">{{ str_replace('_', ' ', ucwords(strtolower($trash->status))) ?? '-' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('lab-management.restore', $trash->id) }}"

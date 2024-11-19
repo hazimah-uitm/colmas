@@ -103,8 +103,7 @@
                                                     @php
                                                         $isSelected = in_array(
                                                             $workChecklist->id,
-                                                            $maintenanceRecord->work_checklist_id,
-                                                        );
+                                                            $maintenanceRecord->work_checklist_id);
                                                     @endphp
                                                     <li>
                                                         @if ($isSelected)

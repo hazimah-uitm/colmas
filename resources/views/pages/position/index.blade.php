@@ -71,7 +71,7 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $position->title }}</td>
-                                    <td>{{ $position->grade }}</td>
+                                    <td class="text-center">{{ $position->grade }}</td>
                                     <td class="text-center">
                                         @if ($position->publish_status == 'Aktif')
                                             <span class="badge bg-success">Aktif</span>

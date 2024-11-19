@@ -80,7 +80,7 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $software->title }}</td>
-                                    <td>{{ $software->version }}</td>
+                                    <td class="text-center">{{ $software->version }}</td>
                                     <td class="text-center">
                                         @if ($software->publish_status == 'Aktif')
                                             <span class="badge bg-success">Aktif</span>
