@@ -143,8 +143,7 @@ class MaintenanceRecordController extends Controller
 
         // Only check for duplicate IP address if entry_option is 'automatik'
         if ($entryOption === 'automatik' && $ipAddress) {
-            $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
-                ->withTrashed()
+            $existingRecord = MaintenanceRecord::withTrashed()
                 ->where('ip_address', $ipAddress)
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year)
@@ -336,8 +335,7 @@ class MaintenanceRecordController extends Controller
 
 
         if ($entryOption === 'automatik' && $ipAddress) {
-            $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
-                ->withTrashed()
+            $existingRecord = MaintenanceRecord::withTrashed()
                 ->where('ip_address', $ipAddress)
                 ->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year)
