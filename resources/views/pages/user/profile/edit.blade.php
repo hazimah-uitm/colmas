@@ -108,15 +108,18 @@
 
                     <div class="mb-3">
                         <label for="campus_id" class="form-label">Kampus</label>
-                        <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id"
-                            name="campus_id">
+                        <div class="form-check">
                             @foreach ($campusList as $campus)
-                            <option value="{{ $campus->id }}"
-                                {{ old('campus_id') == $campus->id || ($user->campus_id ?? '') == $campus->id ? 'selected' : '' }}>
+                            <input class="form-check-input {{ $errors->has('campus_id') ? 'is-invalid' : '' }}"
+                                type="checkbox" name="campus_id[]" value="{{ $campus->id }}"
+                                id="campus_{{ $campus->id }}"
+                                {{ in_array($campus->id, old('campus_id', $user->campus->pluck('id')->toArray())) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="campus_{{ $campus->id }}">
                                 {{ $campus->name }}
-                            </option>
+                            </label><br>
                             @endforeach
-                        </select>
+                        </div>
+
                         @if ($errors->has('campus_id'))
                         <div class="invalid-feedback">
                             @foreach ($errors->get('campus_id') as $error)

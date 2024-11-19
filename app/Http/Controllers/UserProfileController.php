@@ -41,7 +41,7 @@ class UserProfileController extends Controller
             'staff_id'   => 'required|unique:users,staff_id,' . $id,
             'email'      => 'required|email|unique:users,email,' . $id,
             'position_id' => 'required|exists:positions,id',
-            'campus_id'  => 'required|exists:campuses,id',
+            'campus_id'  => 'required|array|exists:campuses,id',
             'office_phone_no' => 'nullable|string',
         ],[
             'name.required'     => 'Sila isi nama pengguna',
@@ -56,9 +56,10 @@ class UserProfileController extends Controller
         $user = User::findOrFail($id);
 
         // Update the user's basic information
-        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'campus_id', 'office_phone_no'));
+        $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no'));
         $user->save();
-
+        $user->campus()->sync($request->input('campus_id'));
+        
         return redirect()->route('profile.show', $id) // Corrected route name
             ->with('success', 'Maklumat berjaya dikemaskini');
     }
