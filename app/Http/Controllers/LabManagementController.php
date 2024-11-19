@@ -96,8 +96,8 @@ class LabManagementController extends Controller
         $user = User::find(auth()->id());
         // Only retrieve assigned computer labs for Pemilik
         $computerLabList = $user->hasRole('Pemilik')
-        ? $user->assignedComputerLabs()->with('software')->get()
-        : ComputerLab::where('publish_status', 1)->with('software')->get();
+            ? $user->assignedComputerLabs()->with('software')->get()
+            : ComputerLab::where('publish_status', 1)->with('software')->get();
 
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         return view('pages.lab-management.create', [
@@ -173,19 +173,21 @@ class LabManagementController extends Controller
         $computerLabList = $user->hasRole('Pemilik')
             ? $user->assignedComputerLabs
             : ComputerLab::where('publish_status', 1)->get();
-        
+
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
         $labManagement = LabManagement::findOrFail($id);
-        $maintenanceRecord = MaintenanceRecord::findOrFail($id);
-        $entryOption = $maintenanceRecord->entry_option;
-    
+        
+        // Check for MaintenanceRecord
+        $maintenanceRecord = MaintenanceRecord::find($id);
+        $entryOption = $maintenanceRecord ? $maintenanceRecord->entry_option : null;
+
         $labManagement->date = Carbon::parse($labManagement->start_time)->format('d-m-Y');
         $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
         $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
         $labManagement->startTime = Carbon::parse($labManagement->start_time)->format('H:i');
         $labManagement->endTime = $labManagement->end_time ? Carbon::parse($labManagement->end_time)->format('H:i') : null;
-    
+
         return view('pages.lab-management.view', [
             'labManagement' => $labManagement,
             'labCheckList' => $labCheckList,
@@ -195,7 +197,7 @@ class LabManagementController extends Controller
             'entryOption' => $entryOption,
         ]);
     }
-    
+
 
     public function edit(Request $request, $id)
     {
