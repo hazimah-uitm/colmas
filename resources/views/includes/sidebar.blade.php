@@ -4,7 +4,7 @@
     </div>
     <div>
         <h4 class="logo-text">COLMAS</h4>
-        <h6 class="logo-subtitle">Computer Lab Management System</h6>
+        <h6 class="logo-subtitle">Computer Lab Maintenance System</h6>
     </div>
     <div class="toggle-icon ms-auto" id="toggle-icon"><i class='bx bx-arrow-to-left'></i></div>
 </div>

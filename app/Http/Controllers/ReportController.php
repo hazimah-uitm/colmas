@@ -198,7 +198,7 @@ class ReportController extends Controller
         $canvasWidth = $canvas->get_width();  // Get the page width
 
         // Header
-        $canvas->page_text(30, 30, "Computer Lab Management System (COLMAS)", 'arial', 8, array(0, 0, 0), 0, false, false, '');
+        $canvas->page_text(30, 30, "Computer Lab Maintenance System (COLMAS)", 'arial', 8, array(0, 0, 0), 0, false, false, '');
 
         // Footer: Left (Dijana oleh), Center (Tarikh), Right (Pagination)
         $footerLeftText = "Dijana oleh: {$user->name} - {$currentDate}";

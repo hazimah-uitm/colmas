@@ -10,7 +10,7 @@
                     <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                     <div class="ms-3">
                     <h4 class="logo-text-login mb-0">COLMAS</h4>
-                    <h6 class="logo-subtitle-login mb-0">Computer Lab Management System</h6>
+                    <h6 class="logo-subtitle-login mb-0">Computer Lab Maintenance System</h6>
                     </div>
                 </div>
             </div>
