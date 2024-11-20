@@ -186,21 +186,31 @@ class ComputerLabController extends Controller
     {
         $search = $request->input('search');
         $perPage = $request->input('perPage', 10);
+    
+        $user = User::find(auth()->id());
 
-        if ($search) {
-            $computerLabList = ComputerLab::where('name', 'LIKE', "%$search%")
-                ->orWhere('code', 'LIKE', "%$search%")
-                ->latest()
-                ->paginate($perPage);
-        } else {
-            $computerLabList = ComputerLab::latest()->paginate($perPage);
+        $computerLabQuery = ComputerLab::with(['pemilik', 'campus'])
+            ->where('publish_status', 1);
+
+        if (!$user->hasAnyRole(['Admin', 'Superadmin'])) {
+            $userCampusIds = $user->campus->pluck('id')->toArray();
+            $computerLabQuery->whereIn('campus_id', $userCampusIds);
         }
 
+        if ($search) {
+            $computerLabQuery->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%$search%")
+                      ->orWhere('code', 'LIKE', "%$search%");
+            });
+        }
+    
+        $computerLabList = $computerLabQuery->latest()->paginate($perPage);
+    
         return view('pages.computer-lab.index', [
             'computerLabList' => $computerLabList,
             'perPage' => $perPage,
         ]);
-    }
+    }    
 
     public function destroy(Request $request, $id)
     {
