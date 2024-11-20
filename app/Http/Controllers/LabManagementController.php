@@ -510,30 +510,56 @@ class LabManagementController extends Controller
         return redirect()->route('lab-management')->with('success', 'Maklumat berjaya dihapuskan');
     }
 
-    public function trashList()
+    public function trashList(Request $request)
     {
-        $trashList = LabManagement::onlyTrashed()->latest()->paginate(10);
-        $softwareList = Software::all();
-        $labCheckList = LabChecklist::all();
-
-        // Format dates
+        $perPage = $request->input('perPage', 10);
+    
+        // Get the authenticated user
+        $user = User::find(auth()->id());
+    
+        // Initialize the query for trashed LabManagement records
+        $trashQuery = LabManagement::onlyTrashed();
+    
+        // Filter based on user role
+        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+            // Admin and Superadmin can access all trashed records
+        } elseif ($user->hasRole('Pegawai Penyemak')) {
+            // Filter by campuses associated with the user
+            $trashQuery->whereHas('computerLab', function ($query) use ($user) {
+                $query->whereIn('campus_id', $user->campus->pluck('id'));
+            });
+        } else {
+            // Filter by assigned computer labs for other roles
+            $assignedComputerLabs = $user->assignedComputerLabs;
+            $trashQuery->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
+        }
+    
+        // Paginate the filtered trash list
+        $trashList = $trashQuery->latest()->paginate($perPage);
+    
+        // Fetch additional lists
+        $softwareList = Software::where('publish_status', 1)->get();
+        $labCheckList = LabChecklist::where('publish_status', 1)->get();
+    
+        // Format dates for trashed records
         foreach ($trashList as $trash) {
             $startTime = Carbon::parse($trash->start_time)->timezone('Asia/Kuching');
             $endTime = Carbon::parse($trash->end_time)->timezone('Asia/Kuching');
-
+    
             $trash->date = $startTime->format('d-m-Y');
             $trash->month = $startTime->format('F');
             $trash->year = $startTime->format('Y');
             $trash->startTime = $startTime->format('H:i');
             $trash->endTime = $endTime->format('H:i');
         }
-
+    
         return view('pages.lab-management.trash', [
             'trashList' => $trashList,
+            'perPage' => $perPage,
             'softwareList' => $softwareList,
             'labCheckList' => $labCheckList,
         ]);
-    }
+    }    
 
     public function restore($id)
     {
