@@ -60,6 +60,11 @@
                             value="pc_rosak" {{ old('entry_option', $entryOption) == 'pc_rosak' ? 'checked' : '' }}>
                         <label class="form-check-label" for="pcRosak">PC Rosak</label>
                     </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="entry_option" id="pcKeluar"
+                            value="pc_keluar" {{ old('entry_option', $entryOption) == 'pc_keluar' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="pcKeluar">PC Keluar</label>
+                    </div>
                 </div>
             </div>
 
@@ -107,7 +112,7 @@
             </div>
 
             <div class="mb-3" id="vmsNoContainer">
-            <label for="vms_no" class="form-label">No. Aduan<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-2">(VMS / UNITS)</a></label>
+                <label for="vms_no" class="form-label">No. Aduan<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-2">(VMS / UNITS)</a></label>
                 <input type="text" class="form-control {{ $errors->has('vms_no') ? 'is-invalid' : '' }}" id="vms_no"
                     name="vms_no" value="{{ old('vms_no') ?? ($maintenanceRecord->vms_no ?? '') }}">
                 @if ($errors->has('vms_no'))
@@ -129,6 +134,56 @@
                 @if ($errors->has('aduan_unit_no'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('aduan_unit_no') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6" id="keluarDate">
+                    <label for="keluar_date" class="form-label">Tarikh Keluar</label>
+                    <input type="date" class="form-control {{ $errors->has('keluar_date') ? 'is-invalid' : '' }}" id="keluar_date" name="keluar_date" value="{{ old('keluar_date') ?? ($maintenanceRecord->keluar_date ?? '') }}">
+                    @if ($errors->has('keluar_date'))
+                    <div class="invalid-feedback">
+                        @foreach ($errors->get('keluar_date') as $error)
+                        {{ $error }}
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+
+                <div class="col-6" id="kembaliDate">
+                    <label for="kembali_date" class="form-label">Tarikh Dikembalikan (Optional)</label>
+                    <input type="date" class="form-control {{ $errors->has('kembali_date') ? 'is-invalid' : '' }}" id="kembali_date" name="kembali_date" value="{{ old('kembali_date') ?? ($maintenanceRecord->kembali_date ?? '') }}">
+                    @if ($errors->has('kembali_date'))
+                    <div class="invalid-feedback">
+                        @foreach ($errors->get('kembali_date') as $error)
+                        {{ $error }}
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="mb-3" id="keluarOfficer">
+                <label for="keluar_officer" class="form-label">Pegawai Bertanggungjawab</label>
+                <input type="text" class="form-control {{ $errors->has('keluar_officer') ? 'is-invalid' : '' }}" id="keluar_officer" name="keluar_officer" value="{{ old('keluar_officer') ?? ($maintenanceRecord->keluar_officer ?? '') }}">
+                @if ($errors->has('keluar_officer'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('keluar_officer') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3" id="keluarLocation">
+                <label for="keluar_location" class="form-label">Lokasi PC Dibawa Keluar</label>
+                <input type="text" class="form-control {{ $errors->has('keluar_location') ? 'is-invalid' : '' }}" id="keluar_location" name="keluar_location" value="{{ old('keluar_location') ?? ($maintenanceRecord->keluar_location ?? '') }}">
+                @if ($errors->has('keluar_location'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('keluar_location') as $error)
                     {{ $error }}
                     @endforeach
                 </div>
@@ -165,6 +220,10 @@
         const workChecklistContainer = document.getElementById('workChecklistContainer');
         const hiddenComputerNameManual = document.getElementById('hidden_computer_name_manual').value;
         const hiddenIpAddress = document.getElementById('hidden_ip_address_automatik').value;
+        const keluarDate = document.getElementById('keluarDate');
+        const kembaliDate = document.getElementById('kembaliDate');
+        const keluarLocation = document.getElementById('keluarLocation');
+        const keluarOfficer = document.getElementById('keluarOfficer');
 
         function toggleFields() {
             const selectedOption = document.querySelector('input[name="entry_option"]:checked').value;
@@ -180,6 +239,10 @@
                 aduanUnitNoContainer.style.display = 'none';
                 remarksContainer.style.display = 'block';
                 workChecklistContainer.style.display = 'block';
+                keluarDate.style.display = 'none';
+                kembaliDate.style.display = 'none';
+                keluarLocation.style.display = 'none';
+                keluarOfficer.style.display = 'none';
             } else if (selectedOption === 'manual') {
                 computerNameInput.value = hiddenComputerNameManual;
                 computerNameInput.removeAttribute('disabled');
@@ -191,6 +254,10 @@
                 aduanUnitNoContainer.style.display = 'block';
                 remarksContainer.style.display = 'block';
                 workChecklistContainer.style.display = 'block';
+                keluarDate.style.display = 'none';
+                kembaliDate.style.display = 'none';
+                keluarLocation.style.display = 'none';
+                keluarOfficer.style.display = 'none';
             } else if (selectedOption === 'pc_rosak') {
                 computerNameInput.value = hiddenComputerNameManual;
                 computerNameInput.removeAttribute('disabled');
@@ -202,6 +269,25 @@
                 aduanUnitNoContainer.style.display = 'none';
                 remarksContainer.style.display = 'block';
                 workChecklistContainer.style.display = 'none';
+                keluarDate.style.display = 'none';
+                kembaliDate.style.display = 'none';
+                keluarLocation.style.display = 'none';
+                keluarOfficer.style.display = 'none';
+            } else if (selectedOption === 'pc_keluar') {
+                computerNameInput.value = hiddenComputerNameManual;
+                computerNameInput.removeAttribute('disabled');
+                ipAddressInput.value = '';
+                ipAddressInput.removeAttribute('disabled');
+                computerNameContainer.style.display = 'block';
+                ipAddressContainer.style.display = 'none';
+                vmsNoContainer.style.display = 'none';
+                aduanUnitNoContainer.style.display = 'none';
+                remarksContainer.style.display = 'block';
+                workChecklistContainer.style.display = 'none';
+                keluarDate.style.display = 'block';
+                kembaliDate.style.display = 'block';
+                keluarLocation.style.display = 'block';
+                keluarOfficer.style.display = 'block';
             }
         }
 

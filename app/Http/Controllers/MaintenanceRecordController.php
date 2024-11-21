@@ -273,6 +273,10 @@ class MaintenanceRecordController extends Controller
             'work_checklist_id' => 'nullable|array|required_if:entry_option,automatik|required_if:entry_option,manual',
             'vms_no'            => 'required_if:entry_option,pc_rosak|nullable',
             'aduan_unit_no'     => 'required_if:entry_option,manual|nullable',
+            'keluar_location'     => 'required_if:entry_option,pc_keluar|nullable',
+            'keluar_officer'     => 'required_if:entry_option,pc_keluar|nullable',
+            'keluar_date'     => 'required_if:entry_option,pc_keluar|nullable',
+            'kembali_date'     => 'nullable',
             'remarks'           => 'nullable|required_if:entry_option,pc_rosak|required_if:entry_option,manual',
             'entry_option'      => 'required',
         ], [
@@ -280,6 +284,9 @@ class MaintenanceRecordController extends Controller
             'work_checklist_id.required_if'  => 'Sila semak proses kerja sebelum hantar',
             'vms_no.required_if'             => 'Sila isi VMS No. sebelum hantar',
             'aduan_unit_no.required_if'      => 'Sila isi No. Aduan Unit sebelum hantar',
+            'keluar_location.required_if'      => 'Sila isi lokasi PC dibawa keluar sebelum hantar',
+            'keluar_officer.required_if'      => 'Sila isi Pegawai Bertanggungjawab sebelum hantar',
+            'keluar_date.required_if'      => 'Sila isi No. Aduan Unit sebelum hantar',
             'remarks.required_if'            => 'Sila isi Ulasan sebelum hantar',
             'lab_management_id.required'     => 'ID pengurusan makmal diperlukan.',
             'entry_option.required'          => 'Pilihan kemasukan rekod diperlukan.',
@@ -292,7 +299,7 @@ class MaintenanceRecordController extends Controller
         // Define the required IDs and retrieve their titles
         $requiredIds = [];
         if ($entryOption === 'manual') {
-            $requiredIds = [1, 2, 3, 4, 5];
+            $requiredIds = [1, 2, 5];
         } elseif ($entryOption === 'automatik') {
             $requiredIds = [1, 2, 3, 4, 5, 6];
         }

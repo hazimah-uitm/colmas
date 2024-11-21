@@ -41,7 +41,16 @@
                     </tr>
                     <tr>
                         <th>Pilihan Rekod</th>
-                        <td>{{ $entryOption == 'auto' ? 'Penyelenggaraan Automatik' : ($entryOption == 'manual' ? 'Penyelenggaraan Manual' : 'PC Rosak') }}
+                        <td>
+                            @if ($entryOption == 'auto')
+                            Penyelenggaraan Automatik
+                            @elseif ($entryOption == 'manual')
+                            Penyelenggaraan Manual
+                            @elseif ($entryOption == 'pc_keluar')
+                            PC Keluar
+                            @else
+                            PC Rosak
+                            @endif
                         </td>
                     </tr>
                     <tr>
@@ -57,7 +66,11 @@
                     <tr>
                         <th>Proses Kerja</th>
                         <td>
-                            @if (!empty($maintenanceRecord->work_checklist_id))
+                            @if ($maintenanceRecord->entry_option == "pc_rosak")
+                            <p>Komputer Bermasalah</p>
+                            @elseif ($maintenanceRecord->entry_option == "pc_keluar")
+                            <p>PC dibawa keluar pada {{ $maintenanceRecord->keluar_date }} <br> ke {{ $maintenanceRecord->keluar_location }}</p>
+                            @else
                             <ul style="list-style-type: none; padding: 0;">
                                 @foreach ($workChecklists as $workChecklist)
                                 @php
@@ -75,12 +88,9 @@
                                 </li>
                                 @endforeach
                             </ul>
-                            @else
-                            <p>Komputer Bermasalah</p>
                             @endif
                         </td>
                     </tr>
-
                     @if ($entryOption == 'manual')
                     <tr>
                         <th>Aduan Unit No.</th>
@@ -90,6 +100,23 @@
                     <tr>
                         <th>VMS No.</th>
                         <td>{{ $maintenanceRecord->vms_no ?? '-' }}</td>
+                    </tr>
+                    @elseif($entryOption == 'pc_keluar')
+                    <tr>
+                        <th>Tarikh Keluar</th>
+                        <td>{{ $maintenanceRecord->keluar_date ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tarikh Dikembalikan</th>
+                        <td>{{ $maintenanceRecord->kembali_date ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Pegawai Bertanggungjawab</th>
+                        <td>{{ $maintenanceRecord->keluar_officer ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lokasi PC dibawa Keluar</th>
+                        <td>{{ $maintenanceRecord->keluar_location ?? '-' }}</td>
                     </tr>
                     @endif
                     <tr>
