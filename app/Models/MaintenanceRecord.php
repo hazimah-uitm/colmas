@@ -24,6 +24,10 @@ class MaintenanceRecord extends Model
         'aduan_unit_no',
         'remarks',
         'entry_option',
+        'keluar_location', 
+        'keluar_officer',
+        'keluar_date', 
+        'kembali_date',
     ];
 
     protected $casts = [

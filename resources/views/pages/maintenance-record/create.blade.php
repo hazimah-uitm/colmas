@@ -57,6 +57,10 @@
                         <input class="form-check-input" type="radio" name="entry_option" id="pcRosak" value="pc_rosak" {{ old('entry_option', $defaultEntryOption) == 'pc_rosak' ? 'checked' : '' }}>
                         <label class="form-check-label" for="pcRosak">PC Rosak</label>
                     </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="entry_option" id="pcKeluar" value="pc_keluar" {{ old('entry_option', $defaultEntryOption) == 'pc_keluar' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="pcKeluar">PC Keluar</label>
+                    </div>
                 </div>
             </div>
 
@@ -111,7 +115,7 @@
             </div>
 
             <div class="mb-3" id="aduanUnitNo">
-            <label for="aduan_unit_no" class="form-label">No. Rujukan Aduan (<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-0">UNITS</a> / GFM)</label>
+                <label for="aduan_unit_no" class="form-label">No. Rujukan Aduan (<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-0">UNITS</a> / GFM)</label>
                 <input type="text" class="form-control {{ $errors->has('aduan_unit_no') ? 'is-invalid' : '' }}" id="aduan_unit_no" name="aduan_unit_no" value="{{ old('aduan_unit_no') ?? ($maintenanceRecord->aduan_unit_no ?? '') }}">
                 @if ($errors->has('aduan_unit_no'))
                 <div class="invalid-feedback">
@@ -122,6 +126,59 @@
                 @endif
             </div>
 
+            <!-- pc keluar -->
+
+            <div class="row mb-3">
+                <div class="col-6" id="keluarDate">
+                    <label for="keluar_date" class="form-label">Tarikh Keluar</label>
+                    <input type="date" class="form-control {{ $errors->has('keluar_date') ? 'is-invalid' : '' }}" id="keluar_date" name="keluar_date" value="{{ old('keluar_date') ?? ($maintenanceRecord->keluar_date ?? '') }}">
+                    @if ($errors->has('keluar_date'))
+                    <div class="invalid-feedback">
+                        @foreach ($errors->get('keluar_date') as $error)
+                        {{ $error }}
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+
+                <div class="col-6" id="kembaliDate">
+                    <label for="kembali_date" class="form-label">Tarikh Dikembalikan (Optional)</label>
+                    <input type="date" class="form-control {{ $errors->has('kembali_date') ? 'is-invalid' : '' }}" id="kembali_date" name="kembali_date" value="{{ old('kembali_date') ?? ($maintenanceRecord->kembali_date ?? '') }}">
+                    @if ($errors->has('kembali_date'))
+                    <div class="invalid-feedback">
+                        @foreach ($errors->get('kembali_date') as $error)
+                        {{ $error }}
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="mb-3" id="keluarOfficer">
+                <label for="keluar_officer" class="form-label">Pegawai Bertanggungjawab</label>
+                <input type="text" class="form-control {{ $errors->has('keluar_officer') ? 'is-invalid' : '' }}" id="keluar_officer" name="keluar_officer" value="{{ old('keluar_officer') ?? ($maintenanceRecord->keluar_officer ?? '') }}">
+                @if ($errors->has('keluar_officer'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('keluar_officer') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3" id="keluarLocation">
+                <label for="keluar_location" class="form-label">Lokasi PC Dibawa Keluar</label>
+                <input type="text" class="form-control {{ $errors->has('keluar_location') ? 'is-invalid' : '' }}" id="keluar_location" name="keluar_location" value="{{ old('keluar_location') ?? ($maintenanceRecord->keluar_location ?? '') }}">
+                @if ($errors->has('keluar_location'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('keluar_location') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            
             <div class="mb-3">
                 <label for="remarks" class="form-label">Catatan</label>
                 <textarea class="form-control {{ $errors->has('remarks') ? 'is-invalid' : '' }}" id="remarks" name="remarks" rows="3">{{ old('remarks') ?? ($maintenanceRecord->remarks ?? '') }}</textarea>
@@ -147,6 +204,7 @@
         const autoRadio = document.getElementById('automatik');
         const pcRosakRadio = document.getElementById('pcRosak');
         const manualRadio = document.getElementById('manual');
+        const pcKeluarRadio = document.getElementById('pcKeluar');
         const computerNameInput = document.getElementById('computer_name');
         const ipAddressInput = document.getElementById('ip_address');
         const hiddenComputerNameManual = document.querySelector('input[name="hidden_computer_name_manual"]').value;
@@ -154,6 +212,10 @@
         const workProcessSection = document.getElementById('workProcessSection');
         const vmsNo = document.getElementById('vmsNo');
         const aduanUnitNo = document.getElementById('aduanUnitNo');
+        const keluarDate = document.getElementById('keluarDate');
+        const kembaliDate = document.getElementById('kembaliDate');
+        const keluarLocation = document.getElementById('keluarLocation');
+        const keluarOfficer = document.getElementById('keluarOfficer');
 
         function toggleEntryOptions() {
             if (autoRadio.checked) {
@@ -165,6 +227,10 @@
                 workProcessSection.style.display = 'block';
                 vmsNo.style.display = 'none';
                 aduanUnitNo.style.display = 'none';
+                keluarDate.style.display = 'none';
+                kembaliDate.style.display = 'none';
+                keluarLocation.style.display = 'none';
+                keluarOfficer.style.display = 'none';
             } else if (pcRosakRadio.checked) {
                 computerNameInput.value = hiddenComputerNameManual;
                 computerNameInput.disabled = false;
@@ -173,6 +239,10 @@
                 workProcessSection.style.display = 'none';
                 vmsNo.style.display = 'block';
                 aduanUnitNo.style.display = 'none';
+                keluarDate.style.display = 'none';
+                kembaliDate.style.display = 'none';
+                keluarLocation.style.display = 'none';
+                keluarOfficer.style.display = 'none';
             } else if (manualRadio.checked) {
                 computerNameInput.value = hiddenComputerNameManual;
                 computerNameInput.disabled = false;
@@ -181,12 +251,29 @@
                 workProcessSection.style.display = 'block';
                 vmsNo.style.display = 'none';
                 aduanUnitNo.style.display = 'block';
+                keluarDate.style.display = 'none';
+                kembaliDate.style.display = 'none';
+                keluarLocation.style.display = 'none';
+                keluarOfficer.style.display = 'none';
+            } else if (pcKeluarRadio.checked) {
+                computerNameInput.value = hiddenComputerNameManual;
+                computerNameInput.disabled = false;
+                ipAddressContainer.style.display = 'none';
+                ipAddressInput.disabled = false;
+                workProcessSection.style.display = 'none';
+                vmsNo.style.display = 'none';
+                aduanUnitNo.style.display = 'none';
+                keluarDate.style.display = 'block';
+                kembaliDate.style.display = 'block';
+                keluarLocation.style.display = 'block';
+                keluarOfficer.style.display = 'block';
             }
         }
 
         autoRadio.addEventListener('change', toggleEntryOptions);
         pcRosakRadio.addEventListener('change', toggleEntryOptions);
         manualRadio.addEventListener('change', toggleEntryOptions);
+        pcKeluarRadio.addEventListener('change', toggleEntryOptions);
 
         toggleEntryOptions();
     });
