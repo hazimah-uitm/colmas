@@ -116,12 +116,13 @@
 <body>
     <div class="container">
         <div class="header">
-             <!-- UiTM Logo -->
-        <img src="{{ $logoBase64 }}" alt="UiTM Logo">
-        <!-- Sub-header -->
-        <p class="sub-header">Bahagian Infostruktur</p>
-        <!-- Report Title -->
-        <h1>Laporan Selenggara {{ $labManagement->computerLab->name }} {{ $labManagement->month }} {{ $labManagement->year }}</h1>
+            <!-- UiTM Logo -->
+            <img src="{{ $logoBase64 }}" alt="UiTM Logo">
+            <!-- Sub-header -->
+            <p class="sub-header">Bahagian Infostruktur</p>
+            <!-- Report Title -->
+            <h1>Laporan Selenggara {{ $labManagement->computerLab->name }} {{ $labManagement->month }}
+                {{ $labManagement->year }}</h1>
         </div>
         <div class="content">
             <table>
@@ -176,25 +177,25 @@
                     <thead>
                         <tr>
                             @foreach ($labCheckList as $labCheck)
-                            <th style="text-align: center; border-color: #cacfd2">{{ $labCheck->title }}</th>
+                                <th style="text-align: center; border-color: #cacfd2">{{ $labCheck->title }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             @foreach ($labCheckList as $labCheck)
-                            <td style="text-align: center; border-color: #cacfd2">
-                                @php
-                                $isSelected =
-                                !empty($labManagement->lab_checklist_id) &&
-                                in_array($labCheck->id, $labManagement->lab_checklist_id);
-                                @endphp
-                                @if ($isSelected)
-                                <span class="tick-icon">&#10004;</span>
-                                @else
-                                <span class="empty-icon" style="color: red">&#10006;</span>
-                                @endif
-                            </td>
+                                <td style="text-align: center; border-color: #cacfd2">
+                                    @php
+                                        $isSelected =
+                                            !empty($labManagement->lab_checklist_id) &&
+                                            in_array($labCheck->id, $labManagement->lab_checklist_id);
+                                    @endphp
+                                    @if ($isSelected)
+                                        <span class="tick-icon">&#10004;</span>
+                                    @else
+                                        <span class="empty-icon" style="color: red">&#10006;</span>
+                                    @endif
+                                </td>
                             @endforeach
                         </tr>
                     </tbody>
@@ -208,7 +209,9 @@
                         <tr>
                             <th style="text-align: center; border-color: #cacfd2">No.</th>
                             <th style="text-align: center; border-color: #cacfd2">Nama Komputer</th>
-                            <th style="text-align: center; border-color: #cacfd2"colspan="{{ count($workChecklists) }}">Kerja Selenggara</th>
+                            <th
+                                style="text-align: center; border-color: #cacfd2"colspan="{{ count($workChecklists) }}">
+                                Kerja Selenggara</th>
                             <th style="text-align: center; border-color: #cacfd2">No. Aduan</th>
                             <th style="width: 45%; text-align: center; border-color: #cacfd2">Catatan</th>
                         </tr>
@@ -216,7 +219,7 @@
                             <th style="text-align: center; border-color: #cacfd2"></th>
                             <th style="text-align: center; border-color: #cacfd2">IP Address</th>
                             @foreach ($workChecklists as $workChecklist)
-                            <th style="text-align: center; border-color: #cacfd2">{{ $workChecklist->title }}</th>
+                                <th style="text-align: center; border-color: #cacfd2">{{ $workChecklist->title }}</th>
                             @endforeach
                             <th style="text-align: center; border-color: #cacfd2"></th>
                             <th style="width: 45%; text-align: center; border-color: #cacfd2"></th>
@@ -224,47 +227,50 @@
                     </thead>
                     <tbody>
                         @foreach ($labManagement->maintenanceRecords as $maintenanceRecord)
-                        @php
-                        $noAduan = '-';
+                            @php
+                                $noAduan = '-';
 
-                        // Check the entryOption for each maintenance record
-                        if ($maintenanceRecord->entry_option == 'manual') {
-                        $noAduan = $maintenanceRecord->aduan_unit_no ?? '-';
-                        } elseif ($maintenanceRecord->entry_option == 'pc_rosak') {
-                        $noAduan = $maintenanceRecord->vms_no ?? '-';
-                        }
-                        @endphp
-                        <tr>
-                            <td style="text-align: center; border-color: #cacfd2">{{ $loop->iteration }}</td>
-                            <td style="text-align: center; border-color: #cacfd2">
-                                {{ $maintenanceRecord->computer_name }} <br>
-                                {{ $maintenanceRecord->ip_address }}
-                            </td>
-                            @if (!empty($maintenanceRecord->work_checklist_id))
-                            @foreach ($workChecklists as $workChecklist)
-                            <td style="text-align: center; border-color: #cacfd2">
-                                @php
-                                $isSelected = in_array(
-                                $workChecklist->id,
-                                $maintenanceRecord->work_checklist_id
-                                );
-                                @endphp
-                                @if ($isSelected)
-                                <span class="tick-icon">&#10004;</span>
+                                // Check the entryOption for each maintenance record
+                                if ($maintenanceRecord->entry_option == 'manual') {
+                                    $noAduan = $maintenanceRecord->aduan_unit_no ?? '-';
+                                } elseif ($maintenanceRecord->entry_option == 'pc_rosak') {
+                                    $noAduan = $maintenanceRecord->vms_no ?? '-';
+                                }
+                            @endphp
+                            <tr>
+                                <td style="text-align: center; border-color: #cacfd2">{{ $loop->iteration }}</td>
+                                <td style="text-align: center; border-color: #cacfd2">
+                                    {{ $maintenanceRecord->computer_name }} <br>
+                                    {{ $maintenanceRecord->ip_address }}
+                                </td>
+                                @if ($maintenanceRecord->entry_option == 'pc_rosak')
+                                    <td style="text-align: center; border-color: #cacfd2" colspan="{{ count($workChecklists) }}">Komputer Bermasalah
+                                    </td>
+                                @elseif ($maintenanceRecord->entry_option == 'pc_keluar')
+                                    <td style="text-align: center; border-color: #cacfd2" colspan="{{ count($workChecklists) }}">PC dibawa keluar
+                                        pada {{ $maintenanceRecord->keluar_date }} <br> ke
+                                        {{ $maintenanceRecord->keluar_location }}</td>
                                 @else
-                                <span class="empty-icon" style="color: red">&#10006;</span>
+                                    @foreach ($workChecklists as $workChecklist)
+                                        <td style="text-align: center; border-color: #cacfd2">
+                                            @php
+                                                $isSelected = in_array(
+                                                    $workChecklist->id,
+                                                    $maintenanceRecord->work_checklist_id);
+                                            @endphp
+                                            @if ($isSelected)
+                                                <span class="tick-icon">&#10004;</span>
+                                            @else
+                                                <span class="empty-icon" style="color: red;">&#10006;</span>
+                                            @endif
+                                        </td>
+                                    @endforeach
                                 @endif
-                            </td>
-                            @endforeach
-                            @else
-                            <td style="text-align: center; border-color: #cacfd2"
-                                colspan="{{ count($workChecklists) }}">Komputer
-                                Bermasalah</td>
-                            @endif
-                            <td style="text-align: center; border-color: #cacfd2">{{ $noAduan }}</td>
-                            <td style="width: 45%; white-space: normal; word-wrap: break-word; word-break: break-word; max-width: 350px; border-color: #cacfd2">
-                                {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
-                        </tr>
+                                <td style="text-align: center; border-color: #cacfd2">{{ $noAduan }}</td>
+                                <td
+                                    style="width: 45%; white-space: normal; word-wrap: break-word; word-break: break-word; max-width: 350px; border-color: #cacfd2">
+                                    {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -273,42 +279,43 @@
             <div class="card">
                 <h3>Senarai Perisian</h3>
                 @php
-                // Extract selected software titles
-                $selectedSoftwareTitles = $softwareList
-                ->filter(function ($software) use ($labManagement) {
-                return !empty($labManagement->software_id) &&
-                in_array($software->id, $labManagement->software_id);
-                })
-                ->pluck('title');
+                    // Extract selected software titles
+                    $selectedSoftwareTitles = $softwareList
+                        ->filter(function ($software) use ($labManagement) {
+                            return !empty($labManagement->software_id) &&
+                                in_array($software->id, $labManagement->software_id);
+                        })
+                        ->pluck('title');
                 @endphp
 
                 <table>
-    <tbody>
-        @if ($labManagement->computerLab->software->count() == 1)
-        <tr>
-            <td style="border: 0px">
-                <span class="tick-icon">&#10004;</span> 
-                {{ $labManagement->computerLab->software->first()->title }} 
-                {{ $labManagement->computerLab->software->first()->version }}
-            </td>
-        </tr>
-        @else
-        @foreach ($labManagement->computerLab->software->chunk(2) as $chunk)
-        <tr>
-            @foreach ($chunk as $software)
-            <td style="border: 0px">
-                <span class="tick-icon">&#10004;</span> 
-                {{ $software->title }} {{ $software->version }}
-            </td>
-            @endforeach
-            @if ($chunk->count() == 1)
-            <td style="border: 0px"></td> <!-- Empty cell if there's an odd number of items -->
-            @endif
-        </tr>
-        @endforeach
-        @endif
-    </tbody>
-</table>
+                    <tbody>
+                        @if ($labManagement->computerLab->software->count() == 1)
+                            <tr>
+                                <td style="border: 0px">
+                                    <span class="tick-icon">&#10004;</span>
+                                    {{ $labManagement->computerLab->software->first()->title }}
+                                    {{ $labManagement->computerLab->software->first()->version }}
+                                </td>
+                            </tr>
+                        @else
+                            @foreach ($labManagement->computerLab->software->chunk(2) as $chunk)
+                                <tr>
+                                    @foreach ($chunk as $software)
+                                        <td style="border: 0px">
+                                            <span class="tick-icon">&#10004;</span>
+                                            {{ $software->title }} {{ $software->version }}
+                                        </td>
+                                    @endforeach
+                                    @if ($chunk->count() == 1)
+                                        <td style="border: 0px"></td>
+                                        <!-- Empty cell if there's an odd number of items -->
+                                    @endif
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
 
             </div>
 
@@ -323,7 +330,8 @@
                 </tr>
                 <tr>
                     <th style="width: 50%; border: 0px">Status</th>
-                    <td style="width: 50%; border: 0px">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}
+                    <td style="width: 50%; border: 0px">
+                        {{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}
                     </td>
                 </tr>
             </table>

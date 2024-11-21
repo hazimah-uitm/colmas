@@ -159,24 +159,27 @@
                                         <td class="text-center">{{ $maintenanceRecord->computer_name }} <br>
                                             {{ $maintenanceRecord->ip_address }}
                                         </td>
-                                        @if (!empty($maintenanceRecord->work_checklist_id))
-                                        @foreach ($workChecklists as $workChecklist)
-                                        <td class="text-center">
-                                            @php
-                                            $isSelected = in_array(
-                                            $workChecklist->id,
-                                            $maintenanceRecord->work_checklist_id);
-                                            @endphp
-                                            @if ($isSelected)
-                                            <span class="tick-icon">&#10004;</span>
+                                        @if ($maintenanceRecord->entry_option == "pc_rosak")
+                                            <td class="text-center" colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
+                                            @elseif ($maintenanceRecord->entry_option == "pc_keluar")
+                                            <td class="text-center" colspan="{{ count($workChecklists) }}">PC dibawa keluar pada {{ $maintenanceRecord->keluar_date }} <br> ke {{ $maintenanceRecord->keluar_location }}</td>
                                             @else
-                                            <span class="empty-icon" style="color: red">&#10006;</span>
+                                            @foreach ($workChecklists as $workChecklist)
+                                            <td class="text-center">
+                                                @php
+                                                $isSelected = in_array(
+                                                $workChecklist->id,
+                                                $maintenanceRecord->work_checklist_id);
+                                                @endphp
+                                                @if ($isSelected)
+                                                <span class="tick-icon">&#10004;</span>
+                                                @else
+                                                <span class="empty-icon"
+                                                    style="color: red;">&#10006;</span>
+                                                @endif
+                                            </td>
+                                            @endforeach
                                             @endif
-                                        </td>
-                                        @endforeach
-                                        @else
-                                        <td class="text-center" colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
-                                        @endif
                                         <td class="text-center">{{ $noAduan }}</td>
                                         <td class="text-center">{!! nl2br(e($maintenanceRecord->remarks)) !!}</td>
                                     </tr>

@@ -143,7 +143,11 @@
                                             <td class="text-center">{{ $maintenanceRecord->computer_name }} <br>
                                                 {{ $maintenanceRecord->ip_address }}
                                             </td>
-                                            @if (!empty($maintenanceRecord->work_checklist_id))
+                                            @if ($maintenanceRecord->entry_option == "pc_rosak")
+                                            <td class="text-center" colspan="{{ count($workChecklists) }}">Komputer Bermasalah</td>
+                                            @elseif ($maintenanceRecord->entry_option == "pc_keluar")
+                                            <td class="text-center" colspan="{{ count($workChecklists) }}">PC dibawa keluar pada {{ $maintenanceRecord->keluar_date }} <br> ke {{ $maintenanceRecord->keluar_location }}</td>
+                                            @else
                                             @foreach ($workChecklists as $workChecklist)
                                             <td class="text-center">
                                                 @php
@@ -155,13 +159,10 @@
                                                 <span class="tick-icon">&#10004;</span>
                                                 @else
                                                 <span class="empty-icon"
-                                                    style="color: red">&#10006;</span>
+                                                    style="color: red;">&#10006;</span>
                                                 @endif
                                             </td>
                                             @endforeach
-                                            @else
-                                            <td class="text-center" colspan="{{ count($workChecklists) }}">Komputer Bermasalah
-                                            </td>
                                             @endif
                                             <td class="text-center">{{ $noAduan }}</td>
                                             <td class="text-center">{!! nl2br(e($maintenanceRecord->remarks)) !!}</td>
