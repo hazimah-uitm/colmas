@@ -90,7 +90,7 @@ class MaintenanceRecordController extends Controller
         // Define the required IDs and retrieve their titles
         $requiredIds = [];
         if ($entryOption === 'manual') {
-            $requiredIds = [1, 2, 3, 4, 5];
+            $requiredIds = [1, 2, 5];
         } elseif ($entryOption === 'automatik') {
             $requiredIds = [1, 2, 3, 4, 5, 6];
         }

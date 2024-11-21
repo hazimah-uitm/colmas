@@ -107,8 +107,7 @@
             </div>
 
             <div class="mb-3" id="vmsNoContainer">
-                <label for="vms_no" class="form-label">No. VMS<a href="https://units.uitm.edu.my/aduan_add.cfm"
-                        target="_blank" class="ms-2">(VMS)</a></label>
+            <label for="vms_no" class="form-label">No. Aduan<a href="https://units.uitm.edu.my/aduan_add.cfm" target="_blank" class="ms-2">(VMS / UNITS)</a></label>
                 <input type="text" class="form-control {{ $errors->has('vms_no') ? 'is-invalid' : '' }}" id="vms_no"
                     name="vms_no" value="{{ old('vms_no') ?? ($maintenanceRecord->vms_no ?? '') }}">
                 @if ($errors->has('vms_no'))
