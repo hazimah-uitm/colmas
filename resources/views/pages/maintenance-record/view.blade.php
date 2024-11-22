@@ -93,12 +93,12 @@
                     </tr>
                     @if ($entryOption == 'manual')
                     <tr>
-                        <th>Aduan Unit No.</th>
+                        <th>No. Aduan (UNITS / GFM)</th>
                         <td>{{ $maintenanceRecord->aduan_unit_no ?? '-' }}</td>
                     </tr>
                     @elseif($entryOption == 'pc_rosak')
                     <tr>
-                        <th>VMS No.</th>
+                        <th>No. Aduan (VMS / UNITS)</th>
                         <td>{{ $maintenanceRecord->vms_no ?? '-' }}</td>
                     </tr>
                     @elseif($entryOption == 'pc_keluar')
