@@ -133,7 +133,6 @@ class YearlyReportController extends Controller
             // Superadmin can see all labs
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                // Filter labs based on the campuses associated with the user
                 $query->whereIn('campus_id', $user->campus->pluck('id'));
             });
         } else {
@@ -146,7 +145,6 @@ class YearlyReportController extends Controller
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            // Get the campuses associated with the user
             $campusList = $user->campus()->with('computerLab')->get();
         } else {
             $assignedComputerLabs = $user->assignedComputerLabs;
@@ -205,7 +203,7 @@ class YearlyReportController extends Controller
             ];
         }
 
-        $path = public_path('assets/images/uitmcss.png');
+        $path = public_path('assets/images/Logo-Infostruktur.png');
         $logoData = base64_encode(file_get_contents($path));
         $logoMimeType = mime_content_type($path);
 

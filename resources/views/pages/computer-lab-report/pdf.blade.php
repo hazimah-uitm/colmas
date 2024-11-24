@@ -27,21 +27,14 @@
         }
 
         .header img {
-            width: 260px;
+            width: 240px;
             margin-bottom: 5px;
         }
 
         .header h1 {
-            font-size: 16pt;
+            font-size: 14pt;
             font-weight: bold;
             text-transform: uppercase;
-        }
-
-        .sub-header {
-            color: #212f3c;
-            font-size: 12pt;
-            font-weight: bold;
-            margin-bottom: 20px;
         }
 
         table {
@@ -90,8 +83,6 @@
     <div class="header">
         <!-- UiTM Logo -->
         <img src="{{ $logoBase64 }}" alt="UiTM Logo">
-        <!-- Sub-header -->
-        <p class="sub-header">Bahagian Infostruktur<br>UiTM Cawangan Sarawak</p>
         <!-- Report Title -->
         <h1>Laporan Makmal Komputer {{ $currentMonthName }} {{ $currentYear }}</h1>
     </div>

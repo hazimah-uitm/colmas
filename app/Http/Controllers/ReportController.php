@@ -162,7 +162,7 @@ class ReportController extends Controller
 
         $filename = $month . ' ' . $year . ' - ' . 'Laporan Selenggara ' . $labName . '.pdf';
 
-        $path = public_path('assets/images/uitmcss.png');
+        $path = public_path('assets/images/Logo-Infostruktur.png');
         $logoData = base64_encode(file_get_contents($path));
         $logoMimeType = mime_content_type($path);
 

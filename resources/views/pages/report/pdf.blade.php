@@ -23,21 +23,8 @@
         }
 
         .header img {
-            width: 260px;
+            width: 240px;
             margin-bottom: 5px;
-        }
-
-        .header h1 {
-            font-size: 16pt;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .sub-header {
-            color: #212f3c;
-            font-size: 12pt;
-            font-weight: bold;
-            margin-bottom: 20px;
         }
 
         .card {
@@ -67,11 +54,6 @@
             margin-bottom: 15px;
         }
 
-        .header h1 {
-            font-size: 16pt;
-            margin: 5px 0;
-        }
-
         .content {
             margin-bottom: 15px;
         }
@@ -91,8 +73,21 @@
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #d6dbdf;
         }
+
+
+    tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    tbody tr:hover {
+        background-color: #e6f7ff;
+    }
 
         .tick-icon,
         .empty-icon {
@@ -118,11 +113,9 @@
         <div class="header">
             <!-- UiTM Logo -->
             <img src="{{ $logoBase64 }}" alt="UiTM Logo">
-            <!-- Sub-header -->
-            <p class="sub-header">Bahagian Infostruktur</p>
             <!-- Report Title -->
-            <h1>Laporan Selenggara {{ $labManagement->computerLab->name }} {{ $labManagement->month }}
-                {{ $labManagement->year }}</h1>
+            <h2 style="text-transform: uppercase">Laporan Selenggara {{ $labManagement->computerLab->name }} {{ $labManagement->month }}
+                {{ $labManagement->year }}</h2>
         </div>
         <div class="content">
             <table>

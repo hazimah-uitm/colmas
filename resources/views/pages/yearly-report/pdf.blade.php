@@ -21,30 +21,22 @@
         }
         .header {
             text-align: center;
-            margin-bottom: 30px;
         }
 
         .header img {
-            width: 260px;
-            margin-bottom: 5px;
+            width: 240px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 16pt;
+            font-size: 14pt;
             font-weight: bold;
             color: #000 !important;
         }
 
-        .sub-header {
-            color: #212f3c;
-            font-size: 12pt;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
         /* Campus Title Styles */
         .campus-section {
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .campus-section h2 {
@@ -112,8 +104,6 @@
     <div class="header">
         <!-- UiTM Logo -->
         <img src="{{ $logoBase64 }}" alt="UiTM Logo">
-        <!-- Sub-header -->
-        <p class="sub-header">Bahagian Infostruktur</p>
         <!-- Report Title -->
         <h1>LAPORAN TAHUNAN SELENGGARA MAKMAL KOMPUTER {{ $currentYear }}</h1>
     </div>
