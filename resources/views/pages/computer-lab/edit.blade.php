@@ -117,18 +117,18 @@
                 <div class="credential-row d-flex align-items-center mb-2">
                     <input type="text" name="user_credentials[{{ $index }}][username]" class="form-control me-2" placeholder="Username" value="{{ $credential['username'] }}" required>
                     <input type="text" name="user_credentials[{{ $index }}][password]" class="form-control me-2" placeholder="Password" value="{{ $credential['password'] }}" required>
-                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    <button type="button" class="btn btn-danger remove-row">Padam</button>
                 </div>
                 @endforeach
                 @else
                 <div class="credential-row d-flex align-items-center mb-2">
                     <input type="text" name="user_credentials[0][username]" class="form-control me-2" placeholder="Username" required>
                     <input type="text" name="user_credentials[0][password]" class="form-control me-2" placeholder="Password" required>
-                    <button type="button" class="btn btn-danger remove-row" disabled>Remove</button>
+                    <button type="button" class="btn btn-danger remove-row" disabled>Padam</button>
                 </div>
                 @endif
             </div>
-            <button type="button" id="add-credential" class="btn btn-primary mb-3">Add Credential</button>
+            <button type="button" id="add-credential" class="btn btn-primary mb-3">Tambah Akaun</button>
 
             <div class="mb-3">
                 <label class="form-label">Senarai Perisian</label>
