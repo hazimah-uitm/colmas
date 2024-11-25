@@ -40,6 +40,7 @@ class UserProfileController extends Controller
             'name'       => 'required',
             'staff_id'   => 'required|unique:users,staff_id,' . $id,
             'email'      => 'required|email|unique:users,email,' . $id,
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'position_id' => 'required|exists:positions,id',
             'campus_id'  => 'required|array|exists:campuses,id',
             'office_phone_no' => 'nullable|string',
@@ -57,6 +58,11 @@ class UserProfileController extends Controller
 
         // Update the user's basic information
         $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no'));
+        if ($request->hasFile('profile_image')) {
+            // Store the file and get its path
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $user->profile_image = $path;
+        }
         $user->save();
         $user->campus()->sync($request->input('campus_id'));
         
