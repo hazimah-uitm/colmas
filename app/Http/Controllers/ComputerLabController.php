@@ -33,6 +33,10 @@ class ComputerLabController extends Controller
 
         $computerLabList = $computerLabQuery->latest()->paginate($perPage);
 
+        foreach ($computerLabList as $computerLab) {
+            $computerLab->user_credentials = json_decode($computerLab->user_credentials, true);
+        }
+
         return view('pages.computer-lab.index', [
             'computerLabList' => $computerLabList,
             'perPage' => $perPage,
@@ -73,18 +77,18 @@ class ComputerLabController extends Controller
             'code' => 'nullable|string',
             'name' => [
                 'required',
-                Rule::unique('computer_labs')
-                    ->where(function ($query) use ($request) {
-                        return $query->where('campus_id', $request->input('campus_id'));
-                    }),
+                Rule::unique('computer_labs')->where(function ($query) use ($request) {
+                    return $query->where('campus_id', $request->input('campus_id'));
+                }),
             ],
             'campus_id' => 'required|exists:campuses,id',
             'pemilik_id' => 'required',
             'software_id' => 'nullable|array',
             'location' => 'required',
-            'username' => 'required',
-            'password' => 'required',
-            'no_of_computer' => 'required',
+            'user_credentials' => 'required|array',
+            'user_credentials.*.username' => 'required|string',
+            'user_credentials.*.password' => 'required|string',
+            'no_of_computer' => 'required|integer',
             'publish_status' => 'required|in:1,0',
         ], [
             'name.required' => 'Sila isi nama makmal komputer',
@@ -93,32 +97,33 @@ class ComputerLabController extends Controller
             'campus_id.exists' => 'Kampus yang dipilih tidak sah',
             'pemilik_id.required' => 'Sila pilih pemilik',
             'location.required' => 'Sila isi nama lokasi',
-            'username.required' => 'Sila isi nama pengguna',
-            'password.required' => 'Sila isi kata laluan',
+            'user_credentials.required' => 'Sila isi nama pengguna dan kata laluan',
             'no_of_computer.required' => 'Sila isi bilangan komputer',
             'publish_status.required'     => 'Sila pilih status',
         ]);
-
+    
         $computerLab = new ComputerLab();
-        $computerLab->fill($request->except('software_id'));
+        $computerLab->fill($request->except('software_id', 'user_credentials'));
+        $computerLab->user_credentials = json_encode($request->input('user_credentials')); 
         $computerLab->save();
-
+    
         $computerLab->software()->attach($request->input('software_id'));
-
+    
         $this->logHistory($computerLab, 'Tambah');
-
+    
         return redirect()->route('computer-lab')->with('success', 'Maklumat berjaya disimpan');
     }
-
 
     public function show($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
         $softwareList = Software::where('publish_status', 1)->get();
+        $userCredentials = json_decode($computerLab->user_credentials, true);
 
         return view('pages.computer-lab.view', [
             'computerLab' => $computerLab,
             'softwareList' => $softwareList,
+            'userCredentials' => $userCredentials,
         ]);
     }
 
@@ -128,6 +133,7 @@ class ComputerLabController extends Controller
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $softwareList = Software::where('publish_status', 1)->get();
+        $userCredentials = json_decode($computerLab->user_credentials, true);
 
         return view('pages.computer-lab.edit', [
             'save_route' => route('computer-lab.update', $computerLab->id),
@@ -135,6 +141,7 @@ class ComputerLabController extends Controller
             'softwareList' => $softwareList,
             'pemilikList' => $pemilikList,
             'computerLab' => $computerLab,
+            'userCredentials' => $userCredentials,
             'str_mode' => 'Kemaskini',
         ]);
     }
@@ -154,8 +161,9 @@ class ComputerLabController extends Controller
             'pemilik_id' => 'required',
             'software_id' => 'nullable|array',
             'location' => 'required',
-            'username' => 'required',
-            'password' => 'required',
+            'user_credentials' => 'required|array',
+            'user_credentials.*.username' => 'required|string',
+            'user_credentials.*.password' => 'required|string',
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
         ], [
@@ -165,14 +173,14 @@ class ComputerLabController extends Controller
             'campus_id.exists' => 'Kampus yang dipilih tidak sah',
             'pemilik_id.required' => 'Sila pilih pemilik',
             'location.required' => 'Sila isi nama lokasi',
-            'username.required' => 'Sila isi nama pengguna',
-            'password.required' => 'Sila isi kata laluan',
+            'user_credentials.required' => 'Sila isi nama pengguna dan kata laluan',
             'no_of_computer.required' => 'Sila isi bilangan komputer',
             'publish_status.required'     => 'Sila pilih status',
         ]);
 
         $computerLab = ComputerLab::findOrFail($id);
-        $computerLab->fill($request->except('software_id'));
+        $computerLab->fill($request->except('software_id', 'user_credentials'));
+        $computerLab->user_credentials = json_encode($request->input('user_credentials'));
         $computerLab->save();
 
         $computerLab->software()->sync($request->input('software_id'));

@@ -72,8 +72,7 @@
                         <th>Kampus</th>
                         <th>Pemilik</th>
                         <th>Bil. Komputer</th>
-                        <th>Username</th>
-                        <th>Kata Laluan</th>
+                        <th>Akaun</th>
                         <th>Status</th>
                         <th>Tindakan</th>
                     </tr>
@@ -88,14 +87,27 @@
                         <td>{{ $computerLab->campus->name }}</td>
                         <td class="text-center">{{ $computerLab->pemilik->name }}</td>
                         <td class="text-center">{{ $computerLab->no_of_computer }}</td>
-                        <td class="text-center">{{ $computerLab->username }}</td>
-                        <td class="text-center align-middle">
-                            <div class="password-container d-flex align-items-center justify-content-center">
-                                <span class="password me-3" data-password="{{ $computerLab->password }}">****</span>
-                                <button class="btn btn-sm btn-outline-info toggle-password" type="button">
+                        <td>
+                            @if(count($computerLab->user_credentials) > 0)
+                            @foreach ($computerLab->user_credentials as $index => $credential)
+                            @if(count($computerLab->user_credentials) > 1)
+                            <p class="badge bg-primary text-uppercase">Akaun {{ $index + 1 }}</p>
+                            @endif
+                            <p><strong>Nama Pengguna:</strong> {{ $credential['username'] }}</p>
+                            <p><strong>Kata Laluan:</strong>
+                                <span class="password" data-password="{{ $credential['password'] }}">****</span>
+                                <button type="button" class="btn btn-link toggle-password" style="padding: 0; font-size: 1.1rem;">
                                     <i class="bx bx-show"></i>
                                 </button>
-                            </div>
+                            </p>
+                            @if($index
+                            < count($computerLab->user_credentials) - 1)
+                                <hr />
+                            @endif
+                            @endforeach
+                            @else
+                            <p><strong>Tiada Akaun</strong></p>
+                            @endif
                         </td>
                         <td class="text-center">
                             @if ($computerLab->publish_status == 'Aktif')

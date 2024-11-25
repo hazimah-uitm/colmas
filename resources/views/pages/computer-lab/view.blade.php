@@ -40,43 +40,53 @@
             <div class="card-body">
                 <table class="table table-borderless">
                     <tr>
-                        <th>Kod</th>
-                        <td>{{ $computerLab->code }}</td>
+                        <th class="col-2">Kod</th>
+                        <td class="col-4">{{ $computerLab->code }}</td>
                     </tr>
                     <tr>
-                        <th>Nama Makmal Komputer</th>
-                        <td>{{ $computerLab->name }}</td>
+                        <th class="col-2">Nama Makmal Komputer</th>
+                        <td class="col-4">{{ $computerLab->name }}</td>
                     </tr>
                     <tr>
-                        <th>Lokasi</th>
-                        <td>{{ $computerLab->location }}</td>
+                        <th class="col-2">Lokasi</th>
+                        <td class="col-4">{{ $computerLab->location }}</td>
                     </tr>
                     <tr>
-                        <th>Kampus</th>
-                        <td>{{ $computerLab->campus->name }}</td>
+                        <th class="col-2">Kampus</th>
+                        <td class="col-4">{{ $computerLab->campus->name }}</td>
                     </tr>
                     <tr>
-                        <th>Pemilik</th>
-                        <td>{{ $computerLab->pemilik->name }}</td>
+                        <th class="col-2">Pemilik</th>
+                        <td class="col-4">{{ $computerLab->pemilik->name }}</td>
                     </tr>
                     <tr>
-                        <th>Username</th>
-                        <td>{{ $computerLab->username }}</td>
-                    </tr>
-                    <tr>
-                        <th>Kata Laluan</th>
-                        <td>
-                            <div class="password-container d-flex align-items-center">
-                                <span class="password me-3" data-password="{{ $computerLab->password }}">****</span>
-                                <button class="btn btn-sm btn-outline-info toggle-password" type="button">
-                                    <i class="bx bx-show"></i>
+                        <th class="col-2">Akaun</th>
+                        <td class="col-4">
+                            @if(count($userCredentials) > 0)
+                            @foreach ($userCredentials as $index => $credential)
+                            @if(count($userCredentials) > 1)
+                            <p class="badge bg-primary text-uppercase">Akaun {{ $index + 1 }}</p>
+                            @endif
+                            <p><strong>Nama Pengguna:</strong> {{ $credential['username'] }}</p>
+                            <p><strong>Kata Laluan:</strong>
+                                <span class="password" data-password="{{ $credential['password'] }}">****</span>
+                                <button type="button" class="btn btn-link toggle-password" style="padding: 0; font-size: 1.1rem;">
+                                    <i class="bx bx-show"></i> <!-- Show icon -->
                                 </button>
-                            </div>
+                            </p>
+                            @if($index
+                            < count($userCredentials) - 1)
+                                <hr />
+                            @endif
+                            @endforeach
+                            @else
+                            <p><strong>Tiada Akaun</strong></p>
+                            @endif
                         </td>
                     </tr>
                     <tr>
-                        <th>Perisian</th>
-                        <td>
+                        <th class="col-2">Perisian</th>
+                        <td class="col-4">
                             <table style="width: 100%;">
                                 <tr>
                                     @php $count = 0; @endphp
@@ -103,12 +113,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Bilangan Komputer</th>
-                        <td>{{ $computerLab->no_of_computer }}</td>
+                        <th class="col-2">Bilangan Komputer</th>
+                        <td class="col-4">{{ $computerLab->no_of_computer }}</td>
                     </tr>
                     <tr>
-                        <th>Status</th>
-                        <td>{{ $computerLab->publish_status }}</td>
+                        <th class="col-2">Status</th>
+                        <td class="col-4">{{ $computerLab->publish_status }}</td>
                     </tr>
                 </table>
             </div>
@@ -119,12 +129,14 @@
 <script>
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
-            const passwordSpan = this.previousElementSibling;
-            const icon = this.querySelector('i');
+            const passwordSpan = this.previousElementSibling; // The <span> containing the password
+            const icon = this.querySelector('i'); // The <i> element for the icon
             if (passwordSpan.textContent === '****') {
+                // Show the password and change the icon to hide
                 passwordSpan.textContent = passwordSpan.getAttribute('data-password');
                 icon.classList.replace('bx-show', 'bx-hide');
             } else {
+                // Hide the password and change the icon to show
                 passwordSpan.textContent = '****';
                 icon.classList.replace('bx-hide', 'bx-show');
             }
