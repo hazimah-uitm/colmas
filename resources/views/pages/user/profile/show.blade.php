@@ -1,96 +1,100 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Breadcrumb -->
-    <div class="page-breadcrumb mb-3">
-        <div class="row align-items-center">
-            <!-- Breadcrumb Title and Navigation -->
-            <div class="col-12 col-md-9 d-flex align-items-center">
-                <div class="breadcrumb-title pe-3">Profil Pengguna</div>
-                <div class="ps-3">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0 p-0">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Profil {{ $user->name }}</li>
-                        </ol>
-                    </nav>
-                </div>
+<!-- Breadcrumb -->
+<div class="page-breadcrumb mb-3">
+    <div class="row align-items-center">
+        <!-- Breadcrumb Title and Navigation -->
+        <div class="col-12 col-md-9 d-flex align-items-center">
+            <div class="breadcrumb-title pe-3">Profil Pengguna</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="bx bx-home-alt"></i></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profil {{ $user->name }}</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
-    <!-- End Breadcrumb -->
+</div>
+<!-- End Breadcrumb -->
 
-    <h6 class="mb-0 text-uppercase">Profil {{ $user->name }}</h6>
-    <hr />
+<h6 class="mb-0 text-uppercase">Profil {{ $user->name }}</h6>
+<hr />
 
-    <!-- User Information Table -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-borderless">
-                        <tr>
-                            <th>Nama</th>
-                            <td>{{ $user->name ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ $user->email ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Staff ID</th>
-                            <td>{{ $user->staff_id ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Jawatan</th>
-                            <td>{{ $user->position->title ?? '-' }} ({{ $user->position->grade ?? '-' }})</td>
-                        </tr>
-                        <tr>
-                            <th>Kampus</th>
-                            <td>
-                                @foreach ($user->campus as $campus)
+<div class="container">
+    <div class="main-body">
+        <!-- Profile Layout -->
+        <div class="row">
+            <!-- Sidebar (User Info) -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <!-- User Image -->
+                            <img src="{{ $user->profile_image_url ?? 'https://via.placeholder.com/150' }}" alt="User Image" class="rounded-circle mb-3" width="150" height="150">
+                            <!-- User Name and Position -->
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <h5 class="mt-3">{{ $user->name }}</h5>
+                                <p class="text-muted">{{ $user->position->title ?? 'Position' }}</p>
+                                <!-- Button Group (Horizontal) -->
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a href="{{ route('profile.edit', ['id' => $user->id]) }}" class="btn btn-primary">Kemaskini Profil</a>
+                                    <a href="{{ route('profile.change-password', ['id' => $user->id]) }}" class="btn btn-warning">Tukar Kata Laluan</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ $user->email ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Staff ID</th>
+                                <td>{{ $user->staff_id ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Kampus</th>
+                                <td>
+                                    @foreach ($user->campus as $campus)
                                     {{ $campus->name }}<br>
-                                @endforeach
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Alamat Emel</th>
-                            <td>{{ $user->email ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>No. Telefon Pejabat</th>
-                            <td>{{ $user->office_phone_no ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Peranan</th>
-                            <td>
-                                @if ($user->roles->count() === 1)
+                                    @endforeach
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>No. Telefon Pejabat</th>
+                                <td>{{ $user->office_phone_no ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Peranan</th>
+                                <td>
+                                    @if ($user->roles->count() === 1)
                                     {{ ucwords(str_replace('-', ' ', $user->roles->first()->name ?? '-')) }}
-                                @else
-                                    <ul>
+                                    @else
+                                    <ul class="list-unstyled">
                                         @foreach ($user->roles as $role)
-                                            <li>{{ ucwords(str_replace('-', ' ', $role->name ?? '-')) }}</li>
+                                        <li><span class="badge bg-secondary">{{ ucwords(str_replace('-', ' ', $role->name ?? '-')) }}</span></li>
                                         @endforeach
                                     </ul>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>{{ $user->publish_status ?? '-' }}</td>
-                        </tr>
-                    </table>
-                    <div class="d-flex flex-column flex-md-row justify-content-between mt-3">
-                        <a href="{{ route('profile.edit', ['id' => $user->id]) }}" class="mb-2 mb-md-0">
-                            <button type="button" class="btn btn-primary w-100 w-md-auto">Kemaskini Profil</button>
-                        </a>
-                        <a href="{{ route('profile.change-password', ['id' => $user->id]) }}">
-                            <button type="button" class="btn btn-warning w-100 w-md-auto">Tukar Kata Laluan</button>
-                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>{{ $user->publish_status ?? '-' }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- End Main Content -->
     </div>
-    <!-- End User Information Table -->
+</div>
+</div>
+<!-- End Profile Layout -->
+
 @endsection
