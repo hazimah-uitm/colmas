@@ -299,31 +299,39 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const workChecklists = <?php echo json_encode($workChecklists); ?>;
         const manualRadio = document.getElementById('manual');
         const workChecklistContainer = document.getElementById('workProcessSection');
         const allowedIds = [1, 2, 5]; // Only show these work checklist IDs for manual option
         
+        // Preserve state for checked checklists
+        const initialStates = {};
+        workChecklists.forEach(function(workChecklist) {
+            const checkbox = document.getElementById('work_checklist_' + workChecklist.id);
+            initialStates[workChecklist.id] = checkbox.checked;
+        });
+
         // Function to filter work checklists
         function filterWorkChecklists() {
-            if (manualRadio.checked) {
-                // Show only work checklists with IDs 1, 2, 5
-                workChecklists.forEach(function(workChecklist) {
-                    const checkbox = document.getElementById('work_checklist_' + workChecklist.id);
+            const isManual = manualRadio.checked;
+
+            workChecklists.forEach(function(workChecklist) {
+                const checkbox = document.getElementById('work_checklist_' + workChecklist.id);
+                const container = checkbox.closest('.form-check');
+
+                if (isManual) {
                     if (allowedIds.includes(workChecklist.id)) {
-                        checkbox.closest('.form-check').style.display = 'block'; // Show
+                        container.style.display = 'block'; // Show allowed IDs
                     } else {
-                        checkbox.closest('.form-check').style.display = 'none'; // Hide
+                        container.style.display = 'none'; // Hide other IDs
+                        checkbox.checked = false; // Auto-clear non-allowed IDs
                     }
-                });
-            } else {
-                // Show all checklists when not in manual mode
-                workChecklists.forEach(function(workChecklist) {
-                    const checkbox = document.getElementById('work_checklist_' + workChecklist.id);
-                    checkbox.closest('.form-check').style.display = 'block'; // Show all
-                });
-            }
+                } else {
+                    container.style.display = 'block'; // Show all IDs
+                    checkbox.checked = initialStates[workChecklist.id]; // Restore initial state
+                }
+            });
         }
 
         // Initial filtering based on the selected option
@@ -336,5 +344,4 @@
         document.getElementById('pcKeluar').addEventListener('change', filterWorkChecklists);
     });
 </script>
-
 @endsection
