@@ -166,9 +166,9 @@ class MaintenanceRecordController extends Controller
         }
 
         // Check for unique aduan_unit_no and vms_no
-        if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->exists()) {
-            return redirect()->back()->withInput()->withErrors('Aduan unit no sudah wujud.');
-        }
+        // if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->exists()) {
+        //     return redirect()->back()->withInput()->withErrors('Aduan unit no sudah wujud.');
+        // }
 
         if ($request->input('vms_no') && MaintenanceRecord::where('vms_no', $request->input('vms_no'))->exists()) {
             return redirect()->back()->withInput()->withErrors('VMS no sudah wujud.');
@@ -365,9 +365,9 @@ class MaintenanceRecordController extends Controller
                 ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
         }
 
-        if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->where('id', '!=', $recordId)->exists()) {
-            return redirect()->back()->withInput()->withErrors('No. Aduan Unit no sudah wujud.');
-        }
+        // if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->where('id', '!=', $recordId)->exists()) {
+        //     return redirect()->back()->withInput()->withErrors('No. Aduan Unit no sudah wujud.');
+        // }
 
         if ($request->input('vms_no') && MaintenanceRecord::where('vms_no', $request->input('vms_no'))->where('id', '!=', $recordId)->exists()) {
             return redirect()->back()->withInput()->withErrors('VMS no sudah wujud.');
