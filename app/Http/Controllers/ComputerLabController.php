@@ -133,7 +133,11 @@ class ComputerLabController extends Controller
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $softwareList = Software::where('publish_status', 1)->get();
-        $userCredentials = json_decode($computerLab->user_credentials, true);
+        $userCredentials = null; // Default value for $userCredentials
+
+        if (!is_null($computerLab->user_credentials)) {
+            $userCredentials = json_decode($computerLab->user_credentials, true);
+        }        
 
         return view('pages.computer-lab.edit', [
             'save_route' => route('computer-lab.update', $computerLab->id),
