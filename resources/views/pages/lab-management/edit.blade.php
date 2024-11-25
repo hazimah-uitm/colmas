@@ -87,16 +87,27 @@
 
             <div class="mb-3">
                 <label class="form-label">Senarai Semak Makmal</label>
-                @foreach ($labCheckList as $labCheck)
-                <div class="form-check">
-                    <input class="form-check-input {{ $errors->has('lab_checklist_id') ? 'is-invalid' : '' }}"
-                        type="checkbox" id="lab_checklist_{{ $labCheck->id }}" name="lab_checklist_id[]"
-                        value="{{ $labCheck->id }}" @if (in_array($labCheck->id, old('lab_checklist_id', $labManagement->lab_checklist_id ?? []))) checked @endif>
-                    <label class="form-check-label" for="lab_checklist_{{ $labCheck->id }}">
-                        {{ $labCheck->title }}
-                    </label>
+                <div class="row">
+                    @foreach ($labCheckList as $index => $labCheck)
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input {{ $errors->has('lab_checklist_id') ? 'is-invalid' : '' }}"
+                                type="checkbox" id="lab_checklist_{{ $labCheck->id }}" name="lab_checklist_id[]"
+                                value="{{ $labCheck->id }}"
+                                @if (in_array($labCheck->id, old('lab_checklist_id', $labManagement->lab_checklist_id ?? []))) checked @endif>
+                            <label class="form-check-label" for="lab_checklist_{{ $labCheck->id }}">
+                                {{ $labCheck->title }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Add a line break after every second checkbox to start a new row if needed -->
+                    @if (($index + 1) % 2 == 0 && $index != count($labCheckList) - 1)
                 </div>
-                @endforeach
+                <div class="row">
+                    @endif
+                    @endforeach
+                </div>
                 @if ($errors->has('lab_checklist_id'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('lab_checklist_id') as $error)
