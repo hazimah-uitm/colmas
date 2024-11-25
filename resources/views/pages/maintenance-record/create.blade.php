@@ -66,8 +66,7 @@
 
             <div class="mb-3" id="computerNameContainer">
                 <label for="computer_name" class="form-label">Nama Komputer</label>
-                <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}" id="computer_name" name="computer_name" value="{{ old('computer_name', $computerName) }}" {{ old('entry_option', $defaultEntryOption) == 'automatik' ? 'disabled' : '' }}>
-                <input type="hidden" name="hidden_computer_name_manual" value="{{ old('computer_name') }}">
+                <input type="text" class="form-control {{ $errors->has('computer_name') ? 'is-invalid' : '' }}" id="computer_name" name="computer_name" value="{{ old('computer_name') }}">
                 @if ($errors->has('computer_name'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('computer_name') as $error)
@@ -178,7 +177,7 @@
                 @endif
             </div>
 
-            
+
             <div class="mb-3">
                 <label for="remarks" class="form-label">Catatan</label>
                 <textarea class="form-control {{ $errors->has('remarks') ? 'is-invalid' : '' }}" id="remarks" name="remarks" rows="3">{{ old('remarks') ?? ($maintenanceRecord->remarks ?? '') }}</textarea>
@@ -198,8 +197,8 @@
 </div>
 
 <script>
+    // UNTUK CHANGE FORM BY PILIHAN REKOD
     document.addEventListener('DOMContentLoaded', function() {
-        const computerNameContainer = document.getElementById('computerNameContainer');
         const ipAddressContainer = document.getElementById('ipAddressContainer');
         const autoRadio = document.getElementById('automatik');
         const pcRosakRadio = document.getElementById('pcRosak');
@@ -207,7 +206,6 @@
         const pcKeluarRadio = document.getElementById('pcKeluar');
         const computerNameInput = document.getElementById('computer_name');
         const ipAddressInput = document.getElementById('ip_address');
-        const hiddenComputerNameManual = document.querySelector('input[name="hidden_computer_name_manual"]').value;
         const hiddenIpAddressAuto = document.querySelector('input[name="hidden_ip_address_automatik"]').value;
         const workProcessSection = document.getElementById('workProcessSection');
         const vmsNo = document.getElementById('vmsNo');
@@ -219,9 +217,8 @@
 
         function toggleEntryOptions() {
             if (autoRadio.checked) {
-                computerNameInput.value = hiddenComputerNameManual;
+                computerNameInput.style.display = 'block';
                 ipAddressInput.value = hiddenIpAddressAuto;
-                computerNameInput.disabled = false;
                 ipAddressContainer.style.display = 'block';
                 ipAddressInput.disabled = true;
                 workProcessSection.style.display = 'block';
@@ -232,8 +229,7 @@
                 keluarLocation.style.display = 'none';
                 keluarOfficer.style.display = 'none';
             } else if (pcRosakRadio.checked) {
-                computerNameInput.value = hiddenComputerNameManual;
-                computerNameInput.disabled = false;
+                computerNameInput.style.display = 'block';
                 ipAddressContainer.style.display = 'none';
                 ipAddressInput.disabled = false;
                 workProcessSection.style.display = 'none';
@@ -244,8 +240,7 @@
                 keluarLocation.style.display = 'none';
                 keluarOfficer.style.display = 'none';
             } else if (manualRadio.checked) {
-                computerNameInput.value = hiddenComputerNameManual;
-                computerNameInput.disabled = false;
+                computerNameInput.style.display = 'block';
                 ipAddressContainer.style.display = 'none';
                 ipAddressInput.disabled = false;
                 workProcessSection.style.display = 'block';
@@ -256,8 +251,7 @@
                 keluarLocation.style.display = 'none';
                 keluarOfficer.style.display = 'none';
             } else if (pcKeluarRadio.checked) {
-                computerNameInput.value = hiddenComputerNameManual;
-                computerNameInput.disabled = false;
+                computerNameInput.style.display = 'block';
                 ipAddressContainer.style.display = 'none';
                 ipAddressInput.disabled = false;
                 workProcessSection.style.display = 'none';
@@ -277,14 +271,14 @@
 
         toggleEntryOptions();
     });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+    // UNTUK DISPLAY CERTAIN WORK CHECKLISTS FOR MANUAL
+    document.addEventListener('DOMContentLoaded', function() {
         const workChecklists = <?php echo json_encode($workChecklists); ?>;
         const manualRadio = document.getElementById('manual');
         const workChecklistContainer = document.getElementById('workProcessSection');
         const allowedIds = [1, 2, 5]; // Only show these work checklist IDs for manual option
-        
+
         // Preserve state for checked checklists
         const initialStates = {};
         workChecklists.forEach(function(workChecklist) {
