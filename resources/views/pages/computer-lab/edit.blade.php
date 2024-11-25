@@ -109,7 +109,8 @@
                 @endif
             </div>
 
-            <div id="credentials-container">
+            <div class="mb-3" id="credentials-container">
+                <label for="credential" class="form-label">Akaun</label>
                 @foreach($userCredentials as $index => $credential)
                 <div class="credential-row d-flex align-items-center mb-2">
                     <input type="text" name="user_credentials[{{ $index }}][username]" class="form-control me-2" placeholder="Username" value="{{ $credential['username'] }}" required>

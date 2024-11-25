@@ -105,7 +105,8 @@
                 @endif
             </div>
 
-            <div id="credentials-container">
+            <div class="mb-3" id="credentials-container">
+                <label for="credential" class="form-label">Akaun</label>
                 <div class="credential-row d-flex align-items-center mb-2">
                     <input type="text" name="user_credentials[0][username]" class="form-control me-2" placeholder="Username" required>
                     <input type="text" name="user_credentials[0][password]" class="form-control me-2" placeholder="Password" required>
@@ -226,7 +227,7 @@
 <script>
     let credentialIndex = 1;
 
-    document.getElementById('add-credential').addEventListener('click', function () {
+    document.getElementById('add-credential').addEventListener('click', function() {
         const container = document.getElementById('credentials-container');
         const newRow = document.createElement('div');
         newRow.classList.add('credential-row', 'd-flex', 'align-items-center', 'mb-2');
@@ -241,7 +242,7 @@
         credentialIndex++;
     });
 
-    document.getElementById('credentials-container').addEventListener('click', function (event) {
+    document.getElementById('credentials-container').addEventListener('click', function(event) {
         if (event.target.classList.contains('remove-row')) {
             event.target.parentElement.remove();
         }
