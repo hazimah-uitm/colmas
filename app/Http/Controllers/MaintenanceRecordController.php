@@ -197,7 +197,7 @@ class MaintenanceRecordController extends Controller
 
         // Count PC damage numbers where entry_option is 'pc_rosak' and deleted_at is null
         $pcDamageNo = MaintenanceRecord::where('lab_management_id', $labManagementId)
-            ->where('entry_option', 'pc_rosak')
+            ->whereIn('entry_option', ['pc_rosak', 'pc_keluar'])
             ->whereNull('deleted_at')
             ->count();
 

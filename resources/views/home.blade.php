@@ -235,7 +235,7 @@
                     <div class="d-flex align-items-center">
                         <div>
                             <p class="mb-0 text-uppercase">Jumlah <span class="fw-bold">Komputer Sewaan</span></p>
-                            <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Rosak</span>
+                            <p class="mb-0 text-uppercase fw-bold"><span class="fst-italic">Rosak/Keluar</span>
                                 ({{ $monthName }}, {{ $currentYear }})</b>
                             </p>
                             <h4 class="my-1 text-danger">{{ $totalDamagePC > 0 ? $totalDamagePC : 0 }}</h4>

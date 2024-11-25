@@ -151,7 +151,7 @@
                 <tr>
                     <th style="border: 0px; text-align: center">Bil. Keseluruhan Komputer</th>
                     <th style="border: 0px; text-align: center">Bil. Komputer Telah Diselenggara</th>
-                    <th style="border: 0px; text-align: center">Bil. Komputer Rosak</th>
+                    <th style="border: 0px; text-align: center">Bil. Komputer Rosak/Keluar</th>
                     <th style="border: 0px; text-align: center">Bil. Komputer Belum Diselenggara</th>
                 </tr>
                 <tr>

@@ -53,7 +53,7 @@
                                 <tr>
                                     <th style="width: 25%" class="text-center">Bil. Keseluruhan Komputer</th>
                                     <th style="width: 25%" class="text-center">Bil. Komputer Telah Diselenggara</th>
-                                    <th style="width: 25%" class="text-center">Bil. Komputer Rosak</th>
+                                    <th style="width: 25%" class="text-center">Bil. Komputer Rosak/Keluar</th>
                                     <th style="width: 25%" class="text-center">Bil. Komputer Belum Diselenggara</th>
                                 </tr>
                             </thead>
