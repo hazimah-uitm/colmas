@@ -34,7 +34,7 @@
                         <div class="d-flex flex-column align-items-center text-center">
                             <!-- User Image -->
                             <img src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
-                                alt="Profile Image" class="rounded-circle" width="150" height="150">
+                                alt="Profile Image" class="rounded-circle p-1 bg-primary" width="150" height="150">
                             <!-- User Name and Position -->
                             <div class="d-flex flex-column align-items-center text-center">
                                 <h5 class="mt-3">{{ $user->name }}</h5>

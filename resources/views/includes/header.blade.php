@@ -6,8 +6,12 @@
         </div>
         <div class="user-box dropdown">
             <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <div class="user-info ps-3">
-                    <p class="user-name mb-0">{{ Auth::user()->staff_id }}<i class='bx bxs-chevron-down' style="margin-left: 5px;"></i></p>
+                <div class="user-info d-flex align-items-center ps-3">
+                    <!-- Profile Image with border and increased size -->
+                    <img src="{{ Auth::user()->profile_image ? asset('public/storage/' . Auth::user()->profile_image) : 'https://via.placeholder.com/150' }}"
+                        alt="Profile Image" class="rounded-circle border border-2 border-primary me-2" width="40" height="40">
+                    <!-- Staff ID with improved styling -->
+                    <p class="user-name mb-0 text-dark fs-6">{{ Auth::user()->staff_id }}<i class='bx bxs-chevron-down' style="margin-left: 5px;"></i></p>
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
