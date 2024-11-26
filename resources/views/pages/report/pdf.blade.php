@@ -200,22 +200,19 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="text-align: center; border-color: #cacfd2">No.</th>
+                            <th rowspan="2" style="text-align: center; border-color: #cacfd2">No.</th>
                             <th style="text-align: center; border-color: #cacfd2">Nama Komputer</th>
                             <th
                                 style="text-align: center; border-color: #cacfd2"colspan="{{ count($workChecklists) }}">
                                 Kerja Selenggara</th>
-                            <th style="text-align: center; border-color: #cacfd2">No. Aduan</th>
-                            <th style="width: 45%; text-align: center; border-color: #cacfd2">Catatan</th>
+                            <th rowspan="2" style="text-align: center; border-color: #cacfd2">No. Aduan</th>
+                            <th rowspan="2" style="width: 45%; text-align: center; border-color: #cacfd2">Catatan</th>
                         </tr>
                         <tr>
-                            <th style="text-align: center; border-color: #cacfd2"></th>
                             <th style="text-align: center; border-color: #cacfd2">IP Address</th>
                             @foreach ($workChecklists as $workChecklist)
                                 <th style="text-align: center; border-color: #cacfd2">{{ $workChecklist->title }}</th>
                             @endforeach
-                            <th style="text-align: center; border-color: #cacfd2"></th>
-                            <th style="width: 45%; text-align: center; border-color: #cacfd2"></th>
                         </tr>
                     </thead>
                     <tbody>

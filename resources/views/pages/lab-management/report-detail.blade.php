@@ -124,20 +124,17 @@
                             <table class="table table-bordered">
                                 <thead class="bg-light">
                                     <tr>
-                                    <th style="width: 5%" class="text-center">No.</th>
+                                    <th style="width: 5%" rowspan="2" class="text-center">No.</th>
                                         <th style="width: 10%" class="text-center">Nama Komputer</th>
                                         <th style="width: 30%" class="text-center" colspan="{{ count($workChecklists) }}">Kerja Selenggara</th>
-                                        <th style="width: 15%" class="text-center">No. Aduan</th>
-                                        <th style="width: 40%" class="text-center">Catatan</th>
+                                        <th style="width: 15%" rowspan="2" class="text-center">No. Aduan</th>
+                                        <th style="width: 40%" rowspan="2" class="text-center">Catatan</th>
                                     </tr>
                                     <tr>
-                                        <th></th>
                                         <th class="text-center">IP Address</th>
                                         @foreach ($workChecklists as $workChecklist)
                                         <th class="text-center">{{ $workChecklist->title }}</th>
                                         @endforeach
-                                        <th></th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
