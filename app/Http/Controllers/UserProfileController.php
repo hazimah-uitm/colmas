@@ -60,7 +60,7 @@ class UserProfileController extends Controller
         $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no'));
         if ($request->hasFile('profile_image')) {
             // Store the file and get its path
-            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $path = $request->file('profile_image')->store("users/{$id}/profile_images", 'public');
             $user->profile_image = $path;
         }
         $user->save();

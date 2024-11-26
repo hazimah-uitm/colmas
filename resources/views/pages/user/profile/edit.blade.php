@@ -32,8 +32,8 @@
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
                             <!-- User Image -->
-                            <img src="{{ $user->profile_image ?? 'https://via.placeholder.com/150' }}" alt="User Image"
-                                class="rounded-circle mb-3" width="150" height="150">
+                            <img src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
+                                alt="Profile Image" class="rounded-circle" width="150" height="150">
                             <!-- User Name and Position -->
                             <h5 class="mt-3">{{ $user->name }}</h5>
                             <p class="text-muted">{{ $user->position->title ?? 'Position' }}</p>

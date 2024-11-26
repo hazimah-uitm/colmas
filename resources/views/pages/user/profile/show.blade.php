@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
                             <!-- User Image -->
-                            <img src="{{ $user->profile_image ? asset('storage/profile_images/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
+                            <img src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
                                 alt="Profile Image" class="rounded-circle" width="150" height="150">
                             <!-- User Name and Position -->
                             <div class="d-flex flex-column align-items-center text-center">
