@@ -31,30 +31,30 @@
             <div class="col-lg-6">
                 <div class="card shadow-sm">
                     <form method="POST" action="{{ $save_route }}" enctype="multipart/form-data">
-                        <div class="card-body text-center">
-                            <!-- User Image -->
-                            <img
-                                src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
-                                alt="Profile Image"
-                                class="rounded-circle p-1 bg-primary profile-preview"
-                                width="150"
-                                height="150">
-
-                            <!-- Profile Image Upload Form -->
-                            <div class="d-flex gap-2 justify-content-center mt-2">
-                                <input
-                                    type="file"
-                                    name="profile_image"
-                                    id="profile_image"
-                                    class="form-control d-none">
-                                <label for="profile_image" class="btn btn-sm btn-primary">Edit Gambar</label>
-                                <button type="button" id="remove_photo" class="btn btn-sm btn-danger">Padam Gambar</button>
-                            </div>
-                            <!-- Hidden Input to Indicate Photo Removal -->
-                            <input type="hidden" name="remove_photo" id="remove_photo_input" value="0">
-                        </div>
-
                         <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <!-- User Image -->
+                                <img
+                                    src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
+                                    alt="Profile Image"
+                                    class="rounded-circle p-1 bg-primary profile-preview"
+                                    width="150"
+                                    height="150">
+
+                                <!-- Profile Image Upload Form -->
+                                <div class="d-flex gap-2 justify-content-center mt-2">
+                                    <input
+                                        type="file"
+                                        name="profile_image"
+                                        id="profile_image"
+                                        class="form-control d-none">
+                                    <label for="profile_image" class="btn btn-primary">Edit Gambar</label>
+                                    <button type="button" id="remove_photo" class="btn btn-danger">Padam Gambar</button>
+                                </div>
+                                <!-- Hidden Input to Indicate Photo Removal -->
+                                <input type="hidden" name="remove_photo" id="remove_photo_input" value="0">
+                            </div>
+                            <hr class="my-4">
                             {{ csrf_field() }}
                             {{ method_field('put') }}
 
