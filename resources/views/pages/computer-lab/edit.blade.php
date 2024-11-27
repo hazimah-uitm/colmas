@@ -116,7 +116,7 @@
                 @foreach($userCredentials as $index => $credential)
                 <div class="credential-row d-flex align-items-center mb-2">
                     <input type="text" name="user_credentials[{{ $index }}][username]" class="form-control me-2" placeholder="Username" value="{{ $credential['username'] }}" required>
-                    <input type="text" name="user_credentials[{{ $index }}][password]" class="form-control me-2" placeholder="Password" value="{{ $credential['password'] }}" required>
+                    <input type="text" name="user_credentials[{{ $index }}][password]" class="form-control me-2" placeholder="Password" value="{{ $credential['password'] }}">
                     <button type="button" class="btn btn-danger remove-row">Padam</button>
                 </div>
                 @endforeach
