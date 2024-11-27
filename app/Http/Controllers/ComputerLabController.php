@@ -89,7 +89,7 @@ class ComputerLabController extends Controller
             'location' => 'required',
             'user_credentials' => 'required|array',
             'user_credentials.*.username' => 'required|string',
-            'user_credentials.*.password' => 'required|string',
+            'user_credentials.*.password' => 'nullable|string',
             'no_of_computer' => 'required|integer',
             'publish_status' => 'required|in:1,0',
         ], [
@@ -171,7 +171,7 @@ class ComputerLabController extends Controller
             'location' => 'required',
             'user_credentials' => 'required|array',
             'user_credentials.*.username' => 'required|string',
-            'user_credentials.*.password' => 'required|string',
+            'user_credentials.*.password' => 'nullable|string',
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
         ], [
