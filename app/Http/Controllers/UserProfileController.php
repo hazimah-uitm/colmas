@@ -44,7 +44,7 @@ class UserProfileController extends Controller
             'position_id' => 'required|exists:positions,id',
             'campus_id'  => 'required|array|exists:campuses,id',
             'office_phone_no' => 'nullable|string',
-        ],[
+        ], [
             'name.required'     => 'Sila isi nama pengguna',
             'staff_id.required' => 'Sila isi no. pekerja pengguna',
             'staff_id.unique' => 'No. pekerja telah wujud',
@@ -58,14 +58,20 @@ class UserProfileController extends Controller
 
         // Update the user's basic information
         $user->fill($request->only('name', 'staff_id', 'email', 'position_id', 'office_phone_no'));
+
+        // Handle profile image update or removal
         if ($request->hasFile('profile_image')) {
-            // Store the file and get its path
+            // Store the new file and get its path
             $path = $request->file('profile_image')->store("users/{$id}/profile_images", 'public');
             $user->profile_image = $path;
+        } elseif ($request->input('remove_photo') == '1') {
+            // If photo is removed, set the default image path
+            $user->profile_image = '';  // Set default image
         }
+
         $user->save();
         $user->campus()->sync($request->input('campus_id'));
-        
+
         return redirect()->route('profile.show', $id) // Corrected route name
             ->with('success', 'Maklumat berjaya dikemaskini');
     }

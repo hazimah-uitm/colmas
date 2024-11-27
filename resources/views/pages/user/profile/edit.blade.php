@@ -41,15 +41,19 @@
                                 height="150">
 
                             <!-- Profile Image Upload Form -->
-                            <div class="d-flex gap-2 justify-content-center">
+                            <div class="d-flex gap-2 justify-content-center mt-2">
                                 <input
                                     type="file"
                                     name="profile_image"
                                     id="profile_image"
                                     class="form-control d-none">
-                                <label for="profile_image" class="btn btn-sm btn-outline-primary mt-2">Edit Gambar Profil</label>
+                                <label for="profile_image" class="btn btn-sm btn-primary">Edit Gambar</label>
+                                <button type="button" id="remove_photo" class="btn btn-sm btn-danger">Padam Gambar</button>
                             </div>
+                            <!-- Hidden Input to Indicate Photo Removal -->
+                            <input type="hidden" name="remove_photo" id="remove_photo_input" value="0">
                         </div>
+
                         <div class="card-body">
                             {{ csrf_field() }}
                             {{ method_field('put') }}
@@ -204,17 +208,29 @@
 </div>
 <!-- End Edit Profile Form -->
 <script>
-    document.getElementById('profile_image').addEventListener('change', function(event) {
+    const fileInput = document.getElementById('profile_image');
+    const previewImg = document.querySelector('.profile-preview');
+    const removeButton = document.getElementById('remove_photo');
+    const removeInput = document.getElementById('remove_photo_input');
+
+    // Preview uploaded image
+    fileInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const previewImg = document.querySelector('.profile-preview');
                 previewImg.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
+
+    // When Remove Photo button is clicked, set the input to 1
+    removeButton.addEventListener('click', function() {
+        removeInput.value = '1'; // Mark photo for removal
+        document.querySelector('.profile-preview').src = 'https://via.placeholder.com/150'; // Set placeholder image
+    });
 </script>
+
 
 @endsection

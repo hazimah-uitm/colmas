@@ -42,9 +42,9 @@
                                 <!-- Button Group (Horizontal) -->
                                 <div class="d-flex gap-2 justify-content-center">
                                     <a href="{{ route('profile.edit', ['id' => $user->id]) }}"
-                                        class="btn btn-primary">Kemaskini Profil</a>
+                                        class="btn btn-sm btn-primary">Kemaskini Profil</a>
                                     <a href="{{ route('profile.change-password', ['id' => $user->id]) }}"
-                                        class="btn btn-warning">Tukar Kata Laluan</a>
+                                        class="btn btn-sm btn-warning">Tukar Kata Laluan</a>
                                 </div>
                             </div>
                         </div>
