@@ -261,7 +261,7 @@
 
         newRow.innerHTML = `
             <input type="text" name="user_credentials[${credentialIndex}][username]" class="form-control me-2" placeholder="Username" required>
-            <input type="text" name="user_credentials[${credentialIndex}][password]" class="form-control me-2" placeholder="Password" required>
+            <input type="text" name="user_credentials[${credentialIndex}][password]" class="form-control me-2" placeholder="Password">
             <button type="button" class="btn btn-danger remove-row">Remove</button>
         `;
 
