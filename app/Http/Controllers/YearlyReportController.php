@@ -203,7 +203,7 @@ class YearlyReportController extends Controller
             ];
         }
 
-        $path = public_path('assets/images/Logo-Infostruktur.png');
+        $path = public_path('assets/images/Logo-Infostruktur.svg');
         $logoData = base64_encode(file_get_contents($path));
         $logoMimeType = mime_content_type($path);
 
