@@ -93,7 +93,7 @@
                                     @foreach ($computerLab->software as $software)
                                     <td style="width: 50%; padding-right: 5px;">
                                         <span style="margin-right: 5px;">&#10004;</span> <!-- Tick icon -->
-                                        {{ $software->title }}
+                                        {{ $software->title }} {{ $software->version ? $software->version : '' }}
                                     </td>
                                     @php $count++; @endphp
 

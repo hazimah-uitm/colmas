@@ -139,7 +139,7 @@
                         @if (in_array($software->id, old('software_id', $computerLab->software->pluck('id')->toArray())))
                         selected
                         @endif>
-                        {{ $software->title }}
+                        {{ $software->title }} {{ $software->version ? $software->version : '' }}
                     </option>
                     @endforeach
                 </select>
@@ -152,7 +152,6 @@
                 </div>
                 @endif
             </div>
-
 
             <div class="mb-3">
                 <label for="no_of_computer" class="form-label">Bilangan Komputer</label>

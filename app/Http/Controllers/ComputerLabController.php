@@ -48,7 +48,9 @@ class ComputerLabController extends Controller
         // Get list of Pemilik and Kampus
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
-        $softwareList = Software::where('publish_status', 1)->get();
+        $softwareList = Software::where('publish_status', 1)
+        ->orderBy('title', 'asc')
+        ->get();
 
         return view('pages.computer-lab.create', [
             'save_route' => route('computer-lab.store'),
@@ -132,7 +134,9 @@ class ComputerLabController extends Controller
         $computerLab = ComputerLab::findOrFail($id);
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
-        $softwareList = Software::where('publish_status', 1)->get();
+        $softwareList = Software::where('publish_status', 1)
+        ->orderBy('title', 'asc')
+        ->get();
         $userCredentials = null; // Default value for $userCredentials
 
         if (!is_null($computerLab->user_credentials)) {

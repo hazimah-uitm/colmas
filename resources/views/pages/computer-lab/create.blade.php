@@ -135,7 +135,7 @@
                     multiple="multiple" id="software-select">
                     @foreach ($softwareList as $software)
                     <option value="{{ $software->id }}" @if (in_array($software->id, old('software_id', $selectedWorkChecklist ?? []))) selected @endif>
-                        {{ $software->title }}
+                        {{ $software->title }} {{ $software->version ? $software->version : '' }}
                     </option>
                     @endforeach
                 </select>
