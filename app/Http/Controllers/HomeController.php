@@ -135,7 +135,7 @@ class HomeController extends Controller
         foreach ($campusList as $campus) {
             if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
                 // Admin and Superadmin see all labs in each campus
-                $computerLabList = ComputerLab::where('publish_status', 1)
+                $computerLabs = ComputerLab::where('publish_status', 1)
                     ->where('campus_id', $campus->id)
                     ->get();
             } elseif ($user->hasRole('Pegawai Penyemak')) {
@@ -143,15 +143,15 @@ class HomeController extends Controller
                 
                 // Pegawai Penyemak sees labs only in campuses they are associated with
                 if (in_array($campus->id, $userCampusIds)) {
-                    $computerLabList = ComputerLab::where('publish_status', 1)
+                    $computerLabs = ComputerLab::where('publish_status', 1)
                         ->where('campus_id', $campus->id)
                         ->get();
                 } else {
-                    $computerLabList = collect(); // Empty collection if they don’t have access
+                    $computerLabs = collect(); // Empty collection if they don’t have access
                 }
             } else {
                 // Regular Pemilik only sees labs they own
-                $computerLabList = ComputerLab::where('publish_status', 1)
+                $computerLabs = ComputerLab::where('publish_status', 1)
                     ->where('campus_id', $campus->id)
                     ->where('pemilik_id', $user->id)
                     ->get();
@@ -169,14 +169,14 @@ class HomeController extends Controller
                     ->pluck('computer_lab_id')
                     ->unique();
         
-                $maintainedLabsPerMonth[$month] = $computerLabList->mapWithKeys(function ($lab) use ($maintainedLabsThisMonth) {
+                $maintainedLabsPerMonth[$month] = $computerLabs->mapWithKeys(function ($lab) use ($maintainedLabsThisMonth) {
                     return [$lab->id => $maintainedLabsThisMonth->contains($lab->id)];
                 });
             }
         
             $campusData[] = [
                 'campus' => $campus,
-                'computerLabList' => $computerLabList,
+                'computerLabs' => $computerLabs,
                 'maintainedLabsPerMonth' => $maintainedLabsPerMonth
             ];
         }
