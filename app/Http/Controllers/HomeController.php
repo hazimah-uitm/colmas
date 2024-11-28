@@ -131,30 +131,28 @@ class HomeController extends Controller
 
         $months = range(1, 12);
         $campusData = [];
-    
+        
+        // Filter campusList if campus_id is provided
+        if ($request->filled('campus_id')) {
+            $campusList = $campusList->where('id', $request->input('campus_id'));
+        }
+        
         foreach ($campusList as $campus) {
             if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
                 // Admin and Superadmin see all labs in each campus
-                $computerLabs = ComputerLab::where('publish_status', 1)
-                    ->where('campus_id', $campus->id)
-                    ->get();
+                $computerLabs = $filteredComputerLabs;
             } elseif ($user->hasRole('Pegawai Penyemak')) {
                 $userCampusIds = $user->campus->pluck('id')->toArray();
                 
                 // Pegawai Penyemak sees labs only in campuses they are associated with
                 if (in_array($campus->id, $userCampusIds)) {
-                    $computerLabs = ComputerLab::where('publish_status', 1)
-                        ->where('campus_id', $campus->id)
-                        ->get();
+                    $computerLabs = $filteredComputerLabs;
                 } else {
                     $computerLabs = collect(); // Empty collection if they don’t have access
                 }
             } else {
                 // Regular Pemilik only sees labs they own
-                $computerLabs = ComputerLab::where('publish_status', 1)
-                    ->where('campus_id', $campus->id)
-                    ->where('pemilik_id', $user->id)
-                    ->get();
+                $computerLabs = $filteredComputerLabs;
             }
         
             $maintainedLabsPerMonth = [];
