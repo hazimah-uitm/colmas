@@ -40,6 +40,10 @@
             <div class="card-body">
                 <table class="table table-borderless">
                     <tr>
+                        <th class="col-2">Kategori</th>
+                        <td class="col-4">{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
+                    </tr>
+                    <tr>
                         <th class="col-2">Kod</th>
                         <td class="col-4">{{ $computerLab->code }}</td>
                     </tr>
