@@ -29,7 +29,7 @@ class ComputerLabController extends Controller
         } else {
             $userCampusIds = $user->campus->pluck('id')->toArray();
             $computerLabQuery->whereIn('campus_id', $userCampusIds);
-        } 
+        }
 
         $computerLabList = $computerLabQuery->latest()->paginate($perPage);
 
@@ -49,8 +49,8 @@ class ComputerLabController extends Controller
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $softwareList = Software::where('publish_status', 1)
-        ->orderBy('title', 'asc')
-        ->get();
+            ->orderBy('title', 'asc')
+            ->get();
 
         return view('pages.computer-lab.create', [
             'save_route' => route('computer-lab.store'),
@@ -103,16 +103,16 @@ class ComputerLabController extends Controller
             'no_of_computer.required' => 'Sila isi bilangan komputer',
             'publish_status.required'     => 'Sila pilih status',
         ]);
-    
+
         $computerLab = new ComputerLab();
         $computerLab->fill($request->except('software_id', 'user_credentials'));
-        $computerLab->user_credentials = json_encode($request->input('user_credentials')); 
+        $computerLab->user_credentials = json_encode($request->input('user_credentials'));
         $computerLab->save();
-    
+
         $computerLab->software()->attach($request->input('software_id'));
-    
+
         $this->logHistory($computerLab, 'Tambah');
-    
+
         return redirect()->route('computer-lab')->with('success', 'Maklumat berjaya disimpan');
     }
 
@@ -132,16 +132,23 @@ class ComputerLabController extends Controller
     public function edit($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
+        
+        $user = User::find(auth()->id());
+        // Allow editing only if the user is the owner (Pemilik) of the lab
+        if ($user->hasRole('Pemilik') && $computerLab->pemilik_id !== $user->id) {
+            abort(403, 'Anda tidak mempunyai akses untuk mengedit makmal ini.');
+        }
+
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
         $softwareList = Software::where('publish_status', 1)
-        ->orderBy('title', 'asc')
-        ->get();
+            ->orderBy('title', 'asc')
+            ->get();
         $userCredentials = null; // Default value for $userCredentials
 
         if (!is_null($computerLab->user_credentials)) {
             $userCredentials = json_decode($computerLab->user_credentials, true);
-        }        
+        }
 
         return view('pages.computer-lab.edit', [
             'save_route' => route('computer-lab.update', $computerLab->id),
@@ -202,7 +209,7 @@ class ComputerLabController extends Controller
     {
         $search = $request->input('search');
         $perPage = $request->input('perPage', 10);
-    
+
         $user = User::find(auth()->id());
 
         $computerLabQuery = ComputerLab::with(['pemilik', 'campus'])
@@ -216,17 +223,17 @@ class ComputerLabController extends Controller
         if ($search) {
             $computerLabQuery->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%$search%")
-                      ->orWhere('code', 'LIKE', "%$search%");
+                    ->orWhere('code', 'LIKE', "%$search%");
             });
         }
-    
+
         $computerLabList = $computerLabQuery->latest()->paginate($perPage);
-    
+
         return view('pages.computer-lab.index', [
             'computerLabList' => $computerLabList,
             'perPage' => $perPage,
         ]);
-    }    
+    }
 
     public function destroy(Request $request, $id)
     {

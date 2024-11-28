@@ -119,12 +119,13 @@
                             <span class="badge bg-danger">Tidak Aktif</span>
                             @endif
                         </td>
-                        <td class="text-center">
-                            @hasanyrole('Superadmin|Admin')
+                        <td>
+                            @if(auth()->user()->hasAnyRole('Superadmin|Admin') ||
+                            (auth()->user()->hasRole('Pemilik') && $computerLab->pemilik_id === auth()->id()))
                             <a href="{{ route('computer-lab.edit', $computerLab->id) }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini">
                                 <i class="bx bxs-edit"></i>
                             </a>
-                            @endhasanyrole
+                            @endif
                             <a href="{{ route('computer-lab.show', $computerLab->id) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Papar">
                                 <i class="bx bx-show"></i>
                             </a>

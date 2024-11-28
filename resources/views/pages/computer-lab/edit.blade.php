@@ -31,10 +31,21 @@
         <form method="POST" action="{{ $save_route }}">
             {{ csrf_field() }}
 
+            @php
+            $isPemilik = auth()->user()->hasRole('pemilik');
+            $canEditAll = auth()
+            ->user()
+            ->hasAnyRole(['Superadmin', 'Admin', 'Pegawai Penyemak']);
+            @endphp
+
             <div class="mb-3">
                 <label for="code" class="form-label">Kod Makmal Komputer</label>
                 <input type="text" class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}" id="code"
-                    name="code" value="{{ old('code') ?? ($computerLab->code ?? '') }}">
+                    name="code" value="{{ old('code') ?? ($computerLab->code ?? '') }}"
+                    {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>
+                @if (!($canEditAll || $isPemilik))
+                <input type="hidden" name="code" value="{{ $computerLab->code }}">
+                @endif
                 @if ($errors->has('code'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('code') as $error)
@@ -47,7 +58,11 @@
             <div class="mb-3">
                 <label for="name" class="form-label">Nama Makmal Komputer</label>
                 <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
-                    name="name" value="{{ old('name', $computerLab->name ?? '') }}">
+                    name="name" value="{{ old('name', $computerLab->name ?? '') }}"
+                    {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>
+                @if (!($canEditAll || $isPemilik))
+                <input type="hidden" name="name" value="{{ $computerLab->name }}">
+                @endif
                 @if ($errors->has('name'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('name') as $error)
@@ -61,7 +76,11 @@
             <div class="mb-3">
                 <label for="location" class="form-label">Lokasi</label>
                 <input type="text" class="form-control {{ $errors->has('location') ? 'is-invalid' : '' }}"
-                    id="location" name="location" value="{{ old('location') ?? $computerLab->location }}">
+                    id="location" name="location" value="{{ old('location') ?? $computerLab->location }}"
+                    {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>
+                @if (!($canEditAll || $isPemilik))
+                <input type="hidden" name="location" value="{{ $computerLab->location }}">
+                @endif
                 @if ($errors->has('location'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('location') as $error)
@@ -74,7 +93,7 @@
             <div class="mb-3">
                 <label for="campus_id" class="form-label">Kampus</label>
                 <select class="form-select {{ $errors->has('campus_id') ? 'is-invalid' : '' }}" id="campus_id"
-                    name="campus_id">
+                    name="campus_id" {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>
                     <option value="" disabled>--- Pilih Kampus ---</option>
                     @foreach ($campusList as $campus)
                     <option value="{{ $campus->id }}"
@@ -83,6 +102,9 @@
                     </option>
                     @endforeach
                 </select>
+                @if (!($canEditAll || $isPemilik))
+                <input type="hidden" name="campus_id" value="{{ $computerLab->campus_id }}">
+                @endif
                 @if ($errors->has('campus_id'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('campus_id') as $error)
@@ -92,14 +114,26 @@
                 @endif
             </div>
 
-
             <div class="mb-3">
                 <label for="pemilik_id" class="form-label">Pemilik</label>
+
+                <!-- Display the value if the select is disabled -->
+                @if (!($canEditAll || $isPemilik))
+                <input type="text" class="form-control" value="{{ old('pemilik_id', $computerLab->pemilik->name ?? '') }}" disabled>
+                <input type="hidden" name="pemilik_id" value="{{ $computerLab->pemilik_id }}">
+                @else
+                <!-- Regular select for editable users -->
                 <select class="form-select {{ $errors->has('pemilik_id') ? 'is-invalid' : '' }}" id="pemilik_id"
                     name="pemilik_id">
-                    <option value="" disabled {{ is_null($computerLab->pemilik_id) ? 'selected' : '' }}>--- Pilih
-                        Pemilik ---</option>
+                    <option value="" disabled {{ is_null($computerLab->pemilik_id) ? 'selected' : '' }}>--- Pilih Pemilik ---</option>
+                    @foreach ($pemilikList as $pemilik) <!-- Assuming $pemilikList contains available pemilik options -->
+                    <option value="{{ $pemilik->id }}" {{ old('pemilik_id', $computerLab->pemilik_id) == $pemilik->id ? 'selected' : '' }}>
+                        {{ $pemilik->name }}
+                    </option>
+                    @endforeach
                 </select>
+                @endif
+
                 @if ($errors->has('pemilik_id'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('pemilik_id') as $error)
@@ -157,7 +191,11 @@
                 <label for="no_of_computer" class="form-label">Bilangan Komputer</label>
                 <input type="number" class="form-control {{ $errors->has('no_of_computer') ? 'is-invalid' : '' }}"
                     id="no_of_computer" name="no_of_computer"
-                    value="{{ old('no_of_computer') ?? ($computerLab->no_of_computer ?? '') }}">
+                    value="{{ old('no_of_computer') ?? ($computerLab->no_of_computer ?? '') }}"
+                    {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>
+                @if (!($canEditAll || $isPemilik))
+                <input type="hidden" name="no_of_computer" value="{{ $computerLab->no_of_computer }}">
+                @endif
                 @if ($errors->has('no_of_computer'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('no_of_computer') as $error)
@@ -169,18 +207,26 @@
 
             <div class="mb-3">
                 <label for="publish_status" class="form-label">Status</label>
+
+                <!-- Hidden Input to Handle Disabled Radio Buttons -->
+                <input type="hidden" name="publish_status" value="{{ $computerLab->publish_status == 'Aktif' ? '1' : ($computerLab->publish_status == 'Tidak Aktif' ? '0' : '') }}">
+
                 <div class="form-check">
                     <input type="radio" id="aktif" name="publish_status" value="1"
                         class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
-                        {{ ($computerLab->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}>
+                        {{ ($computerLab->publish_status ?? '') == 'Aktif' ? 'checked' : '' }}
+                        {{ !$canEditAll && !$isPemilik ? 'disabled' : '' }}>
                     <label class="form-check-label" for="aktif">Aktif</label>
                 </div>
+
                 <div class="form-check">
                     <input type="radio" id="tidak_aktif" name="publish_status" value="0"
                         class="form-check-input {{ $errors->has('publish_status') ? 'is-invalid' : '' }}"
-                        {{ ($computerLab->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}>
+                        {{ ($computerLab->publish_status ?? '') == 'Tidak Aktif' ? 'checked' : '' }}
+                        {{ !$canEditAll && !$isPemilik ? 'disabled' : '' }}>
                     <label class="form-check-label" for="tidak_aktif">Tidak Aktif</label>
                 </div>
+
                 @if ($errors->has('publish_status'))
                 <div class="invalid-feedback d-block">
                     @foreach ($errors->get('publish_status') as $error)
@@ -189,6 +235,7 @@
                 </div>
                 @endif
             </div>
+
 
             <button type="submit" class="btn btn-primary">{{ $str_mode }}</button>
         </form>
