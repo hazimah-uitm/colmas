@@ -96,7 +96,7 @@
         <h2 class="accordion-header" id="headingSection1">
             <button class="accordion-button text-uppercase collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseSection1" aria-expanded="false" aria-controls="collapseSection1">
-                Senarai Makmal Komputer {{ $currentMonthName }} {{ $currentYear }}
+                Senarai Makmal Komputer / Sudut IT / Pusat Data {{ $currentMonthName }} {{ $currentYear }}
             </button>
         </h2>
         <div id="collapseSection1" class="accordion-collapse collapse" aria-labelledby="headingSection1">
@@ -119,7 +119,7 @@
                                         <thead class="table-light text-center text-uppercase">
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Makmal Komputer</th>
+                                                <th>Makmal Komputer / Sudut IT / Pusat Data</th>
                                                 <th>Pemilik</th>
                                                 <th>Jumlah PC</th>
                                             </tr>
@@ -161,7 +161,7 @@
         <h2 class="accordion-header" id="headingSection3">
             <button class="accordion-button collapsed text-uppercase" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseSection3" aria-expanded="false" aria-controls="collapseSection3">
-                Status Selenggara Makmal Komputer {{ $currentYear }}
+                Status Selenggara Makmal Komputer / Sudut IT / Pusat Data {{ $currentYear }}
             </button>
         </h2>
         <div id="collapseSection3" class="accordion-collapse collapse" aria-labelledby="headingSection3">
@@ -176,7 +176,7 @@
                                     <thead style="background-color: #ddd;" class="text-center">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Makmal Komputer</th>
+                                            <th>Makmal Komputer / Sudut IT / Pusat Data</th>
                                             @foreach ($months as $month)
                                             <th>{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
                                             @endforeach
