@@ -82,6 +82,13 @@ class ReportController extends Controller
             });
         }
 
+        // Filter by category
+        if ($request->filled('category')) {
+            $labManagementList->whereHas('computerLab', function ($query) use ($request) {
+                $query->where('category', $request->input('category'));
+            });
+        }
+
         $labManagementList = $labManagementList->paginate($perPage);
         $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
@@ -191,7 +198,7 @@ class ReportController extends Controller
         // Render the PDF
         $dompdf->render();
 
-        
+
         // Add custom header and footer to each page
         $canvas = $dompdf->getCanvas();
         $canvasHeight = $canvas->get_height();

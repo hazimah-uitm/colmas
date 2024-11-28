@@ -18,6 +18,17 @@
                         </select>
                     </div>
                     @endhasanyrole
+
+                    @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
+                    <div class="mb-2 ms-2 col-12 col-md-auto">
+                        <select name="category" id="category" class="form-select">
+                            <option value="">Semua Kategori</option>
+                            <option value="makmal_komputer" {{ request('category') == 'makmal_komputer' ? 'selected' : '' }}>Makmal Komputer</option>
+                            <option value="sudut_it" {{ request('category') == 'sudut_it' ? 'selected' : '' }}>Sudut IT</option>
+                            <option value="pusat_data" {{ request('category') == 'pusat_data' ? 'selected' : '' }}>Pusat Data</option>
+                        </select>
+                    </div>
+                    @endhasanyrole
                     <div class="mb-2 ms-2 col-12 col-md-auto">
                         <select name="computer_lab_id" id="computer_lab_id" class="form-select">
                             <option value="">Semua Makmal Komputer</option>
@@ -297,6 +308,7 @@ $monthName = DateTime::createFromFormat('!m', $currentMonth)->format('F');
         const url = new URL(window.location.href);
         url.searchParams.delete('campus_id');
         url.searchParams.delete('computer_lab_id');
+        url.searchParams.delete('category');
         url.searchParams.delete('status');
         url.searchParams.delete('month');
         url.searchParams.delete('year');
