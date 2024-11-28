@@ -27,6 +27,20 @@
             <div class="col">
                 <form id="homeFilter" action="{{ route('yearly-report') }}" method="GET">
                     <div class="d-flex flex-wrap justify-content-end">
+                        @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
+                            <div class="mb-2 ms-2 col-12 col-md-auto">
+                                <select name="category" id="category" class="form-select">
+                                    <option value="">Semua Kategori</option>
+                                    <option value="makmal_komputer"
+                                        {{ request('category') == 'makmal_komputer' ? 'selected' : '' }}>Makmal Komputer
+                                    </option>
+                                    <option value="sudut_it" {{ request('category') == 'sudut_it' ? 'selected' : '' }}>Sudut IT
+                                    </option>
+                                    <option value="pusat_data" {{ request('category') == 'pusat_data' ? 'selected' : '' }}>Pusat
+                                        Data</option>
+                                </select>
+                            </div>
+                        @endhasanyrole
                         <div class="mb-2 ms-2 col-12 col-md-auto">
                             <select name="year" id="year" class="form-select">
                                 <option value="">Semua Tahun</option>
@@ -60,7 +74,7 @@
                         <thead class="table-light text-center text-uppercase">
                             <tr>
                                 <th>No.</th>
-                                <th>Makmal Komputer</th>
+                                <th>Makmal Komputer / Sudut IT / Pusat Data</th>
                                 @foreach ($months as $month)
                                     <th>{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
                                 @endforeach
@@ -95,7 +109,8 @@
         document.getElementById('resetButton').addEventListener('click', function(e) {
             e.preventDefault(); // Prevent default reset behavior
             const url = new URL(window.location.href);
-            url.searchParams.delete('year'); // Only reset the year filter
+            url.searchParams.delete('year');
+            url.searchParams.delete('category');
             window.location.href = url.toString();
         });
     </script>

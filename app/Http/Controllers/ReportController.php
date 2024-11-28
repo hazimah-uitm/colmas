@@ -59,6 +59,13 @@ class ReportController extends Controller
             });
         }
 
+        // Filter by computer lab category
+        if ($request->filled('category')) {
+            $labManagementList->whereHas('computerLab', function ($query) use ($request) {
+                $query->where('category', $request->input('category'));
+            });
+        }
+
         // Filter by month and year if provided in the request
         if ($request->filled('month')) {
             $labManagementList->whereMonth('start_time', $request->input('month'));
@@ -79,13 +86,6 @@ class ReportController extends Controller
         if ($request->filled('computer_lab_id')) {
             $labManagementList->whereHas('computerLab', function ($query) use ($request) {
                 $query->where('computer_lab_id', $request->input('computer_lab_id'));
-            });
-        }
-
-        // Filter by category
-        if ($request->filled('category')) {
-            $labManagementList->whereHas('computerLab', function ($query) use ($request) {
-                $query->where('category', $request->input('category'));
             });
         }
 

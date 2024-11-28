@@ -59,6 +59,13 @@ class YearlyReportController extends Controller
             $campusList = Campus::with('computerLab')->whereIn('id', $campusIds)->get();
         }
 
+        // Filter by computer lab category
+        if ($request->filled('category')) {
+            $labManagementList->whereHas('computerLab', function ($query) use ($request) {
+                $query->where('category', $request->input('category'));
+            });
+        }
+
         $campusData = [];
 
         foreach ($campusList as $campus) {

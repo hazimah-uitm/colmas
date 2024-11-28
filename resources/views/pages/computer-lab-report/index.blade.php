@@ -20,13 +20,27 @@
         </div>
     </div>
     <!--end breadcrumb-->
-    <h6 class="mb-0 text-uppercase">Senarai Makmal Komputer</h6>
+    <h6 class="mb-0 text-uppercase">Senarai Makmal Komputer / Sudut IT / Pusat Data</h6>
     <hr />
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col">
                 <form id="homeFilter" action="{{ route('computer-lab-report') }}" method="GET">
                     <div class="d-flex flex-wrap justify-content-end">
+                        @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
+                            <div class="mb-2 ms-2 col-12 col-md-auto">
+                                <select name="category" id="category" class="form-select">
+                                    <option value="">Semua Kategori</option>
+                                    <option value="makmal_komputer"
+                                        {{ request('category') == 'makmal_komputer' ? 'selected' : '' }}>Makmal Komputer
+                                    </option>
+                                    <option value="sudut_it" {{ request('category') == 'sudut_it' ? 'selected' : '' }}>Sudut IT
+                                    </option>
+                                    <option value="pusat_data" {{ request('category') == 'pusat_data' ? 'selected' : '' }}>Pusat
+                                        Data</option>
+                                </select>
+                            </div>
+                        @endhasanyrole
                         <div class="mb-2 ms-2 col-12 col-md-auto">
                             <select name="month" id="month" class="form-select">
                                 @for ($i = 1; $i <= 12; $i++)
@@ -74,11 +88,11 @@
                             $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                         @endphp
                         <div class="table-responsive">
-                             <table class="table table-sm table-striped table-hover">
+                            <table class="table table-sm table-striped table-hover">
                                 <thead class="table-light text-center text-uppercase">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Makmal Komputer</th>
+                                        <th>Makmal Komputer / Sudut IT / Pusat Data</th>
                                         <th>Pemilik</th>
                                         <th>Jumlah PC</th>
                                     </tr>
@@ -122,6 +136,7 @@
             const url = new URL(window.location.href);
             url.searchParams.delete('month');
             url.searchParams.delete('year');
+            url.searchParams.delete('category');
             window.location.href = url.toString();
         });
     </script>

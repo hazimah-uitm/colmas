@@ -46,6 +46,11 @@ class ComputerLabReportController extends Controller
             $ownersWithLabsQuery->where('pemilik_id', $user->id);
         }
 
+        if ($request->filled('category')) {
+            $category = $request->input('category');
+            $ownersWithLabsQuery->where('category', $category);
+        }
+
         // Get the results and group by campus_id
         $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id')->map(function ($labs) {
             return $labs->sortBy('name'); // Sort labs by name for each campus
