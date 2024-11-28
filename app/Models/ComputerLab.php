@@ -20,11 +20,11 @@ class ComputerLab extends Model
         'name',
         'campus_id',
         'pemilik_id',
-        'username',
         'location',
-        'password',
         'no_of_computer',
-        'publish_status'
+        'publish_status',
+        'user_credentials',
+        'category'
     ];
 
     public function getPublishStatusAttribute()

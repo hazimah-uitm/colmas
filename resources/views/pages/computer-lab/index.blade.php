@@ -67,6 +67,7 @@
                 <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>#</th>
+                        <th>Kategori</th>
                         <th>Kod</th>
                         <th>Makmal Komputer</th>
                         <th>Kampus</th>
@@ -82,6 +83,7 @@
                     @foreach ($computerLabList as $computerLab)
                     <tr>
                         <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
+                        <td>{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
                         <td>{{ $computerLab->code }}</td>
                         <td>{{ $computerLab->name }}</td>
                         <td>{{ $computerLab->campus->name }}</td>

@@ -45,6 +45,7 @@ class ComputerLabController extends Controller
 
     public function create()
     {
+        $categories = ['makmal_komputer', 'sudut_it', 'pusat_data'];
         // Get list of Pemilik and Kampus
         $pemilikList = User::role('Pemilik')->where('publish_status', 1)->get();
         $campusList = Campus::where('publish_status', 1)->get();
@@ -57,6 +58,7 @@ class ComputerLabController extends Controller
             'campusList' => $campusList,
             'pemilikList' => $pemilikList,
             'softwareList' => $softwareList,
+            'categories' => $categories,
             'str_mode' => 'Tambah',
         ]);
     }
@@ -76,6 +78,7 @@ class ComputerLabController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category' => 'nullable|in:makmal_komputer,sudut_it,pusat_data',
             'code' => 'nullable|string',
             'name' => [
                 'required',
@@ -132,7 +135,7 @@ class ComputerLabController extends Controller
     public function edit($id)
     {
         $computerLab = ComputerLab::findOrFail($id);
-        
+        $categories = ['makmal_komputer', 'sudut_it', 'pusat_data'];
         $user = User::find(auth()->id());
         // Allow editing only if the user is the owner (Pemilik) of the lab
         if ($user->hasRole('Pemilik') && $computerLab->pemilik_id !== $user->id) {
@@ -157,6 +160,7 @@ class ComputerLabController extends Controller
             'pemilikList' => $pemilikList,
             'computerLab' => $computerLab,
             'userCredentials' => $userCredentials,
+            'categories' => $categories,
             'str_mode' => 'Kemaskini',
         ]);
     }
@@ -164,6 +168,7 @@ class ComputerLabController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'category' => 'nullable|in:makmal_komputer,sudut_it,pusat_data',
             'code' => 'nullable|string',
             'name' => [
                 'required',

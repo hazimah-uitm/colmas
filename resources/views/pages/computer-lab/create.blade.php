@@ -32,6 +32,26 @@
             {{ csrf_field() }}
 
             <div class="mb-3">
+                <label for="category" class="form-label">Kategori</label>
+                <select class="form-select {{ $errors->has('category') ? 'is-invalid' : '' }}" id="category" name="category">
+                    <option value="" disabled selected>--- Pilih Kategori ---</option>
+                    @foreach ($categories as $category)
+                    <option value="{{ $category }}"
+                        {{ old('category', $computerLab->category ?? '') == $category ? 'selected' : '' }}>
+                        {{ ucwords(str_replace('_', ' ', $category)) }}
+                    </option>
+                    @endforeach
+                </select>
+                @if ($errors->has('category'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('category') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3">
                 <label for="code" class="form-label">Kod Makmal Komputer</label>
                 <input type="text" class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}" id="code"
                     name="code" value="{{ old('code') ?? ($computerLab->code ?? '') }}">
