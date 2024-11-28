@@ -32,7 +32,7 @@ Route::get('link-expired', function () {
     return view('auth.passwords.link-expired');
 })->name('link-expired');
 
-Route::middleware('auth')->group(function () {
+Route::middleware([RoleMiddleware::class . ':Superadmin|Admin|Pemilik|Pegawai Penyemak'])->group(function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post('home/store', 'HomeController@store')->name('home.store');
@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
 
     //Computer Lab
     Route::get('computer-lab', 'ComputerLabController@index')->name('computer-lab');
+    Route::post('computer-lab/store', 'ComputerLabController@store')->name('computer-lab.store');
     Route::get('computer-lab/{id}/edit', 'ComputerLabController@edit')->name('computer-lab.edit');
     Route::post('computer-lab/{id}', 'ComputerLabController@update')->name('computer-lab.update');
     Route::get('computer-lab/view/{id}', 'ComputerLabController@show')->name('computer-lab.show');
@@ -195,7 +196,6 @@ Route::middleware('auth')->group(function () {
 
         // Computer Lab
         Route::get('computer-lab/create', 'ComputerLabController@create')->name('computer-lab.create');
-        Route::post('computer-lab/store', 'ComputerLabController@store')->name('computer-lab.store');
         Route::delete('computer-lab/{id}', 'ComputerLabController@destroy')->name('computer-lab.destroy');
         Route::get('/computer-lab/trash', 'ComputerLabController@trashList')->name('computer-lab.trash');
         Route::get('/computer-lab/{id}/restore', 'ComputerLabController@restore')->name('computer-lab.restore');
