@@ -65,24 +65,29 @@
                             @if(count($userCredentials) > 0)
                             @foreach ($userCredentials as $index => $credential)
                             @if(count($userCredentials) > 1)
-                            <p class="badge bg-primary text-uppercase">Akaun {{ $index + 1 }}</p>
+                            <p class="badge bg-primary text-uppercase mb-1">Akaun {{ $index + 1 }}</p>
                             @endif
-                            <p><strong>Nama Pengguna:</strong> {{ $credential['username'] }}</p>
-                            <p><strong>Kata Laluan:</strong>
-                                <span class="password" data-password="{{ $credential['password'] }}">****</span>
+                            <p class="mb-0"><strong>Nama Pengguna:</strong> {{ $credential['username'] }}</p>
+                            <p class="mb-0"><strong>Kata Laluan:</strong>
+                                <span class="password" data-password="{{ $credential['password'] ?? '' }}">
+                                    {!! $credential['password'] ? '****' : '<em>Tiada</em>' !!}
+                                </span>
+                                @if($credential['password'])
                                 <button type="button" class="btn btn-link toggle-password" style="padding: 0; font-size: 1.1rem;">
-                                    <i class="bx bx-show"></i> <!-- Show icon -->
+                                    <i class="bx bx-show"></i>
                                 </button>
+                                @endif
                             </p>
                             @if($index
                             < count($userCredentials) - 1)
-                                <hr />
+                                <hr class="my-1" />
                             @endif
                             @endforeach
                             @else
-                            <p><strong>Tiada Akaun</strong></p>
+                            <p class="mb-0"><strong>Tiada Akaun</strong></p>
                             @endif
                         </td>
+
                     </tr>
                     <tr>
                         <th class="col-2">Perisian</th>
