@@ -128,7 +128,7 @@
             <div class="mb-3" id="credentials-container">
                 <label for="credential" class="form-label">Akaun</label>
                 <div class="credential-row d-flex align-items-center mb-2">
-                    <input type="text" name="user_credentials[0][username]" class="form-control me-2" placeholder="Username" required>
+                    <input type="text" name="user_credentials[0][username]" class="form-control me-2" placeholder="Username">
                     <input type="text" name="user_credentials[0][password]" class="form-control me-2" placeholder="Password">
                     <button type="button" class="btn btn-danger remove-row" disabled>Padam</button>
                 </div>
@@ -253,7 +253,7 @@
         newRow.classList.add('credential-row', 'd-flex', 'align-items-center', 'mb-2');
 
         newRow.innerHTML = `
-            <input type="text" name="user_credentials[${credentialIndex}][username]" class="form-control me-2" placeholder="Username" required>
+            <input type="text" name="user_credentials[${credentialIndex}][username]" class="form-control me-2" placeholder="Username">
             <input type="text" name="user_credentials[${credentialIndex}][password]" class="form-control me-2" placeholder="Password">
             <button type="button" class="btn btn-danger remove-row">Remove</button>
         `;
