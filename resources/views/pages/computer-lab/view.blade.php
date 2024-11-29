@@ -44,11 +44,11 @@
                         <td class="col-4">{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
                     </tr>
                     <tr>
-                        <th class="col-2">Kod</th>
+                        <th class="col-2">Kod Ruang</th>
                         <td class="col-4">{{ $computerLab->code }}</td>
                     </tr>
                     <tr>
-                        <th class="col-2">Nama Makmal Komputer</th>
+                        <th class="col-2">Nama Ruang</th>
                         <td class="col-4">{{ $computerLab->name }}</td>
                     </tr>
                     <tr>

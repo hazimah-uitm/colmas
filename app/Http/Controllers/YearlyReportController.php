@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use App\Models\Campus;
 use App\Models\ComputerLab;
-use App\Models\ComputerLabHistory;
 use App\Models\LabManagement;
 use App\Models\User;
 use Carbon\Carbon;

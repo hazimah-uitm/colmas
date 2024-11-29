@@ -30,7 +30,7 @@
                         <tr>
                             <th>#</th>
                             <th>Kod</th>
-                            <th>Makmal Komputer</th>
+                            <th>Ruang</th>
                             <th>Kampus</th>
                             <th>Pemilik</th>
                             <th>Status</th>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="modal-body">
                         @isset($computerLab)
-                            Adakah anda pasti ingin memadam kekal rekod <span style="font-weight: 600;">Makmal Komputer
+                            Adakah anda pasti ingin memadam kekal rekod <span style="font-weight: 600;">Ruang
                                 {{ $computerLab->name }}</span>?
                         @else
                             Error: Campus data not available.

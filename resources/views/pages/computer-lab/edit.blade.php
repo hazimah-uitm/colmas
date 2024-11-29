@@ -64,7 +64,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="code" class="form-label">Kod Makmal Komputer</label>
+                <label for="code" class="form-label">Kod Ruang</label>
                 <input type="text" class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}" id="code"
                     name="code" value="{{ old('code') ?? ($computerLab->code ?? '') }}"
                     {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Makmal Komputer</label>
+                <label for="name" class="form-label">Nama Ruang</label>
                 <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name"
                     name="name" value="{{ old('name', $computerLab->name ?? '') }}"
                     {{ $canEditAll || $isPemilik ? '' : 'disabled' }}>

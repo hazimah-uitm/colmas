@@ -130,7 +130,7 @@
                                         <thead class="table-light text-center text-uppercase">
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Makmal Komputer / Sudut IT / Pusat Data</th>
+                                                <th>Nama Ruang</th>
                                                 <th>Pemilik</th>
                                                 <th>Jumlah PC</th>
                                             </tr>
@@ -187,7 +187,7 @@
                                     <thead style="background-color: #ddd;" class="text-center">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Makmal Komputer / Sudut IT / Pusat Data</th>
+                                            <th>Nama Ruang</th>
                                             @foreach ($months as $month)
                                             <th>{{ date('M', mktime(0, 0, 0, $month, 1)) }}</th>
                                             @endforeach
