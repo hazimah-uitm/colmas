@@ -97,9 +97,13 @@ class HomeController extends Controller
 
         if ($request->filled('category')) {
             $category = $request->input('category');
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($category) {
+                $query->where('category', $category);
+            });
             $computerLabList = $computerLabList->where('category', $category);
             $ownersWithLabsQuery->where('category', $category);
         }
+        
     
         // Execute the query to fetch lab management data
         $labManagementData = $labManagementQuery->get();
