@@ -20,7 +20,7 @@
         </div>
     </div>
     <!--end breadcrumb-->
-    <h6 class="mb-0 text-uppercase">Senarai Makmal Komputer / Sudut IT / Pusat Data</h6>
+    <h6 class="mb-0 text-uppercase">Senarai Makmal Komputer</h6>
     <hr />
     <div class="container-fluid mb-3">
         <div class="row">
@@ -92,7 +92,7 @@
                                 <thead class="table-light text-center text-uppercase">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Makmal Komputer / Sudut IT / Pusat Data</th>
+                                        <th>Nama Ruang</th>
                                         <th>Pemilik</th>
                                         <th>Jumlah PC</th>
                                     </tr>

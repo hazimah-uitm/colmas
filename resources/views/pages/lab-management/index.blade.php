@@ -119,7 +119,8 @@
                         <tr>
                             <th>#</th>
                             <th>Kampus</th>
-                            <th>Makmal Komputer</th>
+                            <th>Kategori</th>
+                            <th>Nama Ruang</th>
                             <th>Pemilik</th>
                             <th>Bil. PC</th>
                             <th>Bulan</th>
@@ -135,6 +136,7 @@
                                     <td class="text-center">{{ ($labManagementList->currentPage() - 1) * $labManagementList->perPage() + $loop->iteration }}
                                     </td>
                                     <td>{{ $labManagement->computerLab->campus->name ?? '-' }}</td>
+                                    <td>{{ ucwords(str_replace('_', ' ', $labManagement->computerLab->category)) ?? '-' }}</td>
                                     <td>{{ $labManagement->computerLab->name ?? '-' }}</td>
                                     <td class="text-center">{{ $labManagement->computerLab->pemilik->name ?? '-' }}</td>
                                     <td class="text-center">{{ $labManagement->computer_no ?? '-' }}</td>

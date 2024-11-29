@@ -19,7 +19,7 @@
         </div>
     </div>
     <!--end breadcrumb-->
-    <h6 class="mb-0 text-uppercase">Senarai Laporan Selenggara Makmal Komputer / Sudut IT / Pusat Data</h6>
+    <h6 class="mb-0 text-uppercase">Senarai Laporan Selenggara Makmal Komputer</h6>
     <hr />
     <div class="card">
         <div class="card-body">
@@ -72,7 +72,7 @@
 
                             <select name="computer_lab_id" class="form-select form-select-sm ms-2 rounded"
                                 id="computerLabFilter">
-                                <option value="">Semua Makmal Komputer</option>
+                                <option value="">Semua Ruang</option>
                                 @foreach ($computerLabList as $computerLab)
                                     <option value="{{ $computerLab->id }}"
                                         {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
@@ -118,7 +118,7 @@
                         <tr>
                             <th>#</th>
                             <th>Kampus</th>
-                            <th>Makmal Komputer / Sudut IT / Pusat Data</th>
+                            <th>Nama Ruang</th>
                             <th>Pemilik</th>
                             <th>Bil. PC</th>
                             <th>Bulan</th>

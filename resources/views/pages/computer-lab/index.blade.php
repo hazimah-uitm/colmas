@@ -69,7 +69,7 @@
                         <th>#</th>
                         <th>Kategori</th>
                         <th>Kod</th>
-                        <th>Makmal Komputer</th>
+                        <th>Nama Ruang</th>
                         <th>Kampus</th>
                         <th>Pemilik</th>
                         <th>Bil. Komputer</th>

@@ -48,7 +48,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th style="width: 50%" class="text-uppercase">Makmal Komputer</th>
+                        <th style="width: 50%" class="text-uppercase">Nama Ruang</th>
                         <td style="width: 50%" class="mb-3 text-uppercase">{{ $labManagement->computerLab->name }},
                             {{ $labManagement->computerLab->campus->name }}
                         </td>
