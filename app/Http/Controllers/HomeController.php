@@ -142,21 +142,21 @@ class HomeController extends Controller
         foreach ($campusList as $campus) {
             if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
                 // Admin and Superadmin see all labs in each campus
-                $computerLabs = $filteredComputerLabs;
+                $computerLabs = $filteredComputerLabs->where('campus_id', $campus->id);
             } elseif ($user->hasRole('Pegawai Penyemak')) {
                 $userCampusIds = $user->campus->pluck('id')->toArray();
                 
                 // Pegawai Penyemak sees labs only in campuses they are associated with
                 if (in_array($campus->id, $userCampusIds)) {
-                    $computerLabs = $filteredComputerLabs;
+                    $computerLabs = $filteredComputerLabs->where('campus_id', $campus->id);
                 } else {
                     $computerLabs = collect(); // Empty collection if they don’t have access
                 }
             } else {
                 // Regular Pemilik only sees labs they own
-                $computerLabs = $filteredComputerLabs;
+                $computerLabs = $filteredComputerLabs->where('pemilik_id', $user->id)->where('campus_id', $campus->id);
             }
-        
+            
             $maintainedLabsPerMonth = [];
             foreach ($months as $month) {
                 $maintainedLabsThisMonth = LabManagement::query()  
@@ -168,12 +168,13 @@ class HomeController extends Controller
                     ->whereIn('status', ['dihantar', 'telah_disemak'])
                     ->pluck('computer_lab_id')
                     ->unique();
-        
+            
                 $maintainedLabsPerMonth[$month] = $computerLabs->mapWithKeys(function ($lab) use ($maintainedLabsThisMonth) {
                     return [$lab->id => $maintainedLabsThisMonth->contains($lab->id)];
                 });
             }
         
+            // Add the campus data to the campusData array
             $campusData[] = [
                 'campus' => $campus,
                 'computerLabs' => $computerLabs,
