@@ -187,7 +187,7 @@
                 </div>
                 @endif
             </div>
-            <button type="button" id="add-credential" class="btn btn-primary mb-3">Tambah Akaun</button>
+            <button type="button" id="add-credential" class="btn btn-info mb-3">Tambah Akaun</button>
 
             <div class="mb-3">
                 <label class="form-label">Senarai Perisian</label>

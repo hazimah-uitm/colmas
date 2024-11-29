@@ -133,7 +133,7 @@
                     <button type="button" class="btn btn-danger remove-row" disabled>Padam</button>
                 </div>
             </div>
-            <button type="button" id="add-credential" class="btn btn-primary mb-3">Tambah Akaun</button>
+            <button type="button" id="add-credential" class="btn btn-info mb-3">Tambah Akaun</button>
 
             <div class="mb-3">
                 <label for="no_of_computer" class="form-label">Bilangan Komputer</label>
