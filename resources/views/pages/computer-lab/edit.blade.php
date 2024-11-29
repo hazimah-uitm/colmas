@@ -174,14 +174,14 @@
                 @if (!empty($userCredentials)) <!-- Check if $userCredentials is not empty -->
                 @foreach($userCredentials as $index => $credential)
                 <div class="credential-row d-flex align-items-center mb-2">
-                    <input type="text" name="user_credentials[{{ $index }}][username]" class="form-control me-2" placeholder="Username" value="{{ $credential['username'] }}" >
+                    <input type="text" name="user_credentials[{{ $index }}][username]" class="form-control me-2" placeholder="Username" value="{{ $credential['username'] }}">
                     <input type="text" name="user_credentials[{{ $index }}][password]" class="form-control me-2" placeholder="Password" value="{{ $credential['password'] }}">
                     <button type="button" class="btn btn-danger remove-row">Padam</button>
                 </div>
                 @endforeach
                 @else
                 <div class="credential-row d-flex align-items-center mb-2">
-                    <input type="text" name="user_credentials[0][username]" class="form-control me-2" placeholder="Username" >
+                    <input type="text" name="user_credentials[0][username]" class="form-control me-2" placeholder="Username">
                     <input type="text" name="user_credentials[0][password]" class="form-control me-2" placeholder="Password">
                     <button type="button" class="btn btn-danger remove-row" disabled>Padam</button>
                 </div>
@@ -324,21 +324,22 @@
     });
 </script>
 <script>
-    let credentialIndex = 1;
-
     document.getElementById('add-credential').addEventListener('click', function() {
         const container = document.getElementById('credentials-container');
+        const newIndex = container.getElementsByClassName('credential-row').length; // Get the current count of rows
         const newRow = document.createElement('div');
         newRow.classList.add('credential-row', 'd-flex', 'align-items-center', 'mb-2');
-
         newRow.innerHTML = `
-            <input type="text" name="user_credentials[${credentialIndex}][username]" class="form-control me-2" placeholder="Username" >
-            <input type="text" name="user_credentials[${credentialIndex}][password]" class="form-control me-2" placeholder="Password">
-            <button type="button" class="btn btn-danger remove-row">Remove</button>
-        `;
-
+        <input type="text" name="user_credentials[${newIndex}][username]" class="form-control me-2" placeholder="Username">
+        <input type="text" name="user_credentials[${newIndex}][password]" class="form-control me-2" placeholder="Password">
+        <button type="button" class="btn btn-danger remove-row">Padam</button>
+    `;
         container.appendChild(newRow);
-        credentialIndex++;
+
+        // Attach the remove button functionality
+        newRow.querySelector('.remove-row').addEventListener('click', function() {
+            newRow.remove();
+        });
     });
 
     document.getElementById('credentials-container').addEventListener('click', function(event) {

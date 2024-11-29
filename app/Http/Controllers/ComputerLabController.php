@@ -34,7 +34,10 @@ class ComputerLabController extends Controller
         $computerLabList = $computerLabQuery->latest()->paginate($perPage);
 
         foreach ($computerLabList as $computerLab) {
-            $computerLab->user_credentials = json_decode($computerLab->user_credentials, true);
+            // Check if the 'user_credentials' is a valid JSON string before decoding
+            if (is_string($computerLab->user_credentials)) {
+                $computerLab->user_credentials = json_decode($computerLab->user_credentials, true);
+            }
         }
 
         return view('pages.computer-lab.index', [
@@ -146,10 +149,16 @@ class ComputerLabController extends Controller
         $softwareList = Software::where('publish_status', 1)
             ->orderBy('title', 'asc')
             ->get();
-        $userCredentials = null; // Default value for $userCredentials
+        $userCredentials = null; 
 
+        // Check if user_credentials is a string, and if so, decode it
         if (!is_null($computerLab->user_credentials)) {
-            $userCredentials = json_decode($computerLab->user_credentials, true);
+            // If it's a string, decode it, otherwise leave it as is
+            if (is_string($computerLab->user_credentials)) {
+                $userCredentials = json_decode($computerLab->user_credentials, true);
+            } else {
+                $userCredentials = $computerLab->user_credentials; // Already an array
+            }
         }
 
         return view('pages.computer-lab.edit', [

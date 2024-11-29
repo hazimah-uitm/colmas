@@ -89,31 +89,34 @@
                         <td>{{ $computerLab->campus->name }}</td>
                         <td class="text-center">{{ $computerLab->pemilik->name }}</td>
                         <td class="text-center">{{ $computerLab->no_of_computer }}</td>
-                        <td>
-                            @if(count($computerLab->user_credentials) > 0)
-                            @foreach ($computerLab->user_credentials as $index => $credential)
-                            @if(count($computerLab->user_credentials) > 1)
-                            <p class="badge bg-primary text-uppercase mb-1">Akaun {{ $index + 1 }}</p>
-                            @endif
-                            <p class="mb-0"><strong>Nama Pengguna:</strong> {{ $credential['username'] }}</p>
-                            <p class="mb-0"><strong>Kata Laluan:</strong>
-                                <span class="password" data-password="{{ $credential['password'] ?? '' }}">
-                                    {!! $credential['password'] ? '****' : '<em>Tiada</em>' !!}
-                                </span>
-                                @if($credential['password'])
-                                <button type="button" class="btn btn-link toggle-password" style="padding: 0; font-size: 1.1rem;">
-                                    <i class="bx bx-show"></i>
-                                </button>
-                                @endif
-                            </p>
-                            @if($index < count($computerLab->user_credentials) - 1)
-                                <hr class="my-1" />
-                                @endif
-                                @endforeach
-                                @else
-                                <p class="mb-0"><strong>Tiada Akaun</strong></p>
-                                @endif
-                        </td>
+                        @php $credentials = $computerLab->user_credentials ?? []; @endphp
+
+<td>
+    @if (count($credentials) > 0)
+        @foreach ($credentials as $index => $credential)
+            @if (count($credentials) > 1)
+                <p class="badge bg-primary text-uppercase mb-1">Akaun {{ $index + 1 }}</p>
+            @endif
+            <p class="mb-0"><strong>Nama Pengguna:</strong> {{ $credential['username'] ?? '-' }}</p>
+            <p class="mb-0"><strong>Kata Laluan:</strong>
+                <span class="password" data-password="{{ $credential['password'] ?? '' }}">
+                    {!! $credential['password'] ? '****' : '<em>Tiada</em>' !!}
+                </span>
+                @if (!empty($credential['password']))
+                    <button type="button" class="btn btn-link toggle-password" style="padding: 0; font-size: 1.1rem;">
+                        <i class="bx bx-show"></i>
+                    </button>
+                @endif
+            </p>
+            @if ($index < count($credentials) - 1)
+                <hr class="my-1" />
+            @endif
+        @endforeach
+    @else
+        <p class="mb-0"><strong>Tiada Akaun</strong></p>
+    @endif
+</td>
+
                         <td class="text-center">
                             @if ($computerLab->publish_status == 'Aktif')
                             <span class="badge bg-success">Aktif</span>

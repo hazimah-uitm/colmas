@@ -27,6 +27,10 @@ class ComputerLab extends Model
         'category'
     ];
 
+    protected $casts = [
+        'user_credentials' => 'array',
+    ];
+    
     public function getPublishStatusAttribute()
     {
         return $this->attributes['publish_status'] ? 'Aktif' : 'Tidak Aktif';
