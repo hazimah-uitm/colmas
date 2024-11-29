@@ -31,7 +31,7 @@
                     @endhasanyrole
                     <div class="mb-2 ms-2 col-12 col-md-auto">
                         <select name="computer_lab_id" id="computer_lab_id" class="form-select">
-                            <option value="">Semua Makmal Komputer</option>
+                            <option value="">Semua Ruang</option>
                             @foreach ($computerLabList as $computerLab)
                             <option value="{{ $computerLab->id }}"
                                 {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
