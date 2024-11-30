@@ -81,7 +81,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($campusItem['computerLabList'] as $lab)
+                            @foreach ($campusItem['computerLabs'] as $lab)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $lab->name }}</td>
