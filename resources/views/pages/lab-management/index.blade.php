@@ -204,7 +204,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="9">Tiada rekod</td>
+                                <td colspan="10">Tiada rekod</td>
                             </tr>
                         @endif
                     </tbody>

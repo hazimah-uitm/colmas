@@ -70,7 +70,7 @@
                                 </tr>
                             @endforeach
                         @else
-                            <td colspan="6">Tiada rekod</td>
+                            <td colspan="7">Tiada rekod</td>
                         @endif
                     </tbody>
                 </table>
