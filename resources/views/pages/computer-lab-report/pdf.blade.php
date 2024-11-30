@@ -21,9 +21,21 @@
             overflow: hidden;
         }
 
+        .campus-section h2 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
+
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 5px;
         }
 
         .header img {
@@ -37,36 +49,35 @@
             text-transform: uppercase;
         }
 
+        /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
+            color: #000 !important;
         }
 
         th,
         td {
-            padding: 6px;
-            text-align: left;
+            text-align: justify;
             font-size: 9pt;
             border: 1px solid #ddd;
+            word-wrap: break-word;
+            /* Allow wrapping of long text */
         }
 
         th {
-            background-color: #abb2b9;
+            padding: 6px;
+            background-color: #d6dbdf;
             font-weight: bold;
             text-align: center;
+            color: #333;
         }
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
-        }
-
-        h4 {
-            font-size: 14pt;
-            margin-top: 10px;
-            margin-bottom: 5px;
         }
 
         @media print {
@@ -89,35 +100,37 @@
 
     <!-- Report Content -->
     @foreach ($ownersWithLabs as $campusId => $labs)
-        <h4>{{ $labs->first()->campus->name ?? 'N/A' }}</h4>
-        @php
-        $labsGroupedByOwner = $labs->groupBy('pemilik_id');
-        @endphp
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 5%">No.</th>
-                    <th>Makmal Komputer</th>
-                    <th style="width: 25%;">Pemilik</th>
-                    <th style="width: 10%;">Total PC</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                $counter = 1;
-                @endphp
-                @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
-                @foreach ($ownerLabs as $labIndex => $lab)
-                <tr>
-                    <td style="text-align: center">{{ $counter++ }}</td>
-                    <td>{{ $lab->name }}</td>
-                    <td style="text-align: center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
-                    <td style="text-align: center">{{ $lab->pc_count }}</td>
-                </tr>
-                @endforeach
-                @endforeach
-            </tbody>
-        </table>
+        <div class="campus-section">
+            <h2>{{ $labs->first()->campus->name ?? 'N/A' }}</h2>
+            @php
+                $labsGroupedByOwner = $labs->groupBy('pemilik_id');
+            @endphp
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%">No.</th>
+                        <th>Nama Ruang</th>
+                        <th style="width: 25%;">Pemilik</th>
+                        <th style="width: 10%;">Total PC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $counter = 1;
+                    @endphp
+                    @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+                        @foreach ($ownerLabs as $labIndex => $lab)
+                            <tr>
+                                <td style="text-align: center">{{ $counter++ }}</td>
+                                <td>{{ $lab->name }}</td>
+                                <td style="text-align: center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
+                                <td style="text-align: center">{{ $lab->pc_count }}</td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endforeach
 </body>
 

@@ -27,6 +27,113 @@ class ComputerLabReportController extends Controller
 
     public function index(Request $request)
     {
+        $currentYear = $request->input('year', date('Y')); // Get the selected year
+        $currentMonth = $request->input('month', date('n')); // Get the selected month
+        $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
+        $data = $this->exportData($request);
+
+        // Return view with data
+        return view('pages.computer-lab-report.index', [
+            'computerLabList' => $data['computerLabList'],
+            'campusList' => $data['campusList'],
+            'currentYear' =>  $data['currentYear'],
+            'currentMonth' =>  $currentYear,
+            'currentMonthName' =>  $currentMonthName,
+            'ownersWithLabs' => $data['ownersWithLabs'],
+        ]);
+    }
+
+    private function getTotalPC($filteredComputerLabs, $selectedMonth = null, $selectedYear = null)
+    {
+        $totalPC = 0;
+        foreach ($filteredComputerLabs as $computerLab) {
+            $query = ComputerLabHistory::where('computer_lab_id', $computerLab->id);
+
+            if ($selectedMonth) {
+                // Get the latest history entry before or in the selected month
+                $query->where(function ($q) use ($selectedMonth, $selectedYear) {
+                    $q->whereYear('month_year', '<', $selectedYear)
+                        ->orWhere(function ($query) use ($selectedMonth, $selectedYear) {
+                            $query->whereYear('month_year', $selectedYear)
+                                ->whereMonth('month_year', '<=', $selectedMonth);
+                        });
+                });
+            }
+
+            $latestHistory = $query->orderBy('month_year', 'desc')->first();
+
+            if ($latestHistory) {
+                // Add the latest pc_no to totalPC, defaulting to 0 if it's null
+                $totalPC += $latestHistory->pc_no ?? 0;
+            }
+        }
+        return $totalPC;
+    }
+
+    public function downloadPdf(Request $request)
+    {
+        $user = User::find(auth()->id());
+        $currentYear = $request->input('year', date('Y'));
+        $currentMonth = $request->input('month', date('n'));
+        $currentDate = now()->format('d M Y');
+        $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
+        $data = $this->exportData($request);
+
+        $path = public_path('assets/images/Logo-Infostruktur.svg');
+        $logoData = base64_encode(file_get_contents($path));
+        $logoMimeType = mime_content_type($path);
+
+        // Render the view into HTML
+        $html = view('pages.computer-lab-report.pdf', [
+            'currentYear' =>  $currentYear,
+            'currentMonth' =>  $currentMonth,
+            'ownersWithLabs' => $data['ownersWithLabs'],
+            'username' => $user->name,
+            'currentDate' => $currentDate,
+            'currentMonthName' =>  $currentMonthName,
+            'logoBase64' => "data:{$logoMimeType};base64,{$logoData}",
+        ])->render();
+
+        // Set up the filename
+        $filename = "Laporan_Makmal_Komputer_{$currentYear}.pdf";
+
+        // Initialize DomPDF options
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        // Create the Dompdf instance and load the HTML
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Add header and footer using DomPDF's callbacks
+        $dompdf->render();
+
+        // Add custom header and footer to each page
+        $canvas = $dompdf->getCanvas();
+        $canvasHeight = $canvas->get_height();
+        $canvasWidth = $canvas->get_width();  // Get the page width
+
+        // Header
+        $canvas->page_text(30, 30, "Computer Lab Maintenance System (COLMAS)", 'arial', 8, array(0, 0, 0), 0, false, false, '');
+
+        // Footer: Left (Dijana oleh), Center (Tarikh), Right (Pagination)
+        $footerLeftText = "Dijana oleh: {$user->name} - {$currentDate}";
+        $footerRightText = "{PAGE_NUM}";
+
+        // Left: Positioning
+        $canvas->page_text(30, $canvasHeight - 40, $footerLeftText, null, 8, array(0, 0, 0));
+
+        // Right: Positioning
+        $canvas->page_text($canvasWidth - 40, $canvasHeight - 40, $footerRightText, null, 8, array(0, 0, 0));
+
+        // Stream the generated PDF
+        return $dompdf->stream($filename, ['Attachment' => false]);
+    }
+
+    private function exportData(Request $request)
+    {
         $user = User::find(auth()->id());
         $currentYear = $request->input('year', date('Y')); // Get the selected year
         $currentMonth = $request->input('month', date('n')); // Get the selected month
@@ -103,13 +210,6 @@ class ComputerLabReportController extends Controller
             $computerLabList = $computerLabList->where('category', $category);
             $ownersWithLabsQuery->where('category', $category);
         }
-        
-    
-        // Execute the query to fetch lab management data
-        $labManagementData = $labManagementQuery->get();
-
-        // Fetch filtered computer labs based on the previously applied filters
-        $filteredComputerLabs = $computerLabList;
 
         // Get the results and group by campus_id
         $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id')->map(function ($labs) {
@@ -123,134 +223,14 @@ class ComputerLabReportController extends Controller
         }
         
         $campusList = Campus::all();
-
-        foreach ($labManagementData as $labManagement) {
-            $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
-            $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
-        }
-
         // Return view with data
-        return view('pages.computer-lab-report.index', [
-            'labManagementList' => $labManagementData,
+        return [
             'computerLabList' => $computerLabList,
             'campusList' => $campusList,
             'currentYear' =>  $currentYear,
             'currentMonth' =>  $currentMonth,
             'currentMonthName' =>  $currentMonthName,
             'ownersWithLabs' => $ownersWithLabs,
-        ]);
-    }
-
-    private function getTotalPC($filteredComputerLabs, $selectedMonth = null, $selectedYear = null)
-    {
-        $totalPC = 0;
-        foreach ($filteredComputerLabs as $computerLab) {
-            $query = ComputerLabHistory::where('computer_lab_id', $computerLab->id);
-
-            if ($selectedMonth) {
-                // Get the latest history entry before or in the selected month
-                $query->where(function ($q) use ($selectedMonth, $selectedYear) {
-                    $q->whereYear('month_year', '<', $selectedYear)
-                        ->orWhere(function ($query) use ($selectedMonth, $selectedYear) {
-                            $query->whereYear('month_year', $selectedYear)
-                                ->whereMonth('month_year', '<=', $selectedMonth);
-                        });
-                });
-            }
-
-            $latestHistory = $query->orderBy('month_year', 'desc')->first();
-
-            if ($latestHistory) {
-                // Add the latest pc_no to totalPC, defaulting to 0 if it's null
-                $totalPC += $latestHistory->pc_no ?? 0;
-            }
-        }
-        return $totalPC;
-    }
-
-    public function downloadPdf(Request $request)
-    {
-        $user = User::find(auth()->id());
-        $currentYear = $request->input('year', date('Y'));
-        $currentMonth = $request->input('month', date('n'));
-        $currentDate = now()->format('d M Y');
-        $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
-
-        // Query to get Computer Labs grouped by campus, pemilik, and total PC
-        $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus'])
-            ->select('id', 'name', 'pemilik_id', 'campus_id')
-            ->where('publish_status', 1);
-
-        // Filter based on user role
-        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
-        } elseif ($user->hasRole('Pegawai Penyemak')) {
-            $userCampusIds = $user->campus->pluck('id')->toArray();
-            $ownersWithLabsQuery->whereIn('campus_id', $userCampusIds);
-        } else {
-            $ownersWithLabsQuery->where('pemilik_id', $user->id);
-        }
-
-        // Get the results and group by campus_id
-        $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id')->map(function ($labs) {
-            return $labs->sortBy('name'); // Sort labs by name for each campus
-        });
-
-        foreach ($ownersWithLabs as $campusId => $labs) {
-            foreach ($labs as $lab) {
-                $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
-            }
-        }
-
-        $path = public_path('assets/images/Logo-Infostruktur.svg');
-        $logoData = base64_encode(file_get_contents($path));
-        $logoMimeType = mime_content_type($path);
-
-        // Render the view into HTML
-        $html = view('pages.computer-lab-report.pdf', [
-            'currentYear' =>  $currentYear,
-            'currentMonth' =>  $currentMonth,
-            'ownersWithLabs' => $ownersWithLabs,
-            'username' => $user->name,
-            'currentDate' => $currentDate,
-            'currentMonthName' =>  $currentMonthName,
-            'logoBase64' => "data:{$logoMimeType};base64,{$logoData}",
-        ])->render();
-
-        // Set up the filename
-        $filename = "Laporan_Makmal_Komputer_{$currentYear}.pdf";
-
-        // Initialize DomPDF options
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-
-        // Create the Dompdf instance and load the HTML
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Add header and footer using DomPDF's callbacks
-        $dompdf->render();
-
-        // Add custom header and footer to each page
-        $canvas = $dompdf->getCanvas();
-        $canvasHeight = $canvas->get_height();
-        $canvasWidth = $canvas->get_width();  // Get the page width
-
-        // Header
-        $canvas->page_text(30, 30, "Computer Lab Maintenance System (COLMAS)", 'arial', 8, array(0, 0, 0), 0, false, false, '');
-
-        // Footer: Left (Dijana oleh), Center (Tarikh), Right (Pagination)
-        $footerLeftText = "Dijana oleh: {$user->name} - {$currentDate}";
-        $footerRightText = "{PAGE_NUM}";
-
-        // Left: Positioning
-        $canvas->page_text(30, $canvasHeight - 40, $footerLeftText, null, 8, array(0, 0, 0));
-
-        // Right: Positioning
-        $canvas->page_text($canvasWidth - 40, $canvasHeight - 40, $footerRightText, null, 8, array(0, 0, 0));
-
-        // Stream the generated PDF
-        return $dompdf->stream($filename, ['Attachment' => false]);
+        ];
     }
 }

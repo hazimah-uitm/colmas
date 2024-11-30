@@ -40,13 +40,14 @@
         }
 
         .campus-section h2 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #333;
             background-color: #f4f4f4;
             padding: 10px 20px;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
         }
 
         .cross-icon {
@@ -123,7 +124,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data['computerLabList'] as $lab)
+                @foreach ($data['computerLabs'] as $lab)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td style="text-align: left; 

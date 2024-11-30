@@ -90,8 +90,8 @@
                         <div>
                             <button id="resetButton" class="btn btn-primary">Reset</button>
                         </div>
-                        <a href="{{ route('computer-lab-report.download-pdf', ['year' => $currentYear]) }}" target="_blank"
-                            class="btn btn-info">Muat Turun PDF</a>
+                        <a href="{{ route('computer-lab-report.download-pdf', request()->query()) }}" target="_blank"
+                            class="btn btn-info mb-0">Muat Turun PDF</a>
                     </div>
                 </form>
             </div>
