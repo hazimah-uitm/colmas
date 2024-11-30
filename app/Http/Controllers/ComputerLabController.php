@@ -241,6 +241,13 @@ class ComputerLabController extends Controller
 
         $computerLabList = $computerLabQuery->latest()->paginate($perPage);
 
+        foreach ($computerLabList as $computerLab) {
+            // Check if the 'user_credentials' is a valid JSON string before decoding
+            if (is_string($computerLab->user_credentials)) {
+                $computerLab->user_credentials = json_decode($computerLab->user_credentials, true);
+            }
+        }
+
         return view('pages.computer-lab.index', [
             'computerLabList' => $computerLabList,
             'perPage' => $perPage,
