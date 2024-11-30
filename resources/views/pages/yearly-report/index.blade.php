@@ -27,6 +27,19 @@
             <div class="col">
                 <form id="homeFilter" action="{{ route('yearly-report') }}" method="GET">
                     <div class="d-flex flex-wrap justify-content-end">
+                        @hasanyrole('Admin|Superadmin')
+                            <div class="mb-2 ms-2 col-12 col-md-auto">
+                                <select name="campus_id" id="campus_id" class="form-select">
+                                    <option value="">Semua Kampus</option>
+                                    @foreach ($campusList as $campus)
+                                        <option value="{{ $campus->id }}"
+                                            {{ Request::get('campus_id') == $campus->id ? 'selected' : '' }}>
+                                            {{ $campus->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endhasanyrole
                         @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
                             <div class="mb-2 ms-2 col-12 col-md-auto">
                                 <select name="category" id="category" class="form-select">
@@ -41,6 +54,17 @@
                                 </select>
                             </div>
                         @endhasanyrole
+                        <div class="mb-2 ms-2 col-12 col-md-auto">
+                            <select name="computer_lab_id" id="computer_lab_id" class="form-select">
+                                <option value="">Semua Ruang</option>
+                                @foreach ($computerLabList as $computerLab)
+                                    <option value="{{ $computerLab->id }}"
+                                        {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
+                                        {{ $computerLab->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="mb-2 ms-2 col-12 col-md-auto">
                             <select name="year" id="year" class="form-select">
                                 <option value="">Semua Tahun</option>
@@ -67,8 +91,12 @@
     <!-- Display Data for Each Campus in Separate Cards -->
     @foreach ($campusData as $campusItem)
         <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
+                <h6 class="text-uppercase text-center mb-0 fw-bold">
+                    {{ $campusItem['campus']->name }}
+                </h6>
+            </div>
             <div class="card-body text-uppercase">
-                <h4>{{ $campusItem['campus']->name }}</h4>
                 <div class="table-responsive">
                     <table class="table table-sm table-striped table-hover">
                         <thead class="table-light text-center text-uppercase">
@@ -111,6 +139,8 @@
             const url = new URL(window.location.href);
             url.searchParams.delete('year');
             url.searchParams.delete('category');
+            url.searchParams.delete('campus_id');
+            url.searchParams.delete('computer_lab_id');
             window.location.href = url.toString();
         });
     </script>

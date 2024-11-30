@@ -309,7 +309,6 @@ $monthName = DateTime::createFromFormat('!m', $currentMonth)->format('F');
         url.searchParams.delete('campus_id');
         url.searchParams.delete('computer_lab_id');
         url.searchParams.delete('category');
-        url.searchParams.delete('status');
         url.searchParams.delete('month');
         url.searchParams.delete('year');
         window.location.href = url.toString(); // Redirect to the URL with reset filters

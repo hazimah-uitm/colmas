@@ -28,28 +28,88 @@ class ComputerLabReportController extends Controller
     public function index(Request $request)
     {
         $user = User::find(auth()->id());
+        $currentYear = $request->input('year', date('Y')); // Get the selected year
+        $currentMonth = $request->input('month', date('n')); // Get the selected month
+        $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
 
-        $currentYear = $request->input('year', date('Y'));
-        $currentMonth = $request->input('month', date('n'));
-
-        // Query to get Computer Labs grouped by campus, pemilik, and total PC
+        // OwnersWithLabsQuery
         $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus'])
             ->select('id', 'name', 'pemilik_id', 'campus_id')
             ->where('publish_status', 1);
 
+        // LabManagement query
+        $labManagementQuery = LabManagement::query()
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear);
+
         // Filter based on user role
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+            // Admin and Superadmin see all lab management data
+            $computerLabList = ComputerLab::where('publish_status', 1)->get();
+            $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
             $userCampusIds = $user->campus->pluck('id')->toArray();
+            
+            // Pegawai Penyemak only sees lab management data for labs in their campuses
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($userCampusIds) {
+                $query->whereIn('campus_id', $userCampusIds);
+            });
+            
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->whereIn('campus_id', $userCampusIds)
+                ->get();
+            
+            // Owner with lab
             $ownersWithLabsQuery->whereIn('campus_id', $userCampusIds);
+            
+            $campusList = Campus::with('computerLab')->whereIn('id', $userCampusIds)->get();        
         } else {
+            // Regular Pemilik only sees lab management data for their own labs
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($user) {
+                $query->where('pemilik_id', $user->id);
+            });
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->where('pemilik_id', $user->id)
+                ->get();
+            //Owners with lab
             $ownersWithLabsQuery->where('pemilik_id', $user->id);
+            $assignedComputerLabs = $user->assignedComputerLabs;
+            $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
+            $campusList = Campus::with('computerLab')->whereIn('id', $campusIds)->get();
+        }
+
+        // Filters
+        if ($request->filled('campus_id')) {
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($request) {
+                $query->where('campus_id', $request->input('campus_id'));
+            });
+            // Also filter computer labs by campus
+            $computerLabList = $computerLabList->where('campus_id', $request->input('campus_id'));
+            $ownersWithLabsQuery->where('campus_id', $request->input('campus_id'));
+        }
+
+        if ($request->filled('computer_lab_id')) {
+            $labManagementQuery->where('computer_lab_id', $request->input('computer_lab_id'));
+            // Also filter computer labs by lab ID
+            $computerLabList = $computerLabList->where('id', $request->input('computer_lab_id'));
+            $ownersWithLabsQuery->where('id', $request->input('computer_lab_id'));
         }
 
         if ($request->filled('category')) {
             $category = $request->input('category');
+            $labManagementQuery->whereHas('computerLab', function ($query) use ($category) {
+                $query->where('category', $category);
+            });
+            $computerLabList = $computerLabList->where('category', $category);
             $ownersWithLabsQuery->where('category', $category);
         }
+        
+    
+        // Execute the query to fetch lab management data
+        $labManagementData = $labManagementQuery->get();
+
+        // Fetch filtered computer labs based on the previously applied filters
+        $filteredComputerLabs = $computerLabList;
 
         // Get the results and group by campus_id
         $ownersWithLabs = $ownersWithLabsQuery->get()->groupBy('campus_id')->map(function ($labs) {
@@ -61,14 +121,25 @@ class ComputerLabReportController extends Controller
                 $lab->pc_count = $this->getTotalPC(collect([$lab]), $currentMonth, $currentYear);
             }
         }
+        
+        $campusList = Campus::all();
 
+        foreach ($labManagementData as $labManagement) {
+            $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
+            $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
+        }
+
+        // Return view with data
         return view('pages.computer-lab-report.index', [
-            'currentYear' => $currentYear,
-            'currentMonth' => $currentMonth,
+            'labManagementList' => $labManagementData,
+            'computerLabList' => $computerLabList,
+            'campusList' => $campusList,
+            'currentYear' =>  $currentYear,
+            'currentMonth' =>  $currentMonth,
+            'currentMonthName' =>  $currentMonthName,
             'ownersWithLabs' => $ownersWithLabs,
         ]);
     }
-
 
     private function getTotalPC($filteredComputerLabs, $selectedMonth = null, $selectedYear = null)
     {
