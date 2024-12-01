@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
     {
         User::insert([
             [
-                'name' => 'John Doe',
-                'staff_id' => '111111',
-                'email' => 'john@gmail.com',
+                'name' => 'Sam',
+                'staff_id' => '333333',
+                'email' => 'sam@gmail.com',
                 'password' => Hash::make('user123'),
                 'position_id' => 3,
                 'office_phone_no' => '082111111',
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
 
         // associate the users with campuses in the pivot table (campus_user)
         $userData = [
-            ['user_id' => 2, 'campus_id' => 1],
+            ['user_id' => 23, 'campus_id' => 2],
         ];
 
         // Insert associations into the campus_user pivot table
