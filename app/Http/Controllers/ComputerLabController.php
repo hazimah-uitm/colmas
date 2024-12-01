@@ -125,7 +125,10 @@ class ComputerLabController extends Controller
     {
         $computerLab = ComputerLab::findOrFail($id);
         $softwareList = Software::where('publish_status', 1)->get();
-        $userCredentials = json_decode($computerLab->user_credentials, true);
+        $userCredentials = is_string($computerLab->user_credentials) 
+        ? json_decode($computerLab->user_credentials, true) 
+        : $computerLab->user_credentials;
+
 
         return view('pages.computer-lab.view', [
             'computerLab' => $computerLab,
