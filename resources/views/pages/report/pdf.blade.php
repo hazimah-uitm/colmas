@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4;
-            margin: 20mm 10mm 20mm 10mm;
+            margin: 30mm 10mm 30mm 10mm; /* Adjust to provide more space for headers */
         }
 
         body {
@@ -104,13 +104,6 @@
             margin: 5px 0;
             border: none;
             border-top: 1px solid #ccc;
-        }
-
-        @media print {
-            body {
-                transform: scale(0.85);
-                transform-origin: top left;
-            }
         }
     </style>
 </head>
