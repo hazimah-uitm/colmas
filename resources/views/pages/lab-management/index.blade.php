@@ -32,7 +32,7 @@
                 <div class="position-relative">
                     @hasanyrole('Pemilik|Superadmin')
                         <a href="{{ route('lab-management.create') }}" class="btn btn-primary radius-30 mt-2 mt-lg-0">
-                            <i class="bx bxs-plus-square"></i> Tambah Rekod Makmal
+                            <i class="bx bxs-plus-square"></i> Tambah Rekod Selenggara
                         </a>
                     @endhasanyrole
                 </div>
