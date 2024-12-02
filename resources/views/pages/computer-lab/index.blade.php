@@ -68,7 +68,7 @@
                     <tr>
                         <th>#</th>
                         <th>Kategori</th>
-                        <th>Kod</th>
+                        <th>Kod Ruang</th>
                         <th>Nama Ruang</th>
                         <th>Kampus</th>
                         <th>Pemilik</th>
@@ -84,7 +84,7 @@
                     <tr>
                         <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
                         <td>{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
-                        <td>{{ $computerLab->code }}</td>
+                        <td>{{ $computerLab->code ?? '-'}}</td>
                         <td>{{ $computerLab->name }}</td>
                         <td>{{ $computerLab->campus->name }}</td>
                         <td class="text-center">{{ $computerLab->pemilik->name }}</td>
