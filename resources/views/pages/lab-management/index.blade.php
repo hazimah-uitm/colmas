@@ -73,7 +73,7 @@
 
                             <select name="computer_lab_id" class="form-select form-select-sm ms-2 rounded"
                                 id="computerLabFilter">
-                                <option value="">Semua Makmal Komputer</option>
+                                <option value="">Semua Ruang</option>
                                 @foreach ($computerLabList as $computerLab)
                                     <option value="{{ $computerLab->id }}"
                                         {{ Request::get('computer_lab_id') == $computerLab->id ? 'selected' : '' }}>
