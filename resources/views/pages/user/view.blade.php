@@ -29,63 +29,73 @@
     <h6 class="mb-0 text-uppercase">Maklumat {{ ucfirst($user->name) }}</h6>
     <hr />
 
-    <!-- Campus Information Table -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-borderless">
-                        <tr>
-                            <th>Nama Penuh</th>
-                            <td>{{ ucfirst($user->name) }}</td>
-                        </tr>
-                        <tr>
-                            <th>ID Pekerja</th>
-                            <td>{{ $user->staff_id }}</td>
-                        </tr>
-                        <tr>
-                            <th>Jawatan</th>
-                            <td>{{ $user->position->title }} ({{ $user->position->grade }})</td>
-                        </tr>
-                        <tr>
-                            <th>Alamat Emel</th>
-                            <td>{{ $user->email }}</td>
-                        </tr>
-                        <tr>
-                            <th>No. Telefon Pejabat</th>
-                            <td>{{ $user->office_phone_no }}</td>
-                        </tr>
-                        <tr>
-                            <th>Kampus</th>
-                            <td>
-                                @foreach ($user->campus as $campus)
+    <div class="container">
+    <div class="main-body">
+        <!-- Profile Layout -->
+        <div class="row">
+            <!-- Sidebar (User Info) -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <!-- User Image -->
+                            <img src="{{ $user->profile_image ? asset('public/storage/' . $user->profile_image) : 'https://via.placeholder.com/150' }}"
+                                alt="Profile Image" class="rounded-circle p-1 bg-primary" width="150" height="150">
+                            <!-- User Name and Position -->
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <h5 class="mt-3">{{ $user->name }}</h5>
+                                <p class="text-muted">{{ $user->position->title ?? 'Position' }}</p>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <table class="table table-borderless mt-2">
+                            <tr class="border-bottom">
+                                <th>Email</th>
+                                <td>{{ $user->email ?? '-' }}</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>Staff ID</th>
+                                <td>{{ $user->staff_id ?? '-' }}</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>Kampus</th>
+                                <td>
+                                    @foreach ($user->campus as $campus)
                                     {{ $campus->name }}<br>
-                                @endforeach
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Peranan</th>
-                            <td>
-                                @if ($user->roles->count() === 1)
-                                    {{ ucwords(str_replace('-', ' ', $user->roles->first()->name)) }}
-                                @else
-                                    <ul>
+                                    @endforeach
+                                </td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>No. Telefon Pejabat</th>
+                                <td>{{ $user->office_phone_no ?? '-' }}</td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <th>Peranan</th>
+                                <td>
+                                    @if ($user->roles->count() === 1)
+                                    {{ ucwords(str_replace('-', ' ', $user->roles->first()->name ?? '-')) }}
+                                    @else
+                                    <ul class="list-unstyled">
                                         @foreach ($user->roles as $role)
-                                            <li>{{ ucwords(str_replace('-', ' ', $role->name)) }}</li>
+                                        <li><span
+                                                class="badge bg-secondary">{{ ucwords(str_replace('-', ' ', $role->name ?? '-')) }}</span>
+                                        </li>
                                         @endforeach
                                     </ul>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>{{ $user->publish_status }}</td>
-                        </tr>
-                    </table>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>{{ $user->publish_status ?? '-' }}</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- End Main Content -->
     </div>
-    <!-- End Campus Information Table -->
+</div>
     <!-- End Page Wrapper -->
 @endsection
