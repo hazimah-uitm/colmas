@@ -47,7 +47,6 @@
                             <input type="text" class="form-control rounded" placeholder="Carian..." name="search"
                                 value="{{ request('search') }}" id="searchInput">
 
-                            @hasanyrole('Admin|Superadmin')
                                 <select name="campus_id" class="form-select form-select-sm ms-2 rounded" id="campusFilter">
                                     <option value="">Semua Kampus</option>
                                     @foreach ($campusList as $campus)
@@ -57,9 +56,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            @endhasanyrole
 
-                            @hasanyrole('Pegawai Penyemak|Superadmin')
                                 <select name="pemilik_id" class="form-select form-select-sm ms-2 rounded" id="pemilikFilter">
                                     <option value="">Semua Pemilik</option>
                                     @foreach ($pemilikList as $pemilik)
@@ -69,7 +66,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            @endhasanyrole
+
 
                             <select name="computer_lab_id" class="form-select form-select-sm ms-2 rounded"
                                 id="computerLabFilter">

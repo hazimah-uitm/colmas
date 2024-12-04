@@ -24,27 +24,27 @@ class ReportController extends Controller
         $perPage = $request->input('perPage', 10);
 
         // Determine assigned labs based on user role
-        $assignedComputerLabs = ($user->hasAnyRole(['Admin', 'Superadmin']))
-            ? ComputerLab::where('publish_status', 1)->get()
-            : (($user->hasRole('Pegawai Penyemak'))
-                ? ComputerLab::where('publish_status', 1)
-                ->where('campus_id', $user->campus_id)
-                ->get()
-                : $user->assignedComputerLabs);
-
-        $labManagementList = LabManagement::latest()
-            ->where('status', 'telah_disemak');
-
-        // Filter labs based on user role
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
             // Admin or superadmin can access all labs
+            $assignedComputerLabs = ComputerLab::where('publish_status', 1)->get();
+            $labManagementList = LabManagement::latest()->where('status', 'telah_disemak');
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                // Filter labs based on the campuses associated with the user
-                $query->whereIn('campus_id', $user->campus->pluck('id'));
-            });
+            // Pegawai Penyemak can access labs for their campus
+            $assignedComputerLabs = ComputerLab::where('publish_status', 1)
+                ->where('campus_id', $user->campus_id)
+                ->get();
+            $labManagementList = LabManagement::latest()
+                ->where('status', 'telah_disemak')
+                ->whereHas('computerLab', function ($query) use ($user) {
+                    // Filter labs based on the campuses associated with the user
+                    $query->whereIn('campus_id', $user->campus->pluck('id'));
+                });
         } else {
-            $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
+            // For other roles, use assigned computer labs
+            $assignedComputerLabs = $user->assignedComputerLabs;
+            $labManagementList = LabManagement::latest()
+                ->where('status', 'telah_disemak')
+                ->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
         }
 
         // Apply search filter if present
