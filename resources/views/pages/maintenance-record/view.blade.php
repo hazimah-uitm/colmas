@@ -42,10 +42,10 @@
                     <tr>
                         <th>Pilihan Rekod</th>
                         <td>
-                            @if ($entryOption == 'auto')
-                            Penyelenggaraan Automatik
+                            @if ($entryOption == 'automatik')
+                            Automatik
                             @elseif ($entryOption == 'manual')
-                            Penyelenggaraan Manual
+                            Manual
                             @elseif ($entryOption == 'pc_keluar')
                             PC Keluar
                             @else
