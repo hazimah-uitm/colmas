@@ -92,13 +92,45 @@ class ReportController extends Controller
         $labManagementList = $labManagementList->paginate($perPage);
         $softwareList = Software::where('publish_status', 1)->get();
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
-        $computerLabList = ComputerLab::whereIn('id', $assignedComputerLabs->pluck('id'))->get();
-        $pemilikList = User::role('Pemilik')
-            ->whereIn('id', $assignedComputerLabs->pluck('pemilik_id'))
-            ->get();
-
-        $campusList = Campus::whereIn('id', $assignedComputerLabs->pluck('campus_id'))->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
+
+        // Filter based on user role
+        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
+            // Admin and Superadmin see all computer labs, owners, and campuses
+            $computerLabList = ComputerLab::where('publish_status', 1)->get();
+            $pemilikList = User::role('Pemilik')->get();
+            $campusList = Campus::with('computerLab')->get();
+        } elseif ($user->hasRole('Pegawai Penyemak')) {
+            $userCampusIds = $user->campus->pluck('id')->toArray();
+
+            // Pegawai Penyemak only sees data related to campuses they are assigned to
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->whereIn('campus_id', $userCampusIds)
+                ->get();
+
+            $pemilikList = User::role('Pemilik')
+                ->whereHas('assignedComputerLabs', function ($query) use ($userCampusIds) {
+                    $query->whereIn('campus_id', $userCampusIds);
+                })
+                ->get();
+
+            $campusList = Campus::with('computerLab')
+                ->whereIn('id', $userCampusIds)
+                ->get();
+        } else {
+            // Regular Pemilik only sees their own labs, associated owners, and campuses
+            $assignedComputerLabs = $user->assignedComputerLabs;
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->whereIn('id', $assignedComputerLabs->pluck('id'))
+                ->get();
+
+            $pemilikList = User::role('Pemilik')
+                ->whereIn('id', $assignedComputerLabs->pluck('pemilik_id'))
+                ->get();
+
+            $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
+            $campusList = Campus::with('computerLab')->whereIn('id', $campusIds)->get();
+        }
 
         foreach ($labManagementList as $labManagement) {
             $labManagement->date = Carbon::parse($labManagement->start_time)->format('d-m-Y');
