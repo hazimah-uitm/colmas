@@ -185,8 +185,6 @@ class HomeController extends Controller
                 'maintainedLabsPerMonth' => $maintainedLabsPerMonth
             ];
         }
-        
-        $campusList = Campus::all();
 
         foreach ($labManagementData as $labManagement) {
             $labManagement->month = Carbon::parse($labManagement->start_time)->format('F');
