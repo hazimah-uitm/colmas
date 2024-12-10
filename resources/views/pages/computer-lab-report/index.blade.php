@@ -27,7 +27,7 @@
             <div class="col">
                 <form id="homeFilter" action="{{ route('computer-lab-report') }}" method="GET">
                     <div class="d-flex flex-wrap justify-content-end align-items-center gap-1">
-                        @hasanyrole('Admin|Superadmin')
+                        @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
                             <div>
                                 <select name="campus_id" id="campus_id" class="form-select">
                                     <option value="">Semua Kampus</option>
@@ -39,8 +39,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                        @endhasanyrole
-                        @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
                             <div>
                                 <select name="category" id="category" class="form-select">
                                     <option value="">Semua Kategori</option>

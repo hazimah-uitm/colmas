@@ -27,7 +27,7 @@
             <div class="col">
                 <form id="homeFilter" action="{{ route('yearly-report') }}" method="GET">
                     <div class="d-flex flex-wrap justify-content-end">
-                        @hasanyrole('Admin|Superadmin')
+                        @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
                             <div class="mb-2 ms-2 col-12 col-md-auto">
                                 <select name="campus_id" id="campus_id" class="form-select">
                                     <option value="">Semua Kampus</option>
@@ -39,8 +39,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                        @endhasanyrole
-                        @hasanyrole('Admin|Superadmin|Pegawai Penyemak')
                             <div class="mb-2 ms-2 col-12 col-md-auto">
                                 <select name="category" id="category" class="form-select">
                                     <option value="">Semua Kategori</option>

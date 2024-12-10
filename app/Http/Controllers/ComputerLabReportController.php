@@ -222,7 +222,6 @@ class ComputerLabReportController extends Controller
             }
         }
         
-        $campusList = Campus::all();
         // Return view with data
         return [
             'computerLabList' => $computerLabList,
