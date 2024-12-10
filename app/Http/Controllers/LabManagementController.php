@@ -24,36 +24,80 @@ class LabManagementController extends Controller
     {
         $perPage = $request->input('perPage', 10);
         $user = User::find(auth()->id());
-
+    
         $labManagementList = LabManagement::latest()->where('status', '<>', 'telah_disemak');
-
-        // Determine assigned labs and filter labs based on user role in a single structure
+    
         if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
-            $assignedComputerLabs = ComputerLab::where('publish_status', 1)->get();
-            // Admin or superadmin can access all labs, no additional filtering needed
+            // Admin and Superadmin see everything
+            $computerLabList = ComputerLab::where('publish_status', 1)->get();
+            $pemilikList = User::role('Pemilik')->get();
+            $campusList = Campus::with('computerLab')->get();
         } elseif ($user->hasRole('Pegawai Penyemak')) {
-            $assignedComputerLabs = ComputerLab::where('publish_status', 1)
-                ->where('campus_id', $user->campus_id)
+            // Pegawai Penyemak sees data related to their campuses
+            $userCampusIds = $user->campus->pluck('id')->toArray();
+    
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->whereIn('campus_id', $userCampusIds)
                 ->get();
-
-            $labManagementList->whereHas('computerLab', function ($query) use ($user) {
-                $query->whereIn('campus_id', $user->campus->pluck('id'));
+    
+            $pemilikList = User::role('Pemilik')
+                ->whereHas('assignedComputerLabs', function ($query) use ($userCampusIds) {
+                    $query->whereIn('campus_id', $userCampusIds);
+                })
+                ->get();
+    
+            $campusList = Campus::with('computerLab')
+                ->whereIn('id', $userCampusIds)
+                ->get();
+    
+            $labManagementList->whereHas('computerLab', function ($query) use ($userCampusIds) {
+                $query->whereIn('campus_id', $userCampusIds);
             });
         } else {
+            // Pemilik sees only their data
             $assignedComputerLabs = $user->assignedComputerLabs;
-
-            $labManagementList->whereIn('computer_lab_id', $assignedComputerLabs->pluck('id'));
+    
+            $computerLabList = ComputerLab::where('publish_status', 1)
+                ->whereIn('id', $assignedComputerLabs->pluck('id'))
+                ->get();
+    
+            $pemilikList = User::where('id', $user->id)->get(); // Only the logged-in user as Pemilik
+    
+            $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
+            $campusList = Campus::with('computerLab')->whereIn('id', $campusIds)->get();
+    
+            $labManagementList->whereHas('computerLab', function ($query) use ($assignedComputerLabs) {
+                $query->whereIn('id', $assignedComputerLabs->pluck('id'));
+            });
         }
-
-        // Apply search filters if needed
+    
+        // Apply additional filters if needed
         if ($applySearch) {
             if ($request->filled('search')) {
                 $search = $request->input('search');
                 $labManagementList->where('remarks_submitter', 'LIKE', "%$search%");
             }
             if ($request->filled('campus_id')) {
-                $labManagementList->whereHas('computerLab', function ($query) use ($request) {
-                    $query->where('campus_id', $request->input('campus_id'));
+                $selectedCampusId = $request->input('campus_id');
+                $labManagementList->whereHas('computerLab', function ($query) use ($selectedCampusId) {
+                    $query->where('campus_id', $selectedCampusId);
+                });
+                $computerLabList = $computerLabList->where('campus_id', $selectedCampusId);
+                $pemilikList = $pemilikList->filter(function ($pemilik) use ($selectedCampusId) {
+                    return $pemilik->assignedComputerLabs->pluck('campus_id')->contains($selectedCampusId);
+                });
+            }
+            if ($request->filled('pemilik_id')) {
+                $pemilikId = $request->input('pemilik_id');
+                $labManagementList->whereHas('computerLab', function ($query) use ($pemilikId) {
+                    $query->where('pemilik_id', $pemilikId);
+                });
+                $computerLabList = $computerLabList->where('pemilik_id', $pemilikId);
+            }
+            if ($request->filled('computer_lab_id')) {
+                $computerLabId = $request->input('computer_lab_id');
+                $labManagementList->whereHas('computerLab', function ($query) use ($computerLabId) {
+                    $query->where('id', $computerLabId);
                 });
             }
             if ($request->filled('month')) {
@@ -62,74 +106,23 @@ class LabManagementController extends Controller
             if ($request->filled('year')) {
                 $labManagementList->whereYear('start_time', $request->input('year'));
             }
-            if ($request->filled('pemilik_id')) {
-                $labManagementList->whereHas('computerLab', function ($query) use ($request) {
-                    $query->where('pemilik_id', $request->input('pemilik_id'));
-                });
-            }
-            if ($request->filled('computer_lab_id')) {
-                $labManagementList->whereHas('computerLab', function ($query) use ($request) {
-                    $query->where('computer_lab_id', $request->input('computer_lab_id'));
-                });
-            }
         }
-
+    
         $labManagementList = $labManagementList->paginate($perPage);
-
-        // Fetch additional lists
+    
         $labCheckList = LabChecklist::where('publish_status', 1)->get();
         $workChecklists = WorkChecklist::where('publish_status', 1)->get();
-        
-        // Filter based on user role
-        if ($user->hasAnyRole(['Admin', 'Superadmin'])) {
-            // Admin and Superadmin see all computer labs, owners, and campuses
-            $computerLabList = ComputerLab::where('publish_status', 1)->get();
-            $pemilikList = User::role('Pemilik')->get();
-            $campusList = Campus::with('computerLab')->get();
-        } elseif ($user->hasRole('Pegawai Penyemak')) {
-            $userCampusIds = $user->campus->pluck('id')->toArray();
-
-            // Pegawai Penyemak only sees data related to campuses they are assigned to
-            $computerLabList = ComputerLab::where('publish_status', 1)
-                ->whereIn('campus_id', $userCampusIds)
-                ->get();
-
-            $pemilikList = User::role('Pemilik')
-                ->whereHas('assignedComputerLabs', function ($query) use ($userCampusIds) {
-                    $query->whereIn('campus_id', $userCampusIds);
-                })
-                ->get();
-
-            $campusList = Campus::with('computerLab')
-                ->whereIn('id', $userCampusIds)
-                ->get();
-        } else {
-            // Regular Pemilik only sees their own labs, associated owners, and campuses
-            $assignedComputerLabs = $user->assignedComputerLabs;
-            $computerLabList = ComputerLab::where('publish_status', 1)
-                ->whereIn('id', $assignedComputerLabs->pluck('id'))
-                ->get();
-
-            $pemilikList = User::role('Pemilik')
-                ->whereIn('id', $assignedComputerLabs->pluck('pemilik_id'))
-                ->get();
-
-            $campusIds = $assignedComputerLabs->pluck('campus_id')->unique();
-            $campusList = Campus::with('computerLab')->whereIn('id', $campusIds)->get();
-        }
-
-        // Format dates
+    
         foreach ($labManagementList as $labManagement) {
             $startTime = Carbon::parse($labManagement->start_time)->timezone('Asia/Kuching');
             $endTime = Carbon::parse($labManagement->end_time)->timezone('Asia/Kuching');
-
             $labManagement->date = $startTime->format('d-m-Y');
             $labManagement->month = $startTime->format('F');
             $labManagement->year = $startTime->format('Y');
             $labManagement->startTime = $startTime->format('H:i');
             $labManagement->endTime = $endTime->format('H:i');
         }
-
+    
         return [
             'labManagementList' => $labManagementList,
             'perPage' => $perPage,
@@ -140,6 +133,7 @@ class LabManagementController extends Controller
             'workChecklists' => $workChecklists,
         ];
     }
+    
 
     public function index(Request $request)
     {
