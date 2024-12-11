@@ -13,9 +13,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middlewares\RoleMiddleware;
+use Illuminate\Support\Facades\Response;
 
 Route::get('/', function () {
     return view('auth.login');
+});
+
+Route::get('/manual-login', function () {
+    $path = public_path('storage/manuals/MANUAL LOG MASUK-KATA LALUAN-RESET KATA LALUAN.pdf');
+    return Response::file($path);
 });
 
 // Login & logout function
@@ -34,6 +40,11 @@ Route::get('link-expired', function () {
 
 Route::middleware([RoleMiddleware::class . ':Superadmin|Admin|Pemilik|Pegawai Penyemak'])->group(function () {
 
+    Route::get('/manual', function () {
+        $path = public_path('storage/manuals/MANUAL PENGGUNA COLMAS.pdf');
+        return Response::file($path);
+    })->name('manual');
+    
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post('home/store', 'HomeController@store')->name('home.store');
     Route::get('home/{id}/edit', 'HomeController@edit')->name('home.edit');

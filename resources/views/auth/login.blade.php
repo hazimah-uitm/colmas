@@ -9,8 +9,8 @@
                 <div class="d-flex align-items-center justify-content-center flex-column flex-md-row mb-4">
                     <img src="{{ asset('public/assets/images/putih.png') }}" class="logo-icon-login" alt="logo icon">
                     <div class="ms-3">
-                    <h4 class="logo-text-login mb-0">COLMAS</h4>
-                    <h6 class="logo-subtitle-login mb-0">Computer Lab Maintenance System</h6>
+                        <h4 class="logo-text-login mb-0">COLMAS</h4>
+                        <h6 class="logo-subtitle-login mb-0">Computer Lab Maintenance System</h6>
                     </div>
                 </div>
             </div>
@@ -74,6 +74,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="{{ url('/manual-login') }}" target="_blank" class="btn btn-warning btn-sm text-white text-decoration-none">
+                            <i class="bx bxs-file-pdf me-2"></i>Panduan Log Masuk
+                        </a>
                     </div>
                 </div>
             </div>

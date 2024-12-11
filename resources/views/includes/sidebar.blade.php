@@ -60,7 +60,7 @@
             <div class="menu-title">Rekod Selenggara</div>
         </a>
     </li>
-        <li class="{{ request()->routeIs('report*', 'yearly-report*') ? 'mm-active' : '' }}">
+    <li class="{{ request()->routeIs('report*', 'yearly-report*') ? 'mm-active' : '' }}">
         <a class="has-arrow">
             <div class="parent-icon"><i class='bx bxs-report'></i></div>
             <div class="menu-title">Laporan</div>
@@ -139,5 +139,11 @@
         </a>
     </li>
     @endrole
+    <li class="{{ Request::is('manual') ? 'mm-active' : '' }}">
+        <a href="{{ route('manual') }}" target="_blank" >
+            <div class="parent-icon"><i class='bx bxs-bookmark'></i></div>
+            <div class="menu-title">Manual Pengguna</div>
+        </a>
+    </li>
 </ul>
 <!--end navigation-->
