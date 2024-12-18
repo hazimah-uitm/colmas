@@ -126,37 +126,48 @@
                                 $labsGroupedByOwner = $labs->groupBy('pemilik_id');
                                 @endphp
                                 <div class="table-responsive">
-                                    <table class="table table-sm table-striped table-hover">
-                                        <thead class="table-light text-center text-uppercase">
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Nama Ruang</th>
-                                                <th>Pemilik</th>
-                                                <th>Jumlah PC</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                            $counter = 1; // Initialize counter for continuous numbering
-                                            @endphp
-                                            @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
-                                            @foreach ($ownerLabs as $labIndex => $lab)
-                                            <tr>
-                                                <td class="text-center">{{ $counter++ }}</td>
-                                                <td>{{ $lab->name }}</td>
-                                                <td class="text-center">{{ $lab->pemilik->name ?? 'N/A' }}
-                                                </td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-info text-dark"
-                                                        style="font-size: 0.80rem; font-weight: 500;">
-                                                        {{ $lab->pc_count }}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <table class="table table-sm table-striped table-hover">
+    <thead class="table-light text-center text-uppercase">
+        <tr>
+            <th>No.</th>
+            <th>Nama Ruang</th>
+            <th>Pemilik</th>
+            <th>Jumlah PC</th>
+        </tr>
+    </thead>
+    <tbody>
+        @php
+        $counter = 1; // Initialize counter for continuous numbering
+        $totalPCs = 0; // Initialize total PC counter
+        @endphp
+        @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+        @foreach ($ownerLabs as $labIndex => $lab)
+        <tr>
+            <td class="text-center">{{ $counter++ }}</td>
+            <td>{{ $lab->name }}</td>
+            <td class="text-center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
+            <td class="text-center">
+                <span class="badge bg-info text-dark" style="font-size: 0.80rem; font-weight: 500;">
+                    {{ $lab->pc_count }}
+                </span>
+            </td>
+        </tr>
+        @php
+        $totalPCs += $lab->pc_count; // Accumulate total PCs
+        @endphp
+        @endforeach
+        @endforeach
+    </tbody>
+    <tfoot class="table-light text-center text-uppercase">
+        <tr>
+            <td colspan="3" class="text-end"><strong>Jumlah PC</strong></td>
+            <td class="text-center">
+                <strong>{{ $totalPCs }}</strong>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
                                 </div>
                             </div>
                         </div>
