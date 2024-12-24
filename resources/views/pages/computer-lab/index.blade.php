@@ -68,7 +68,7 @@
                     <tr>
                         <th>#</th>
                         <th>Kategori</th>
-                        <th>Kod Ruang</th>
+                        {{-- <th>Kod Ruang</th> --}}
                         <th>Nama Ruang</th>
                         <th>Kampus</th>
                         <th>Pemilik</th>
@@ -83,11 +83,11 @@
                     @foreach ($computerLabList as $computerLab)
                     <tr>
                         <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
-                        <td>{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
-                        <td>{{ $computerLab->code ?? '-'}}</td>
-                        <td>{{ $computerLab->name }}</td>
-                        <td>{{ $computerLab->campus->name }}</td>
-                        <td class="text-center">{{ $computerLab->pemilik->name }}</td>
+                        <td class="text-center" style="word-wrap: break-word; white-space: normal;">{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
+                        {{-- <td>{{ $computerLab->code ?? '-'}}</td> --}}
+                       <td class="text-center" style="word-wrap: break-word; white-space: normal;">{{ $computerLab->name }}</td>
+                        <td class="text-center">{{ $computerLab->campus->name }}</td>
+                        <td class="text-center" style="word-wrap: break-word; white-space: normal;">{{ $computerLab->pemilik->name }}</td>
                         <td class="text-center">{{ $computerLab->no_of_computer }}</td>
                         <td>
                             @if (is_array($computerLab->user_credentials) && count($computerLab->user_credentials) > 0)
