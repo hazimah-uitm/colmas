@@ -18,6 +18,7 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                    <div class="table-responsive">
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
@@ -43,11 +44,13 @@
                                 <tr>
                                     <td>{{ $labManagement->month ?? '-'}}</td>
                                     <td>{{ $labManagement->year ?? '-'}}</td>
-                                    <td>{{ $labManagement->start_time ?? '-'}}</td>
-                                    <td>{{ $labManagement->end_time ?? '-'}}</td>
+<td>{{ \Carbon\Carbon::parse($labManagement->start_time)->format('d-m-Y h:i A') }}</td>
+<td>{{ $labManagement->end_time ? \Carbon\Carbon::parse($labManagement->end_time)->format('d-m-Y h:i A') : '-' }}</td>
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
+                        <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead class="bg-light">
                                 <tr>
@@ -66,6 +69,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                         <div class="card">
                             <div class="card-body">
                                 <h6 class="mb-3 text-uppercase">Senarai Semak Makmal</h6>
@@ -103,7 +107,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h6 class="mb-3 text-uppercase">Senarai Rekod PC Diselenggara/Rosak</h6>
-                                <table class="table table-bordered">
+                            <table class="table table-bordered table-sm">
                                     <thead class="bg-light">
                                         <tr>
                                             <th style="width: 5%" rowspan="2" class="text-center">No.</th>
@@ -158,7 +162,15 @@
                                             @endforeach
                                             @endif
                                             <td class="text-center">{{ $noAduan }}</td>
-                                            <td class="text-center">{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                                            <td class="text-center" style="word-wrap: break-word; white-space: normal;">
+    <span class="badge text-dark mb-1" style="font-size: 12px; background-color: yellow">
+        {{ $maintenanceRecord->computer_name }} selesai pada: 
+        {{ $maintenanceRecord->created_at->format('d-m-Y') }} | 
+        {{ $maintenanceRecord->created_at->format('h:i A') }}
+    </span>
+    <br>
+    {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}
+</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

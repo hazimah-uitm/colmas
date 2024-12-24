@@ -60,8 +60,8 @@
                         <tr>
                             <td>{{ $labManagement->month }}</td>
                             <td>{{ $labManagement->year }}</td>
-                            <td>{{ $labManagement->start_time }}</td>
-                            <td>{{ $labManagement->end_time ?? '-' }}</td>
+<td>{{ \Carbon\Carbon::parse($labManagement->start_time)->format('d-m-Y h:i A') }}</td>
+<td>{{ $labManagement->end_time ? \Carbon\Carbon::parse($labManagement->end_time)->format('d-m-Y h:i A') : '-' }}</td>
                         </tr>
                     </table>
                 </div>
@@ -125,7 +125,7 @@
                         <h6 class="mb-3 text-uppercase">Senarai Rekod PC Diselenggara/Rosak</h6>
                         <hr />
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered table-sm">
                                 <thead class="bg-light">
                                     <tr>
                                         <th style="width: 5%" rowspan="2" class="text-center">No.</th>
@@ -180,9 +180,15 @@
                                             @endforeach
                                             @endif
                                         <td class="text-center">{{ $noAduan }}</td>
-                                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word; max-width: 200px;">
-                                            {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}
-                                        </td>
+                                        <td class="text-center" style="word-wrap: break-word; white-space: normal;">
+    <span class="badge text-dark mb-1" style="font-size: 12px; background-color: yellow">
+        {{ $maintenanceRecord->computer_name }} selesai pada: 
+        {{ $maintenanceRecord->created_at->format('d-m-Y') }} | 
+        {{ $maintenanceRecord->created_at->format('h:i A') }}
+    </span>
+    <br>
+    {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}
+</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -205,7 +211,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
                             <th style="width: 50%">Catatan/Ulasan Pemilik</th>
@@ -220,23 +225,24 @@
                             <td style="width: 50%">{{ str_replace('_', ' ', ucwords(strtolower($labManagement->status))) }}</td>
                         </tr>
                     </table>
-                </div>
-                <div class="table-responsive">
                     <table class="table table-borderless">
-                        <tr>
-                            <th style="width: 25%">Dihantar oleh</th>
-                            <td style="width: 25%">{{ $labManagement->submittedBy->name ?? '-' }}</td>
-                            <th style="width: 25%">Dihantar pada</th>
-                            <td style="width: 25%">{{ $labManagement->submitted_at ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width: 25%">Disemak oleh</th>
-                            <td style="width: 25%">{{ $labManagement->checkedBy->name ?? '-' }}</td>
-                            <th style="width: 25%">Disemak pada</th>
-                            <td style="width: 25%">{{ $labManagement->checked_at ?? '-' }}</td>
-                        </tr>
+                    <tr>
+    <th style="width: 25%">Dihantar oleh</th>
+    <td style="width: 25%">{{ $labManagement->submittedBy->name ?? '-' }}</td>
+    <th style="width: 25%">Dihantar pada</th>
+    <td style="width: 25%">
+        {{ $labManagement->submitted_at ? \Carbon\Carbon::parse($labManagement->submitted_at)->format('d-m-Y h:i A') : '-' }}
+    </td>
+</tr>
+<tr>
+    <th style="width: 25%">Disemak oleh</th>
+    <td style="width: 25%">{{ $labManagement->checkedBy->name ?? '-' }}</td>
+    <th style="width: 25%">Disemak pada</th>
+    <td style="width: 25%">
+        {{ $labManagement->checked_at ? \Carbon\Carbon::parse($labManagement->checked_at)->format('d-m-Y h:i A') : '-' }}
+    </td>
+</tr>
                     </table>
-                </div>
             </div>
         </div>
     </div>

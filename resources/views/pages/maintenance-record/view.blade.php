@@ -121,7 +121,15 @@
                     @endif
                     <tr>
                         <th>Catatan</th>
-                        <td>{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                        <td style="word-wrap: break-word; white-space: normal;">
+    <span class="badge text-dark mb-1" style="font-size: 12px; background-color: yellow">
+        {{ $maintenanceRecord->computer_name }} selesai pada: 
+        {{ $maintenanceRecord->created_at->format('d-m-Y') }} | 
+        {{ $maintenanceRecord->created_at->format('h:i A') }}
+    </span>
+    <br>
+    {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}
+</td>
                     </tr>
                 </table>
             </div>

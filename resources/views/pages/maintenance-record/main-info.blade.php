@@ -34,8 +34,8 @@
     <tr>
         <td>{{ $month ?? '-' }}</td>
         <td>{{ $year ?? '-' }}</td>
-        <td>{{ $labManagement->start_time ?? '-' }}</td>
-        <td>{{ $labManagement->end_time ?? '-' }}</td>
+<td>{{ \Carbon\Carbon::parse($labManagement->start_time)->format('d-m-Y h:i A') }}</td>
+<td>{{ $labManagement->end_time ? \Carbon\Carbon::parse($labManagement->end_time)->format('d-m-Y h:i A') : '-' }}</td>
     </tr>
 </table>
 

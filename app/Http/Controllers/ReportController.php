@@ -133,6 +133,8 @@ class ReportController extends Controller
             $labManagement->year = Carbon::parse($labManagement->start_time)->format('Y');
             $labManagement->startTime = Carbon::parse($labManagement->start_time)->format('H:i');
             $labManagement->endTime = Carbon::parse($labManagement->end_time)->format('H:i');
+            $labManagement->startDateTime = Carbon::parse($labManagement->start_time)->format('d-m-Y h:i A');
+            $labManagement->endDateTime = Carbon::parse($labManagement->end_time)->format('d-m-Y h:i A');
         }
 
         return view('pages.report.index', [

@@ -143,8 +143,13 @@
                 <tr>
                     <td style="border: 0px">{{ $labManagement->month }}</td>
                     <td style="border: 0px">{{ $labManagement->year }}</td>
-                    <td style="border: 0px">{{ $labManagement->start_time }}</td>
-                    <td style="border: 0px">{{ $labManagement->end_time ?? '-' }}</td>
+<td style="border: 0px">
+    {{ $labManagement->start_time ? \Carbon\Carbon::parse($labManagement->start_time)->format('d-m-Y h:i A') : '-' }}
+</td>
+<td style="border: 0px">
+    {{ $labManagement->end_time ? \Carbon\Carbon::parse($labManagement->end_time)->format('d-m-Y h:i A') : '-' }}
+</td>
+
                 </tr>
             </table>
 
@@ -208,7 +213,7 @@
                                 colspan="{{ count($workChecklists) }}">
                                 Kerja Selenggara</th>
                             <th rowspan="2" style="text-align: center; border-color: #cacfd2">No. Aduan</th>
-                            <th rowspan="2" style="width: 45%; text-align: center; border-color: #cacfd2">Catatan
+                            <th rowspan="2" style="width: 50%; text-align: center; border-color: #cacfd2">Catatan
                             </th>
                         </tr>
                         <tr>
@@ -264,8 +269,14 @@
                                 @endif
                                 <td style="text-align: center; border-color: #cacfd2">{{ $noAduan }}</td>
                                 <td
-                                    style="width: 45%; white-space: normal; word-wrap: break-word; word-break: break-word; max-width: 350px; border-color: #cacfd2">
-                                    {!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
+                                    style="width: 50%; white-space: normal; word-wrap: break-word; word-break: break-word; max-width: 350px; border-color: #cacfd2">
+                                    <span style="background-color: yellow; color: #000; font-size: 10px; display: inline-block; margin-bottom: 4px; padding: 0.10em 0.3em; border-radius: 0.2rem;">
+    {{ $maintenanceRecord->computer_name }} selesai pada:
+    {{ $maintenanceRecord->created_at->format('d-m-Y') }} |
+    {{ $maintenanceRecord->created_at->format('h:i A') }}.
+</span>
+<br>
+{!! nl2br(e($maintenanceRecord->remarks ?? '-')) !!}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -334,17 +345,22 @@
 
             <table>
                 <tr>
-                    <th style="width: 25%; border: 0px">Dihantar oleh</th>
-                    <td style="width: 25%; border: 0px">{{ $labManagement->submittedBy->name ?? '-' }}</td>
-                    <th style="width: 25%; border: 0px">Dihantar pada</th>
-                    <td style="width: 25%; border: 0px">{{ $labManagement->submitted_at ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <th style="width: 25%; border: 0px">Disemak oleh</th>
-                    <td style="width: 25%; border: 0px">{{ $labManagement->checkedBy->name ?? '-' }}</td>
-                    <th style="width: 25%; border: 0px">Disemak pada</th>
-                    <td style="width: 25%; border: 0px">{{ $labManagement->checked_at ?? '-' }}</td>
-                </tr>
+    <th style="width: 25%; border: 0px">Dihantar oleh</th>
+    <td style="width: 25%; border: 0px">{{ $labManagement->submittedBy->name ?? '-' }}</td>
+    <th style="width: 25%; border: 0px">Dihantar pada</th>
+    <td style="width: 25%; border: 0px">
+        {{ $labManagement->submitted_at ? \Carbon\Carbon::parse($labManagement->submitted_at)->format('d-m-Y h:i A') : '-' }}
+    </td>
+</tr>
+<tr>
+    <th style="width: 25%; border: 0px">Disemak oleh</th>
+    <td style="width: 25%; border: 0px">{{ $labManagement->checkedBy->name ?? '-' }}</td>
+    <th style="width: 25%; border: 0px">Disemak pada</th>
+    <td style="width: 25%; border: 0px">
+        {{ $labManagement->checked_at ? \Carbon\Carbon::parse($labManagement->checked_at)->format('d-m-Y h:i A') : '-' }}
+    </td>
+</tr>
+
             </table>
         </div>
     </div>
