@@ -151,20 +151,20 @@ class MaintenanceRecordController extends Controller
         }
 
         // Only check for duplicate IP address if entry_option is 'automatik'
-        if ($entryOption === 'automatik' && $ipAddress) {
-            $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
-                ->withTrashed()
-                ->where('ip_address', $ipAddress)
-                ->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year)
-                ->first();
+        // if ($entryOption === 'automatik' && $ipAddress) {
+        //     $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+        //         ->withTrashed()
+        //         ->where('ip_address', $ipAddress)
+        //         ->whereMonth('created_at', $month)
+        //         ->whereYear('created_at', $year)
+        //         ->first();
 
-            if ($existingRecord) {
-                return redirect()->back()
-                    ->withInput() // Preserve the old input data
-                    ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
-            }
-        }
+        //     if ($existingRecord) {
+        //         return redirect()->back()
+        //             ->withInput() // Preserve the old input data
+        //             ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
+        //     }
+        // }
 
         // Check for unique aduan_unit_no and vms_no
         // if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->exists()) {
@@ -346,26 +346,26 @@ class MaintenanceRecordController extends Controller
 
         if ($existingRecord) {
             return redirect()->back()
-                ->withInput() // Preserve the old input data
+                ->withInput() 
                 ->withErrors('Rekod selenggara PC bagi nama komputer pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
         }
 
 
-        if ($entryOption === 'automatik' && $ipAddress) {
-            $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
-                ->withTrashed()
-                ->where('ip_address', $ipAddress)
-                ->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year)
-                ->where('id', '!=', $recordId)
-                ->first();
-        }
+        // if ($entryOption === 'automatik' && $ipAddress) {
+        //     $existingRecord = MaintenanceRecord::where('lab_management_id', $labManagementId)
+        //         ->withTrashed()
+        //         ->where('ip_address', $ipAddress)
+        //         ->whereMonth('created_at', $month)
+        //         ->whereYear('created_at', $year)
+        //         ->where('id', '!=', $recordId)
+        //         ->first();
+        // }
 
-        if ($existingRecord) {
-            return redirect()->back()
-                ->withInput() // Preserve the old input data
-                ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
-        }
+        // if ($existingRecord) {
+        //     return redirect()->back()
+        //         ->withInput() 
+        //         ->withErrors('Rekod selenggara PC bagi alamat IP pada bulan dan tahun tersebut telah wujud atau masih dalam rekod dipadam');
+        // }
 
         // if ($request->input('aduan_unit_no') && MaintenanceRecord::where('aduan_unit_no', $request->input('aduan_unit_no'))->where('id', '!=', $recordId)->exists()) {
         //     return redirect()->back()->withInput()->withErrors('No. Aduan Unit no sudah wujud.');
