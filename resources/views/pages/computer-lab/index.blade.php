@@ -156,7 +156,7 @@
                     <tr>
                         <td colspan="5" class="text-end"><strong>Jumlah PC di halaman ini:</strong></td>
                         <td class="text-center">
-                            {{ $computerLabList->sum('no_of_computer') }}
+                        <strong>{{ $computerLabList->sum('no_of_computer') }}</strong>
                         </td>
                         <td colspan="3"></td>
                     </tr>
