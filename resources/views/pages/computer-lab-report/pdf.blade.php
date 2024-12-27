@@ -111,12 +111,13 @@
                         <th style="width: 5%">No.</th>
                         <th>Nama Ruang</th>
                         <th style="width: 25%;">Pemilik</th>
-                        <th style="width: 10%;">Total PC</th>
+                        <th style="width: 10%; text-align:right">Total PC</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                         $counter = 1;
+                        $totalPCs = 0;
                     @endphp
                     @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
                         @foreach ($ownerLabs as $labIndex => $lab)
@@ -124,11 +125,22 @@
                                 <td style="text-align: center">{{ $counter++ }}</td>
                                 <td>{{ $lab->name }}</td>
                                 <td style="text-align: center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
-                                <td style="text-align: center">{{ $lab->pc_count }}</td>
+                                <td style="text-align: right;">{{ $lab->pc_count }}</td>
                             </tr>
+                            @php
+                            $totalPCs += $lab->pc_count; // Accumulate total PCs
+                            @endphp
                         @endforeach
                     @endforeach
                 </tbody>
+                <tfoot class="table-light text-center text-uppercase">
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>Jumlah PC</strong></td>
+                        <td style="text-align: right;">
+                            <strong>{{ $totalPCs }}</strong>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     @endforeach

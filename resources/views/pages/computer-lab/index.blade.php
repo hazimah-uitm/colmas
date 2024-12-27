@@ -152,6 +152,15 @@
                     <td colspan="10">Tiada rekod</td>
                     @endif
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-end"><strong>Jumlah PC di halaman ini:</strong></td>
+                        <td class="text-center">
+                            {{ $computerLabList->sum('no_of_computer') }}
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <div class="mt-3 d-flex justify-content-between align-items-center">

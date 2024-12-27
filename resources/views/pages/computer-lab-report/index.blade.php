@@ -122,7 +122,8 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $counter = 1; // Initialize counter for continuous numbering
+                                        $counter = 1;
+                                        $totalPCs = 0; 
                                     @endphp
                                     @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
                                         @foreach ($ownerLabs as $labIndex => $lab)
@@ -137,9 +138,20 @@
                                                     </span>
                                                 </td>
                                             </tr>
+                                            @php
+                                            $totalPCs += $lab->pc_count; // Accumulate total PCs
+                                            @endphp
                                         @endforeach
                                     @endforeach
                                 </tbody>
+                                <tfoot class="table-light text-center text-uppercase">
+                                    <tr>
+                                        <td colspan="3" class="text-end"><strong>Jumlah PC</strong></td>
+                                        <td class="text-center">
+                                            <strong>{{ $totalPCs }}</strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
