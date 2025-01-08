@@ -28,7 +28,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form method="POST" action="{{ $save_route }}">
+        <form method="POST" action="{{ $save_route }}" enctype="multipart/form-data">
             {{ csrf_field() }}
 
             <div class="mb-3">
@@ -162,6 +162,18 @@
                 @if ($errors->has('software_id'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('software_id') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3">
+                <label for="jadual_kuliah" class="form-label">Jadual Kuliah</label>
+                <input type="file" class="form-control {{ $errors->has('jadual_kuliah') ? 'is-invalid' : '' }}" id="jadual_kuliah" name="jadual_kuliah">
+                @if ($errors->has('jadual_kuliah'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('jadual_kuliah') as $error)
                     {{ $error }}
                     @endforeach
                 </div>

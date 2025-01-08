@@ -28,7 +28,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form method="POST" action="{{ $save_route }}">
+        <form method="POST" action="{{ $save_route }}" enctype="multipart/form-data">
             {{ csrf_field() }}
 
             @php
@@ -224,6 +224,27 @@
                 @if ($errors->has('no_of_computer'))
                 <div class="invalid-feedback">
                     @foreach ($errors->get('no_of_computer') as $error)
+                    {{ $error }}
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+            <div class="mb-3">
+                <label for="jadual_kuliah" class="form-label">Jadual Kuliah</label>
+                <input type="file" class="form-control {{ $errors->has('jadual_kuliah') ? 'is-invalid' : '' }}" id="jadual_kuliah" name="jadual_kuliah">
+
+                <!-- Display the current image if it exists -->
+                @if ($computerLab->jadual_kuliah)
+                <div class="mt-2">
+                    <strong>Jadual Kuliah Terkini:</strong><br>
+                    <img src="{{ asset('public/storage/' . $computerLab->jadual_kuliah) }}" alt="Current Schedule" class="img-fluid" style="max-height: 300px;">
+                </div>
+                @endif
+
+                @if ($errors->has('jadual_kuliah'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('jadual_kuliah') as $error)
                     {{ $error }}
                     @endforeach
                 </div>

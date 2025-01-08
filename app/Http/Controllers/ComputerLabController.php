@@ -9,6 +9,7 @@ use App\Models\Software;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ComputerLabController extends Controller
@@ -97,6 +98,7 @@ class ComputerLabController extends Controller
             'user_credentials.*.username' => 'nullable|string',
             'user_credentials.*.password' => 'nullable|string',
             'no_of_computer' => 'required|integer',
+            'jadual_kuliah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'publish_status' => 'required|in:1,0',
         ], [
             'name.required' => 'Sila isi nama makmal komputer',
@@ -110,8 +112,16 @@ class ComputerLabController extends Controller
         ]);
 
         $computerLab = new ComputerLab();
-        $computerLab->fill($request->except('software_id', 'user_credentials'));
+        $computerLab->fill($request->except('software_id', 'user_credentials', 'jadual_kuliah'));
         $computerLab->user_credentials = json_encode($request->input('user_credentials'));
+
+        // Handle jadual_kuliah image upload
+        if ($request->hasFile('jadual_kuliah')) {
+            // Store the image in the 'public' disk under a structured folder
+            $path = $request->file('jadual_kuliah')->store("makmal_komputer/temp/jadual_kuliah", 'public');
+            $computerLab->jadual_kuliah = $path;
+        }
+
         $computerLab->save();
 
         $computerLab->software()->attach($request->input('software_id'));
@@ -125,9 +135,9 @@ class ComputerLabController extends Controller
     {
         $computerLab = ComputerLab::findOrFail($id);
         $softwareList = Software::where('publish_status', 1)->get();
-        $userCredentials = is_string($computerLab->user_credentials) 
-        ? json_decode($computerLab->user_credentials, true) 
-        : $computerLab->user_credentials;
+        $userCredentials = is_string($computerLab->user_credentials)
+            ? json_decode($computerLab->user_credentials, true)
+            : $computerLab->user_credentials;
 
 
         return view('pages.computer-lab.view', [
@@ -152,7 +162,7 @@ class ComputerLabController extends Controller
         $softwareList = Software::where('publish_status', 1)
             ->orderBy('title', 'asc')
             ->get();
-        $userCredentials = null; 
+        $userCredentials = null;
 
         // Check if user_credentials is a string, and if so, decode it
         if (!is_null($computerLab->user_credentials)) {
@@ -185,7 +195,7 @@ class ComputerLabController extends Controller
                 'required',
                 Rule::unique('computer_labs')->where(function ($query) use ($request, $id) {
                     return $query->where('campus_id', $request->input('campus_id'))
-                        ->where('id', '!=', $id); // Exclude the current record by ID
+                        ->where('id', '!=', $id);
                 }),
             ],
             'campus_id' => 'required|exists:campuses,id',
@@ -195,6 +205,7 @@ class ComputerLabController extends Controller
             'user_credentials' => 'nullable|array',
             'user_credentials.*.username' => 'nullable|string',
             'user_credentials.*.password' => 'nullable|string',
+            'jadual_kuliah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'no_of_computer' => 'required',
             'publish_status' => 'required|in:1,0',
         ], [
@@ -209,8 +220,20 @@ class ComputerLabController extends Controller
         ]);
 
         $computerLab = ComputerLab::findOrFail($id);
-        $computerLab->fill($request->except('software_id', 'user_credentials'));
+        $computerLab->fill($request->except('software_id', 'user_credentials', 'jadual_kuliah'));
         $computerLab->user_credentials = json_encode($request->input('user_credentials'));
+
+        // Handle jadual_kuliah image upload (if a new image is uploaded)
+        if ($request->hasFile('jadual_kuliah')) {
+            // Delete the old image if it exists
+            if ($computerLab->jadual_kuliah && file_exists(public_path('storage/' . $computerLab->jadual_kuliah))) {
+                unlink(public_path('storage/' . $computerLab->jadual_kuliah));
+            }
+
+            // Store the new image in the 'public' disk under a structured folder
+            $path = $request->file('jadual_kuliah')->store("makmal_komputer/temp/jadual_kuliah", 'public');
+            $computerLab->jadual_kuliah = $path;
+        }
         $computerLab->save();
 
         $computerLab->software()->sync($request->input('software_id'));

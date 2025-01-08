@@ -24,7 +24,8 @@ class ComputerLab extends Model
         'no_of_computer',
         'publish_status',
         'user_credentials',
-        'category'
+        'category',
+        'jadual_kuliah'
     ];
 
     protected $casts = [
