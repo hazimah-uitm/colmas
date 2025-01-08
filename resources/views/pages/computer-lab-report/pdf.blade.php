@@ -5,7 +5,7 @@
     <title>Laporan Makmal Komputer {{ $currentMonthName }}-{{ $currentYear }}</title>
     <style>
         @page {
-            size: A4;
+            size: A4 landscape;
             margin: 20mm 10mm 20mm 10mm;
         }
 
@@ -65,6 +65,8 @@
             font-size: 9pt;
             border: 1px solid #ddd;
             word-wrap: break-word;
+            padding-right: 3px;
+            vertical-align: top;
             /* Allow wrapping of long text */
         }
 
@@ -100,49 +102,83 @@
 
     <!-- Report Content -->
     @foreach ($ownersWithLabs as $campusId => $labs)
-        <div class="campus-section">
-            <h2>{{ $labs->first()->campus->name ?? 'N/A' }}</h2>
-            @php
-                $labsGroupedByOwner = $labs->groupBy('pemilik_id');
-            @endphp
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 5%">No.</th>
-                        <th>Nama Ruang</th>
-                        <th style="width: 25%;">Pemilik</th>
-                        <th style="width: 10%; text-align:right">Total PC</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $counter = 1;
-                        $totalPCs = 0;
-                    @endphp
-                    @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
-                        @foreach ($ownerLabs as $labIndex => $lab)
-                            <tr>
-                                <td style="text-align: center">{{ $counter++ }}</td>
-                                <td>{{ $lab->name }}</td>
-                                <td style="text-align: center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
-                                <td style="text-align: right;">{{ $lab->pc_count }}</td>
+    <div class="campus-section" style="page-break-before: {{ $loop->first ? 'auto' : 'always' }};">
+        <h2>{{ $labs->first()->campus->name ?? 'N/A' }}</h2>
+        @php
+        $labsGroupedByOwner = $labs->groupBy('pemilik_id');
+        @endphp
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%">No.</th>
+                    <th>Nama Ruang</th>
+                    <th style="width: 25%;">Pemilik</th>
+                    <th style="width: 10%; text-align:right">Total PC</th>
+                    <th style="width: 40%;">Senarai Perisian</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                $counter = 1;
+                $totalPCs = 0;
+                @endphp
+                @foreach ($labsGroupedByOwner as $ownerId => $ownerLabs)
+                @foreach ($ownerLabs as $labIndex => $lab)
+                <tr>
+                    <td style="text-align: center">{{ $counter++ }}</td>
+                    <td>{{ $lab->name }}</td>
+                    <td style="text-align: center">{{ $lab->pemilik->name ?? 'N/A' }}</td>
+                    <td style="text-align: right;">{{ $lab->pc_count }}</td>
+                    <td>
+                        @if ($lab->software->isNotEmpty())
+                        @php
+                        $softwareList = $lab->software->toArray();
+                        $half = ceil(count($softwareList) / 2);
+                        $leftColumn = array_slice($softwareList, 0, $half);
+                        $rightColumn = array_slice($softwareList, $half);
+                        @endphp
+                        <table style="width: 100%; border: none;">
+                            <tr style="border: none;">
+                                <!-- Left Column -->
+                                <td style="vertical-align: top; width: 50%; padding-right: 10px; border: none;">
+                                    <ul style="list-style-type: disc; padding-left: 20px; margin: 0;">
+                                        @foreach ($leftColumn as $software)
+                                        <li>{{ $software['title'] }} {{ $software['version'] }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <!-- Right Column -->
+                                <td style="vertical-align: top; width: 50%; padding-left: 10px; border: none;">
+                                    <ul style="list-style-type: disc; padding-left: 20px; margin: 0;">
+                                        @foreach ($rightColumn as $software)
+                                        <li>{{ $software['title'] }} {{ $software['version'] }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
                             </tr>
-                            @php
-                            $totalPCs += $lab->pc_count; // Accumulate total PCs
-                            @endphp
-                        @endforeach
-                    @endforeach
-                </tbody>
-                <tfoot class="table-light text-center text-uppercase">
-                    <tr>
-                        <td colspan="3" style="text-align: right;"><strong>Jumlah PC</strong></td>
-                        <td style="text-align: right;">
-                            <strong>{{ $totalPCs }}</strong>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+                        </table>
+                        @else
+                        <div style="text-align: center;">Tiada perisian tersedia</div>
+                        @endif
+                    </td>
+                </tr>
+                @php
+                $totalPCs += $lab->pc_count; // Accumulate total PCs
+                @endphp
+                @endforeach
+                @endforeach
+            </tbody>
+            <tfoot class="table-light text-center text-uppercase">
+                <tr>
+                    <td colspan="3" style="text-align: right;"><strong>Jumlah PC</strong></td>
+                    <td style="text-align: right;">
+                        <strong>{{ $totalPCs }}</strong>
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
     @endforeach
 </body>
 

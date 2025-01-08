@@ -105,7 +105,7 @@ class ComputerLabReportController extends Controller
         // Create the Dompdf instance and load the HTML
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->setPaper('A4', 'landscape');
 
         // Add header and footer using DomPDF's callbacks
         $dompdf->render();
@@ -140,7 +140,7 @@ class ComputerLabReportController extends Controller
         $currentMonthName = Carbon::createFromFormat('!m', $currentMonth)->format('F');
 
         // OwnersWithLabsQuery
-        $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus'])
+        $ownersWithLabsQuery = ComputerLab::with(['pemilik', 'campus', 'software'])
             ->select('id', 'name', 'pemilik_id', 'campus_id')
             ->where('publish_status', 1);
 
