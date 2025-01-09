@@ -109,12 +109,20 @@
                     @foreach ($campusItem['computerLabs'] as $lab)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td><span
+                        <td>
+                            <span
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                title="{{ $lab->pemilik->name }}">
+                                data-bs-html="true"
+                                title="{{ $lab->pemilik->name }}<br>
+               @if (!is_null($lab->jadual_kuliah))
+                   <img src='{{ asset('public/storage/' . $lab->jadual_kuliah) }}' alt='Schedule' style='max-height: 100px; max-width: 100px;' />
+               @else
+                   
+               @endif">
                                 {{ $lab->name }}
-                            </span></td>
+                            </span>
+                        </td>
                         @foreach ($months as $month)
                         <td class="text-center">
                             <span style="font-size: 12px;">
