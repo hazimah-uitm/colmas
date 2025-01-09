@@ -127,6 +127,10 @@ Route::middleware([RoleMiddleware::class . ':Superadmin|Admin|Pemilik|Pegawai Pe
     Route::get('lab-management/{labManagement}/maintenance-records/{id}/restore', 'MaintenanceRecordController@restore')->name('lab-management.maintenance-records.restore');
     Route::delete('lab-management/{labManagement}/maintenance-records/{id}/force-delete', 'MaintenanceRecordController@forceDelete')->name('lab-management.maintenance-records.forceDelete');
 
+    // Sechedule
+    Route::get('schedule', 'ScheduleController@index')->name('schedule');
+    Route::get('/schedule/search', 'ScheduleController@search')->name('schedule.search');
+
     // Report
     Route::get('report', 'ReportController@index')->name('report');
     Route::get('report/view/{id}', 'ReportController@show')->name('report.show');

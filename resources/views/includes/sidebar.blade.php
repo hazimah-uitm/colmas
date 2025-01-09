@@ -77,6 +77,13 @@
             </li>
         </ul>
     </li>
+    <li class="{{ Request::is('schedule*') ? 'mm-active' : '' }}">
+        <a href="{{ route('schedule') }}">
+            <div class="parent-icon"><i class='bx bx-calendar'></i>
+            </div>
+            <div class="menu-title">Jadual Kuliah</div>
+        </a>
+    </li>
 
     <li class="menu-label">Tetapan</li>
     @hasanyrole('Superadmin|admin')
