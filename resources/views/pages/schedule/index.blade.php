@@ -53,12 +53,9 @@
                 <thead class="table-light text-center text-uppercase">
                     <tr>
                         <th>#</th>
-                        <th>Kategori</th>
-                        <th>Kod Ruang</th>
                         <th>Nama Ruang</th>
                         <th>Kampus</th>
                         <th>Pemilik</th>
-                        <th>Status</th>
                         <th>Jadual Kuliah</th>
                     </tr>
                 </thead>
@@ -67,18 +64,9 @@
                     @foreach ($computerLabList as $computerLab)
                     <tr>
                         <td class="text-center">{{ ($computerLabList->currentPage() - 1) * $computerLabList->perPage() + $loop->iteration }}</td>
-                        <td class="text-center" style="word-wrap: break-word; white-space: normal;">{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
-                        <td>{{ $computerLab->code ?? '-'}}</td>
                         <td class="text-center" style="word-wrap: break-word; white-space: normal;">{{ $computerLab->name }}</td>
                         <td class="text-center">{{ $computerLab->campus->name }}</td>
                         <td class="text-center" style="word-wrap: break-word; white-space: normal;">{{ $computerLab->pemilik->name }}</td>
-                        <td class="text-center">
-                            @if ($computerLab->publish_status == 'Aktif')
-                            <span class="badge bg-success">Aktif</span>
-                            @else
-                            <span class="badge bg-danger">Tidak Aktif</span>
-                            @endif
-                        </td>
                         <td class="text-center">
                             <a type="button" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                 data-bs-title="Papar">
@@ -90,7 +78,7 @@
                     </tr>
                     @endforeach
                     @else
-                    <td colspan="8">Tiada rekod</td>
+                    <td colspan="5">Tiada rekod</td>
                     @endif
                 </tbody>
             </table>
@@ -131,7 +119,7 @@
 @foreach ($computerLabList as $computerLab)
 <div class="modal fade" id="showModal{{ $computerLab->id }}" tabindex="-1"
     aria-labelledby="showModalLabel{{ $computerLab->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-light">
@@ -146,49 +134,11 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <table class="table table-borderless table-striped">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Kategori</th>
-                            <td>{{ ucwords(str_replace('_', ' ', $computerLab->category)) }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Kod Ruang</th>
-                            <td>{{ $computerLab->code }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nama Ruang</th>
-                            <td>{{ $computerLab->name }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Kampus</th>
-                            <td>{{ $computerLab->campus->name }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Pemilik</th>
-                            <td>{{ $computerLab->pemilik->name }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Status</th>
-                            <td> @if ($computerLab->publish_status == 'Aktif')
-                                <span class="badge bg-success">Aktif</span>
-                                @else
-                                <span class="badge bg-danger">Tidak Aktif</span>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Jadual Kuliah</th>
-                            <td>
-                                @if (!is_null($computerLab->jadual_kuliah))
-                                <img src="{{ asset('public/storage/' . $computerLab->jadual_kuliah) }}" alt="Current Schedule" class="img-fluid" style="max-height: 1000px;">
-                                @else
-                                <span>Tiada jadual terkini</span>
-                                @endif
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                @if (!is_null($computerLab->jadual_kuliah))
+                <img src="{{ asset('public/storage/' . $computerLab->jadual_kuliah) }}" alt="Current Schedule" style="max-width: 100%; height: auto;">
+                @else
+                <span>Tiada jadual terkini</span>
+                @endif
             </div>
 
             <!-- Modal Footer -->
