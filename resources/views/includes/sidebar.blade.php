@@ -81,7 +81,7 @@
         <a href="{{ route('schedule') }}">
             <div class="parent-icon"><i class='bx bx-calendar'></i>
             </div>
-            <div class="menu-title">Jadual Kuliah</div>
+            <div class="menu-title">Jadual Waktu</div>
         </a>
     </li>
 

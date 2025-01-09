@@ -19,7 +19,8 @@ class ScheduleController extends Controller
         $perPage = $request->input('perPage', 10);
 
         $computerLabQuery = ComputerLab::with(['pemilik', 'campus'])
-            ->where('publish_status', 1);
+            ->where('publish_status', 1)
+            ->where('category', "makmal_komputer");
 
         $computerLabList = $computerLabQuery->latest()->paginate($perPage);
 
