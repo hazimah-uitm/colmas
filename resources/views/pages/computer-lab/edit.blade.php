@@ -231,15 +231,25 @@
             </div>
 
             <div class="mb-3">
-                <label for="jadual_kuliah" class="form-label">Jadual Kuliah</label>
-                <input type="file" class="form-control {{ $errors->has('jadual_kuliah') ? 'is-invalid' : '' }}" id="jadual_kuliah" name="jadual_kuliah">
+                <label for="jadual_kuliah" class="form-label">Jadual Waktu</label>
+                <input type="file"
+                    class="form-control {{ $errors->has('jadual_kuliah') ? 'is-invalid' : '' }}"
+                    id="jadual_kuliah"
+                    name="jadual_kuliah"
+                    {{ $canEditAll || !$isPemilik ? '' : 'disabled' }}>
 
                 <!-- Display the current image if it exists -->
                 @if ($computerLab->jadual_kuliah)
                 <div class="mt-2">
-                    <strong>Jadual Kuliah Terkini:</strong><br>
-                    <img src="{{ asset('public/storage/' . $computerLab->jadual_kuliah) }}" alt="Current Schedule" class="img-fluid" style="max-height: 300px;">
+                    <strong>Jadual Waktu Terkini:</strong><br>
+                    <img src="{{ asset('public/storage/' . $computerLab->jadual_kuliah) }}"
+                        alt="Current Schedule"
+                        class="img-fluid" style="max-height: 600px;">
                 </div>
+                @endif
+
+                @if (!($canEditAll || !$isPemilik))
+                <input type="hidden" name="jadual_kuliah" value="{{ $computerLab->jadual_kuliah }}">
                 @endif
 
                 @if ($errors->has('jadual_kuliah'))

@@ -169,7 +169,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="jadual_kuliah" class="form-label">Jadual Kuliah</label>
+                <label for="jadual_kuliah" class="form-label">Jadual Waktu</label>
                 <input type="file" class="form-control {{ $errors->has('jadual_kuliah') ? 'is-invalid' : '' }}" id="jadual_kuliah" name="jadual_kuliah">
                 @if ($errors->has('jadual_kuliah'))
                 <div class="invalid-feedback">
