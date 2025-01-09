@@ -208,19 +208,24 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td>
-                                                <span
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="right"
-                                                    data-bs-html="true"
-                                                    title="{{ $lab->pemilik->name }}<br>
-               @if (!is_null($lab->jadual_kuliah))
-                   <img src='{{ asset('public/storage/' . $lab->jadual_kuliah) }}' alt='Schedule' style='max-height: 100px; max-width: 100px;' />
-               @else
-                   
-               @endif">
-                                                    {{ $lab->name }}
-                                                </span>
-                                            </td>
+    <span
+        data-bs-toggle="tooltip"
+        data-bs-placement="right"
+        data-bs-html="true"
+        title="
+            <div style='text-align: center;'>
+                <div style='margin-bottom: 10px; font-weight: bold;'>{{ $lab->pemilik->name }}</div>
+                @if (!is_null($lab->jadual_kuliah))
+                    <img src='{{ asset('public/storage/' . $lab->jadual_kuliah) }}' alt='Schedule' class='img-fluid' style='max-height: 150px;' />
+                @else
+                    <span>No schedule available</span>
+                @endif
+            </div>
+        ">
+        {{ $lab->name }}
+    </span>
+</td>
+
 
                                             @foreach ($months as $month)
                                             <td class="text-center">
